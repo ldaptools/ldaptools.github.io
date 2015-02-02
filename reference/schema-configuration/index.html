@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="Chad Sikorra">
+        <link rel="canonical" href="http://www.phpldaptools.com/reference/schema-configuration/">
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+
+        <title>Schema configuration - LdapTools</title>
+
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../..">LdapTools</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reference <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            <li >
+                                <a href="../attribute-converters">Attribute converters</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../default-schema-attributes">Default schema attributes</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../main-configuration">Main configuration</a>
+                            </li>
+                        
+                            <li class="active">
+                                <a href=".">Schema configuration</a>
+                            </li>
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            <li >
+                                <a href="../../tutorials/building-ldap-queries">Building ldap queries</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../../tutorials/using-the-ldap-manager">Using the ldap manager</a>
+                            </li>
+                        
+                        </ul>
+                    </li>
+                
+                
+                </ul>
+            
+
+            
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                
+                
+                <li >
+                    <a rel="next" href="../main-configuration">
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </li>
+                <li >
+                    <a rel="prev" href="../../tutorials/building-ldap-queries">
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </li>
+                
+                
+                <li>
+                    <a href="https://github.com/ldaptools/ldaptools/">
+                        
+                            <i class="fa fa-github"></i>
+                        
+                        GitHub
+                    </a>
+                </li>
+                
+            </ul>
+            
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#schema-configuration">Schema Configuration</a></li>
+        
+            <li><a href="#schema-file-structure-yaml">Schema File Structure (YAML)</a></li>
+        
+    
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="schema-configuration">Schema Configuration</h1>
+<hr />
+<p>LdapTools uses a schema definition to describe various LDAP objects in your directory service. This allows you to easily
+create and modify any part of the schema to suit your needs. Default schema definitions are included in the 
+<code>resources/schema</code> directory in the root of this library. Both OpenLDAP and Active Directory have default schema files.</p>
+<p>The schema definition allows you to abstract the LDAP schema so you can refer to objects by whatever name and attribute
+names that you want within this class. It also allows you to assign attribute converters to LDAP attributes so you can 
+convert the data in LDAP to the way you want it to be displayed in PHP, and vice-versa.</p>
+<p>The following serves as a reference for the structure of a schema and the possible configuration directives.</p>
+<h2 id="schema-file-structure-yaml">Schema File Structure (YAML)</h2>
+<p>The schema YAML file is structured as follows:</p>
+<pre><code class="yaml"># This name must always be defined
+objects:
+    # This name can be whatever you want, but must be unique for this section of the YAML.
+    user_object:
+        # ... Schema object directives are defined here
+    # Another schema object definition
+    group_object:
+        # ... More object directives are defined here
+</code></pre>
+
+<h3 id="schema-object-configuration-options">Schema Object Configuration Options</h3>
+<hr />
+<h4 id="type-required">type <strong><em>(Required)</em></strong></h4>
+<p>The name for the type is how you will refer to this LDAP schema object within the class. This is a required field. 
+Default LDAP object types that the class has defined are: <code>user</code>, <code>group</code>, <code>computer</code>, <code>contact</code>.</p>
+<hr />
+<h4 id="class">class</h4>
+<p>This is the <code>objectClass</code> value for the LDAP object you're defining. It can be any valid LDAP objectClass value (<code>user</code>,
+<code>inetOrgPerson</code>, <code>group</code>, etc) and will be used in the creation of LDAP query filters when using this type.</p>
+<hr />
+<h4 id="category">category</h4>
+<p>This is the <code>objectCategory</code> value for the LDAP object you're defining. It can be any valid LDAP
+objectCategory value (<code>person</code>, <code>computer</code>, <code>contact</code>, etc) and will be used in the creation of LDAP query filters 
+(along with the <code>class</code> definition above) when using this type.</p>
+<hr />
+<h4 id="attributes">attributes</h4>
+<p>These should be <code>key: value</code> pairs. Where the <code>key</code> is the name you would like the refer to the LDAP attribute by 
+within the class, and the <code>value</code> is the name of the attribute in LDAP (ie. <code>firstName: givenName</code>).</p>
+<hr />
+<h4 id="converters">converters</h4>
+<p>These should defined as keys with the converters name with an array of attribute name values:</p>
+<pre><code class="yaml">    convert_windows_generalized_time:
+        - 'created'
+        - 'modified'
+</code></pre>
+
+<p>The attribute names can either be the schema defined attribute name, or the actual LDAP attribute name. For a 
+complete listing of possible built-in attribute converters, see this <a href="../attribute-converters">reference doc</a>.</p>
+<hr />
+<h4 id="attributes_to_select">attributes_to_select</h4>
+<p>An array of attributes that will be selected by default on LDAP queries when using this type.</p>
+<pre><code class="yaml">    attributes_to_select:
+        - 'firstName'
+        - 'lastName'
+        - 'guid'
+</code></pre>
+
+<hr />
+<h4 id="repository">repository</h4>
+<p>The full name class name (ie <code>\MyNamespace\MyClasses\CustomRepository</code>) to use as the default repository when calling
+ <code>getRepository('object_type')</code> on the <code>LdapManager</code> class. The class must extend <code>\LdapTools\LdapObjectRepository</code>.</p>
+</div>
+            
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+            <p>Copyright &copy; 2015, Chad Sikorra.</p>
+            
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+
+        
+
+        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/prettify-1.0.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script>
+        <script src="../../js/base.js"></script>
+    </body>
+</html>

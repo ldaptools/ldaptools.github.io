@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="Chad Sikorra">
+        <link rel="canonical" href="http://www.phpldaptools.com/reference/default-schema-attributes/">
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+
+        <title>Default schema attributes - LdapTools</title>
+
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../..">LdapTools</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reference <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            <li >
+                                <a href="../attribute-converters">Attribute converters</a>
+                            </li>
+                        
+                            <li class="active">
+                                <a href=".">Default schema attributes</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../main-configuration">Main configuration</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../schema-configuration">Schema configuration</a>
+                            </li>
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            <li >
+                                <a href="../../tutorials/building-ldap-queries">Building ldap queries</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../../tutorials/using-the-ldap-manager">Using the ldap manager</a>
+                            </li>
+                        
+                        </ul>
+                    </li>
+                
+                
+                </ul>
+            
+
+            
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                
+                
+                <li >
+                    <a rel="next" href="../attribute-converters">
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </li>
+                <li >
+                    <a rel="prev" href="../main-configuration">
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </li>
+                
+                
+                <li>
+                    <a href="https://github.com/ldaptools/ldaptools/">
+                        
+                            <i class="fa fa-github"></i>
+                        
+                        GitHub
+                    </a>
+                </li>
+                
+            </ul>
+            
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#default-schema-attributes">Default Schema Attributes</a></li>
+        
+            <li><a href="#active-directory-schema">Active Directory Schema</a></li>
+        
+            <li><a href="#openldap-schema">OpenLDAP Schema</a></li>
+        
+            <li><a href="#the-active-directory-schema">The Active Directory Schema</a></li>
+        
+            <li><a href="#the-openldap-schema">The OpenLDAP Schema</a></li>
+        
+    
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="default-schema-attributes">Default Schema Attributes</h1>
+<p>Default schemas are provided for both Active Directory and OpenLDAP that contain attribute name mappings and converters
+against commonly used attributes and object types. Below is a reference for the mappings and their converters that can be
+used when generating queries and returning data from LDAP.</p>
+<h4 id="active-directory-schema">Active Directory Schema</h4>
+<ul>
+<li><a href="#ad-user-types">Users</a></li>
+<li><a href="#ad-group-types">Groups</a></li>
+<li><a href="#ad-computer-types">Computers</a></li>
+<li><a href="#ad-contact-types">Contacts</a></li>
+</ul>
+<h4 id="openldap-schema">OpenLDAP Schema</h4>
+<ul>
+<li><a href="#openldap-user-types">Users</a></li>
+<li><a href="#openldap-group-types">Groups</a></li>
+</ul>
+<h3 id="the-active-directory-schema">The Active Directory Schema</h3>
+<hr />
+<h4 id="ad-user-types">AD User Types</h4>
+<p>These are typical LDAP user objects (<code>objectClass=user</code> and <code>objectCategory=person</code>).</p>
+<table>
+<thead>
+<tr>
+<th>LdapTools Name</th>
+<th>LDAP Attribute</th>
+<th>Value Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>badPasswordCount</td>
+<td>badPwdCount</td>
+<td>int</td>
+</tr>
+<tr>
+<td>city</td>
+<td>l</td>
+<td>string</td>
+</tr>
+<tr>
+<td>company</td>
+<td>company</td>
+<td>string</td>
+</tr>
+<tr>
+<td>country</td>
+<td>country</td>
+<td>string</td>
+</tr>
+<tr>
+<td>created</td>
+<td>whenCreated</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>department</td>
+<td>department</td>
+<td>string</td>
+</tr>
+<tr>
+<td>description</td>
+<td>description</td>
+<td>string</td>
+</tr>
+<tr>
+<td>displayName</td>
+<td>displayName</td>
+<td>string</td>
+</tr>
+<tr>
+<td>division</td>
+<td>division</td>
+<td>string</td>
+</tr>
+<tr>
+<td>dn</td>
+<td>dn</td>
+<td>string</td>
+</tr>
+<tr>
+<td>emailAddress</td>
+<td>mail</td>
+<td>string</td>
+</tr>
+<tr>
+<td>employeeId</td>
+<td>employeeId</td>
+<td>string</td>
+</tr>
+<tr>
+<td>employeeNumber</td>
+<td>employeeNumber</td>
+<td>int</td>
+</tr>
+<tr>
+<td>fax</td>
+<td>facsimileTelephoneNumber</td>
+<td>string</td>
+</tr>
+<tr>
+<td>firstName</td>
+<td>givenName</td>
+<td>string</td>
+</tr>
+<tr>
+<td>guid</td>
+<td>objectGuid</td>
+<td>string</td>
+</tr>
+<tr>
+<td>homeDirectory</td>
+<td>homeDirectory</td>
+<td>string</td>
+</tr>
+<tr>
+<td>homeDrive</td>
+<td>homeDrive</td>
+<td>string</td>
+</tr>
+<tr>
+<td>homePage</td>
+<td>wWWHomePage</td>
+<td>string</td>
+</tr>
+<tr>
+<td>homePhone</td>
+<td>homePhone</td>
+<td>string</td>
+</tr>
+<tr>
+<td>initials</td>
+<td>initials</td>
+<td>string</td>
+</tr>
+<tr>
+<td>ipPhone</td>
+<td>ipPhone</td>
+<td>string</td>
+</tr>
+<tr>
+<td>lastName</td>
+<td>sn</td>
+<td>string</td>
+</tr>
+<tr>
+<td>middleName</td>
+<td>middleName</td>
+<td>string</td>
+</tr>
+<tr>
+<td>mobilePhone</td>
+<td>mobile</td>
+<td>string</td>
+</tr>
+<tr>
+<td>office</td>
+<td>physicalDeliveryOfficeName</td>
+<td>string</td>
+</tr>
+<tr>
+<td>organization</td>
+<td>o</td>
+<td>string</td>
+</tr>
+<tr>
+<td>password</td>
+<td>unicodePwd</td>
+<td>string</td>
+</tr>
+<tr>
+<td>passwordLastSet</td>
+<td>pwdLastSet</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>pager</td>
+<td>pager</td>
+<td>string</td>
+</tr>
+<tr>
+<td>phoneNumber</td>
+<td>telephoneNumber</td>
+<td>string</td>
+</tr>
+<tr>
+<td>poBox</td>
+<td>postOfficeBox</td>
+<td>string</td>
+</tr>
+<tr>
+<td>profilePath</td>
+<td>profilePath</td>
+<td>string</td>
+</tr>
+<tr>
+<td>scriptPath</td>
+<td>scriptPath</td>
+<td>string</td>
+</tr>
+<tr>
+<td>sid</td>
+<td>objectSid</td>
+<td>string</td>
+</tr>
+<tr>
+<td>state</td>
+<td>st</td>
+<td>string</td>
+</tr>
+<tr>
+<td>streetAddress</td>
+<td>streetAddress</td>
+<td>string</td>
+</tr>
+<tr>
+<td>title</td>
+<td>title</td>
+<td>string</td>
+</tr>
+<tr>
+<td>username</td>
+<td>sAMAccountName</td>
+<td>string</td>
+</tr>
+<tr>
+<td>upn</td>
+<td>userPrincipalName</td>
+<td>string</td>
+</tr>
+<tr>
+<td>zipCode</td>
+<td>postalCode</td>
+<td>string</td>
+</tr>
+</tbody>
+</table>
+<h4 id="ad-group-types">AD Group Types</h4>
+<p>These are typical LDAP group objects (<code>objectClass=group</code>).</p>
+<table>
+<thead>
+<tr>
+<th>LdapTools Name</th>
+<th>LDAP Attribute</th>
+<th>Value Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>accountName</td>
+<td>sAMAccountName</td>
+<td>string</td>
+</tr>
+<tr>
+<td>created</td>
+<td>whenCreated</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>description</td>
+<td>description</td>
+<td>string</td>
+</tr>
+<tr>
+<td>displayName</td>
+<td>displayName</td>
+<td>string</td>
+</tr>
+<tr>
+<td>dn</td>
+<td>dn</td>
+<td>string</td>
+</tr>
+<tr>
+<td>guid</td>
+<td>objectGuid</td>
+<td>string</td>
+</tr>
+<tr>
+<td>members</td>
+<td>member</td>
+<td>array</td>
+</tr>
+<tr>
+<td>modified</td>
+<td>whenModified</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>name</td>
+<td>cn</td>
+<td>string</td>
+</tr>
+<tr>
+<td>sid</td>
+<td>objectSid</td>
+<td>string</td>
+</tr>
+</tbody>
+</table>
+<h4 id="ad-computer-types">AD Computer Types</h4>
+<p>These are typical LDAP computer objects (<code>objectCategory=computer</code>).</p>
+<table>
+<thead>
+<tr>
+<th>LdapTools Name</th>
+<th>LDAP Attribute</th>
+<th>Value Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>accountName</td>
+<td>sAMAccountName</td>
+<td>string</td>
+</tr>
+<tr>
+<td>created</td>
+<td>whenCreated</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>description</td>
+<td>description</td>
+<td>string</td>
+</tr>
+<tr>
+<td>displayName</td>
+<td>displayName</td>
+<td>string</td>
+</tr>
+<tr>
+<td>dn</td>
+<td>dn</td>
+<td>string</td>
+</tr>
+<tr>
+<td>dnsHostName</td>
+<td>dNSHostName</td>
+<td>string</td>
+</tr>
+<tr>
+<td>guid</td>
+<td>objectGuid</td>
+<td>string</td>
+</tr>
+<tr>
+<td>location</td>
+<td>location</td>
+<td>string</td>
+</tr>
+<tr>
+<td>modified</td>
+<td>whenModified</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>name</td>
+<td>cn</td>
+<td>string</td>
+</tr>
+<tr>
+<td>os</td>
+<td>operatingSystem</td>
+<td>string</td>
+</tr>
+<tr>
+<td>osServicePack</td>
+<td>operatingSystemServicePack</td>
+<td>string</td>
+</tr>
+<tr>
+<td>osVersion</td>
+<td>operatingSystemVersion</td>
+<td>string</td>
+</tr>
+<tr>
+<td>sid</td>
+<td>objectSid</td>
+<td>string</td>
+</tr>
+</tbody>
+</table>
+<h4 id="ad-contact-types">AD Contact Types</h4>
+<p>These are typical LDAP contact objects (<code>objectCategory=contact</code>).</p>
+<table>
+<thead>
+<tr>
+<th>LdapTools Name</th>
+<th>LDAP Attribute</th>
+<th>Value Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>created</td>
+<td>whenCreated</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>description</td>
+<td>description</td>
+<td>string</td>
+</tr>
+<tr>
+<td>displayName</td>
+<td>displayName</td>
+<td>string</td>
+</tr>
+<tr>
+<td>dn</td>
+<td>dn</td>
+<td>string</td>
+</tr>
+<tr>
+<td>emailAddress</td>
+<td>mail</td>
+<td>string</td>
+</tr>
+<tr>
+<td>firstName</td>
+<td>givenName</td>
+<td>string</td>
+</tr>
+<tr>
+<td>guid</td>
+<td>objectGuid</td>
+<td>string</td>
+</tr>
+<tr>
+<td>lastName</td>
+<td>sn</td>
+<td>string</td>
+</tr>
+<tr>
+<td>modified</td>
+<td>whenModified</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>phoneNumber</td>
+<td>telephoneNumber</td>
+<td>string</td>
+</tr>
+<tr>
+<td>sid</td>
+<td>objectSid</td>
+<td>string</td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-openldap-schema">The OpenLDAP Schema</h3>
+<hr />
+<h4 id="openldap-user-types">OpenLDAP User Types</h4>
+<p>These are typical LDAP user objects (<code>objectClass=inetOrgPerson</code>).</p>
+<table>
+<thead>
+<tr>
+<th>LdapTools Name</th>
+<th>LDAP Attribute</th>
+<th>Value Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>city</td>
+<td>l</td>
+<td>string</td>
+</tr>
+<tr>
+<td>company</td>
+<td>company</td>
+<td>string</td>
+</tr>
+<tr>
+<td>country</td>
+<td>country</td>
+<td>string</td>
+</tr>
+<tr>
+<td>created</td>
+<td>createTimestamp</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>department</td>
+<td>department</td>
+<td>string</td>
+</tr>
+<tr>
+<td>description</td>
+<td>description</td>
+<td>string</td>
+</tr>
+<tr>
+<td>dn</td>
+<td>dn</td>
+<td>string</td>
+</tr>
+<tr>
+<td>emailAddress</td>
+<td>mail</td>
+<td>string</td>
+</tr>
+<tr>
+<td>employeeNumber</td>
+<td>employeeNumber</td>
+<td>int</td>
+</tr>
+<tr>
+<td>fax</td>
+<td>facsimileTelephoneNumber</td>
+<td>string</td>
+</tr>
+<tr>
+<td>firstName</td>
+<td>givenName</td>
+<td>string</td>
+</tr>
+<tr>
+<td>homeDirectory</td>
+<td>homeDirectory</td>
+<td>string</td>
+</tr>
+<tr>
+<td>homePhone</td>
+<td>homePhone</td>
+<td>string</td>
+</tr>
+<tr>
+<td>initials</td>
+<td>initials</td>
+<td>string</td>
+</tr>
+<tr>
+<td>lastName</td>
+<td>sn</td>
+<td>string</td>
+</tr>
+<tr>
+<td>middleName</td>
+<td>middleName</td>
+<td>string</td>
+</tr>
+<tr>
+<td>modified</td>
+<td>modifyTimestamp</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>mobilePhone</td>
+<td>mobile</td>
+<td>string</td>
+</tr>
+<tr>
+<td>organization</td>
+<td>o</td>
+<td>string</td>
+</tr>
+<tr>
+<td>password</td>
+<td>password</td>
+<td>string</td>
+</tr>
+<tr>
+<td>pager</td>
+<td>pager</td>
+<td>string</td>
+</tr>
+<tr>
+<td>phoneNumber</td>
+<td>telephoneNumber</td>
+<td>string</td>
+</tr>
+<tr>
+<td>poBox</td>
+<td>postOfficeBox</td>
+<td>string</td>
+</tr>
+<tr>
+<td>state</td>
+<td>st</td>
+<td>string</td>
+</tr>
+<tr>
+<td>streetAddress</td>
+<td>streetAddress</td>
+<td>string</td>
+</tr>
+<tr>
+<td>title</td>
+<td>title</td>
+<td>string</td>
+</tr>
+<tr>
+<td>zipCode</td>
+<td>postalCode</td>
+<td>string</td>
+</tr>
+</tbody>
+</table>
+<h4 id="openldap-group-types">OpenLDAP Group Types</h4>
+<p>These are typical LDAP group objects (<code>objectClass=groupOfUniqueNames</code>).</p>
+<table>
+<thead>
+<tr>
+<th>LdapTools Name</th>
+<th>LDAP Attribute</th>
+<th>Value Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>created</td>
+<td>createTimestamp</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>description</td>
+<td>description</td>
+<td>string</td>
+</tr>
+<tr>
+<td>displayName</td>
+<td>displayName</td>
+<td>string</td>
+</tr>
+<tr>
+<td>dn</td>
+<td>dn</td>
+<td>string</td>
+</tr>
+<tr>
+<td>members</td>
+<td>uniqueMembers</td>
+<td>array</td>
+</tr>
+<tr>
+<td>modified</td>
+<td>modifyTimestamp</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>name</td>
+<td>cn</td>
+<td>string</td>
+</tr>
+</tbody>
+</table>
+</div>
+            
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+            <p>Copyright &copy; 2015, Chad Sikorra.</p>
+            
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+
+        
+
+        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/prettify-1.0.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script>
+        <script src="../../js/base.js"></script>
+    </body>
+</html>

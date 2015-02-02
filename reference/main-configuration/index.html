@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="Chad Sikorra">
+        <link rel="canonical" href="http://www.phpldaptools.com/reference/main-configuration/">
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+
+        <title>Main configuration - LdapTools</title>
+
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../..">LdapTools</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reference <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            <li >
+                                <a href="../attribute-converters">Attribute converters</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../default-schema-attributes">Default schema attributes</a>
+                            </li>
+                        
+                            <li class="active">
+                                <a href=".">Main configuration</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../schema-configuration">Schema configuration</a>
+                            </li>
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            <li >
+                                <a href="../../tutorials/building-ldap-queries">Building ldap queries</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../../tutorials/using-the-ldap-manager">Using the ldap manager</a>
+                            </li>
+                        
+                        </ul>
+                    </li>
+                
+                
+                </ul>
+            
+
+            
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                
+                
+                <li >
+                    <a rel="next" href="../default-schema-attributes">
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </li>
+                <li >
+                    <a rel="prev" href="../schema-configuration">
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </li>
+                
+                
+                <li>
+                    <a href="https://github.com/ldaptools/ldaptools/">
+                        
+                            <i class="fa fa-github"></i>
+                        
+                        GitHub
+                    </a>
+                </li>
+                
+            </ul>
+            
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#main-configuration">Main Configuration</a></li>
+        
+            <li><a href="#manual-configuration">Manual Configuration</a></li>
+        
+            <li><a href="#yaml-configuration">YAML Configuration</a></li>
+        
+    
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="main-configuration">Main Configuration</h1>
+<hr />
+<p>You can either choose to configure your settings via a file (YAML) or directly using the methods on the <code>Configuration</code> 
+and <code>DomainConfiguration</code> classes. Once you have an instance of the configuration, you can pass it to the <code>LdapManager</code>
+class.</p>
+<h2 id="manual-configuration">Manual Configuration</h2>
+<hr />
+<pre><code class="php">use LdapTools\Configuration;
+use LdapTools\DomainConfiguration;
+use LdapTools\LdapManager;
+
+// A new configuration object contains the most common default settings.
+$config = new Configuration();
+
+// A domain configuration object. Requires a domain name, servers, username, and password. 
+$domain = (new DomainConfiguration('mydomain.com'))
+   -&gt;setBaseDn('dc=mydomain,dc=com')
+   -&gt;setServers(['dc01'])
+   -&gt;setUsername('username')
+   -&gt;setPassword('password');
+$altDomain = (new DomainConfiguration('foo.bar'))
+   -&gt;setBaseDn('dc=foo,dc=bar')
+   -&gt;setServers(['foo'])
+   -&gt;setUsername('username')
+   -&gt;setPassword('password')
+   -&gt;setLazyBind(true)
+   -&gt;setLdapType('openldap');
+$config-&gt;addDomain($domain, $altDomain);
+// Defaults to the first domain added. You can change this if you want.
+$config-&gt;setDefaultDomain('foo.bar');
+
+// The LdapManager provides an easy point of access to some different classes.
+$ldap = new LdapManager($config);
+</code></pre>
+
+<h2 id="yaml-configuration">YAML Configuration</h2>
+<hr />
+<p>The easy way to configure everything is by using a single YAML configuration file. See the <a href="https://github.com/ldaptools/ldaptools/blob/master/resources/config/example.yml">example configuration</a>
+for a detailed overview. The YAML file is split into a <code>general</code> section and a <code>domains</code> section. </p>
+<pre><code class="yaml">general:
+...
+domains:
+    domain_one:
+    ...
+    domain_two:
+    ...
+</code></pre>
+
+<p>Once you have a YAML configuration file defined, you can configure the class very easily:</p>
+<pre><code class="php">use LdapTools\Configuration;
+use LdapTools\LdapManager;
+
+$config = (new Configuration())-&gt;load('/path/to/ldap/config.yml');
+$ldap = new LdapManager($config);
+</code></pre>
+
+<p>The below reference describes each possible configuration directive.</p>
+<h3 id="general-section"><strong>General Section</strong></h3>
+<hr />
+<h4 id="default_domain">default_domain</h4>
+<p>If you have added more than one domain configuration, set this to the domain name (ie. <code>example.com</code>) you would like to 
+be the default context when using the <code>LdapManager</code> class.</p>
+<p><strong>Default</strong>: If more than one domain is present, the first domain added is the default domain.</p>
+<hr />
+<h4 id="schema_format">schema_format</h4>
+<p>The format that the schema file is in. Only <code>yml</code> is available at present.</p>
+<p><strong>Default</strong>: <code>yml</code></p>
+<hr />
+<h4 id="schema_folder">schema_folder</h4>
+<p>This is where the LDAP object schema definition files are stored.</p>
+<p><strong>Default</strong>: The <code>resources/schema</code> folder in the libraries root directory.</p>
+<hr />
+<h4 id="cache_type">cache_type</h4>
+<p>The default caching mechanism to use when parsing schema files. Options are <code>stash</code> or <code>none</code>. When <code>stash</code> is used it
+will take the parsed LDAP schema objects and cache them to disk. It will then use the cache instead of re-parsing the
+schema each time. If it detects that the schema file has been modified, it will re-parse it and cache it again.</p>
+<p>To use the <code>stash</code> type you must install <a href="https://github.com/tedious/Stash">Stash</a>.</p>
+<p><strong>Default:</strong> <code>none</code></p>
+<hr />
+<h4 id="cache_options">cache_options</h4>
+<p>An array of options that will be passed to the cache type when it is instantiated.</p>
+<p><strong>Defaults</strong>: No options are passed by default.</p>
+<hr />
+<h3 id="domain-section"><strong>Domain Section</strong></h3>
+<hr />
+<h4 id="domain_name-required">domain_name <strong>(REQUIRED)</strong></h4>
+<p>The FQDN of the domain (ie. <code>example.com</code>).</p>
+<hr />
+<h4 id="base_dn-required">base_dn <strong>(REQUIRED)</strong></h4>
+<p>The base DN for searches (ie. <code>dc=example,dc=com</code>).</p>
+<hr />
+<h4 id="username-required">username <strong>(REQUIRED)</strong></h4>
+<p>The username to use when binding to LDAP.</p>
+<hr />
+<h4 id="password-required">password <strong>(REQUIRED)</strong></h4>
+<p>The password to use when binding to LDAP.</p>
+<hr />
+<h4 id="servers-required">servers <strong>(REQUIRED)</strong></h4>
+<p>An array of LDAP servers (ie. <code>[ 'dc01' ]</code>). When more than one is used it will attempt it each server until it finds
+one it can connect to.</p>
+<hr />
+<h4 id="server_selection">server_selection</h4>
+<p>When more than one server is listed for a domain, choose which one is selected for the connection. The possible choices 
+are <code>order</code> (tried in the order they appear) or <code>random</code>. </p>
+<p><strong>Default</strong>: <code>order</code></p>
+<hr />
+<h4 id="page_size">page_size</h4>
+<p>The default page size to use for paging operations.</p>
+<p><strong>Default</strong>: <code>1000</code></p>
+<hr />
+<h4 id="port">port</h4>
+<p>The default port number to connect to LDAP on.</p>
+<p><strong>Default</strong>: <code>389</code></p>
+<hr />
+<h4 id="use_ssl">use_ssl</h4>
+<p>Whether or not to talk to LDAP over SSL. The default is <code>false</code>. Typically you want to use the <code>use_tls</code> directive (in
+the case of Active Directory). Setting this to <code>true</code> also changes the port to <code>636</code>.</p>
+<p><strong>Default</strong>: <code>false</code></p>
+<hr />
+<h4 id="use_tls">use_tls</h4>
+<p>Whether or not to initiate TLS when connecting to LDAP. This is required for certain LDAP operations (such as password 
+changes in Active Directory).</p>
+<p><strong>Default</strong>: <code>false</code></p>
+<hr />
+<h4 id="ldap_type">ldap_type</h4>
+<p>The LDAP type for this domain. Choices are <code>ad</code> or <code>openldap</code>.</p>
+<p><strong>Default</strong>: <code>ad</code></p>
+<hr />
+<h4 id="lazy_bind">lazy_bind</h4>
+<p>If set to <code>true</code>, then the connection will not automatically connect and bind when first created.</p>
+<p><strong>Default</strong>: <code>false</code></p>
+<hr />
+<h4 id="schema_name">schema_name</h4>
+<p>The schema name to use for this domain. This typically refers to the name of the schema file to use within the path 
+defined by the <code>schema_folder</code> directive in the general section. </p>
+<p><strong>Default</strong>: The same value set for <code>ldap_type</code>.</p>
+</div>
+            
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+            <p>Copyright &copy; 2015, Chad Sikorra.</p>
+            
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+
+        
+
+        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/prettify-1.0.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script>
+        <script src="../../js/base.js"></script>
+    </body>
+</html>

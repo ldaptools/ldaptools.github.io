@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="Chad Sikorra">
+        <link rel="canonical" href="http://www.phpldaptools.com/tutorials/using-the-ldap-manager/">
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+
+        <title>Using the ldap manager - LdapTools</title>
+
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../..">LdapTools</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reference <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            <li >
+                                <a href="../../reference/attribute-converters">Attribute converters</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../../reference/default-schema-attributes">Default schema attributes</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../../reference/main-configuration">Main configuration</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../../reference/schema-configuration">Schema configuration</a>
+                            </li>
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            <li >
+                                <a href="../building-ldap-queries">Building ldap queries</a>
+                            </li>
+                        
+                            <li class="active">
+                                <a href=".">Using the ldap manager</a>
+                            </li>
+                        
+                        </ul>
+                    </li>
+                
+                
+                </ul>
+            
+
+            
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                
+                
+                <li >
+                    <a rel="next" href="../building-ldap-queries">
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </li>
+                <li class="disabled">
+                    <a rel="prev" >
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </li>
+                
+                
+                <li>
+                    <a href="https://github.com/ldaptools/ldaptools/">
+                        
+                            <i class="fa fa-github"></i>
+                        
+                        GitHub
+                    </a>
+                </li>
+                
+            </ul>
+            
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#using-the-ldapmanager-class">Using the LdapManager Class</a></li>
+        
+            <li><a href="#getting-a-ldapquerybuilder-instance">Getting a LdapQueryBuilder Instance</a></li>
+        
+            <li><a href="#getting-a-repository-object-for-a-ldap-type">Getting a Repository Object for a LDAP Type</a></li>
+        
+            <li><a href="#switching-domains">Switching Domains</a></li>
+        
+            <li><a href="#getting-the-ldapconnection">Getting The LdapConnection</a></li>
+        
+    
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="using-the-ldapmanager-class">Using the LdapManager Class</h1>
+<hr />
+<p>The <code>LdapManager</code> provides an easy point of access into the different parts of this library after you have setup the
+<a href="../../reference/main-configuration">configuration</a>. You can use the <code>LdapManager</code> to generate LDAP queries for a
+certain domain, get a "Repository" for a specific LDAP type in your schema, switch between domains when you have 
+multiple defined in your configuration, and retrieve a <code>LdapConnection</code> object for the domain.</p>
+<h3 id="getting-a-ldapquerybuilder-instance">Getting a LdapQueryBuilder Instance</h3>
+<hr />
+<p>You can retrieve a <code>LdapQueryBuilder</code> for a specific domain. For example, the below query will select all users with 
+the first name 'John', last name starts with a 'S', and whose accounts are not disabled.</p>
+<pre><code class="php">$query = $ldapManager-&gt;buildLdapQuery();
+
+$users = $query-&gt;select(['username', 'city', 'state', 'guid'])
+    -&gt;fromUsers()
+    -&gt;where(
+        $query-&gt;filter-&gt;eq('firstName', 'John'),
+        $query-&gt;filter-&gt;startsWith('lastName', 'S'),
+        // 'accountIsDisabled' is an Active Directory specific filter method. Negate a statement using 'not'.
+        $query-&gt;filter-&gt;not($query-&gt;filter-&gt;accountIsDisabled())
+    )
+    -&gt;getLdapQuery()
+    -&gt;execute();
+</code></pre>
+
+<h3 id="getting-a-repository-object-for-a-ldap-type">Getting a Repository Object for a LDAP Type</h3>
+<hr />
+<p>A repository object lets you easily query specific attributes for a LDAP object type to retrieve either a single result
+or many results. You can also define your own custom repository for a LDAP type to encapsulate an reuse your queries.</p>
+<pre><code class="php">use LdapTools\Object\LdapObjectTypes;
+
+$repository = $ldapManager-&gt;getRepository(LdapObjectTypes::USER);
+
+// Retrieve the user that has a specific GUID.
+$user = $repository-&gt;findOneByGuid('29d46992-a5c4-4dc2-ac51-ac432db2a078');
+
+// Retrieve the user with a specific username.
+$user = $repository-&gt;findOneByUsername('jsmith');
+
+// Retrieve all users with their city set as Seattle
+$users = $repository-&gt;findByCity('Seattle');
+</code></pre>
+
+<h3 id="switching-domains">Switching Domains</h3>
+<hr />
+<p>If you have multiple domains defined in your configuration, you can easily switch the contexts of your calls in the
+<code>LdapManager</code> by using <code>switchDomain</code>:</p>
+<pre><code class="php">// Now calls to 'getRepository', 'buildLdapQuery', etc will return objects that execute in the context of this domain.
+$ldapManager-&gt;switchDomain('example.local');
+</code></pre>
+
+<h3 id="getting-the-ldapconnection">Getting The LdapConnection</h3>
+<hr />
+<p>The <code>LdapConnection</code> is what ultimately executes queries against LDAP. It encapsulates the PHP <code>ldap_*</code> functions into
+an object oriented form. It has several functions that also may be useful on their own.</p>
+<pre><code class="php">$connection = $ldapManager-&gt;getConnection();
+
+// Attempt to authenticate a user by username/password combination and get the result as a bool
+if ($connection-&gt;authenticate('username','password')) {
+    echo &quot;Successfully authenticated $username!&quot;.PHP_EOL;
+}
+
+// Retrieve an object containing the RootDSE for the domain
+$rootDse = $connection-&gt;getRootDse();
+
+var_dump($rootDse-&gt;toArray());
+var_dump($rootDse-&gt;getDefaultNamingContext());
+</code></pre>
+
+</div>
+            
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+            <p>Copyright &copy; 2015, Chad Sikorra.</p>
+            
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+
+        
+
+        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/prettify-1.0.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script>
+        <script src="../../js/base.js"></script>
+    </body>
+</html>

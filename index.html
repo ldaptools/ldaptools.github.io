@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="A feature-rich LDAP library for PHP 5.6+.">
+        <meta name="author" content="Chad Sikorra">
+        <link rel="canonical" href="http://www.phpldaptools.com/">
+        <link rel="shortcut icon" href="./img/favicon.ico">
+
+        <title>LdapTools</title>
+
+        <link href="./css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="./css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="./css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="./css/highlight.css">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body class="homepage">
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <a class="navbar-brand" href=".">LdapTools</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reference <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            <li >
+                                <a href="reference/attribute-converters/">Attribute converters</a>
+                            </li>
+                        
+                            <li >
+                                <a href="reference/default-schema-attributes/">Default schema attributes</a>
+                            </li>
+                        
+                            <li >
+                                <a href="reference/main-configuration/">Main configuration</a>
+                            </li>
+                        
+                            <li >
+                                <a href="reference/schema-configuration/">Schema configuration</a>
+                            </li>
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            <li >
+                                <a href="tutorials/building-ldap-queries/">Building ldap queries</a>
+                            </li>
+                        
+                            <li >
+                                <a href="tutorials/using-the-ldap-manager/">Using the ldap manager</a>
+                            </li>
+                        
+                        </ul>
+                    </li>
+                
+                
+                </ul>
+            
+
+            
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                
+                
+                <li class="disabled">
+                    <a rel="next" >
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </li>
+                <li >
+                    <a rel="prev" href="reference/attribute-converters/">
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </li>
+                
+                
+                <li>
+                    <a href="https://github.com/ldaptools/ldaptools/">
+                        
+                            <i class="fa fa-github"></i>
+                        
+                        GitHub
+                    </a>
+                </li>
+                
+            </ul>
+            
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#ldaptools">LdapTools</a></li>
+        
+            <li><a href="#overview">Overview</a></li>
+        
+            <li><a href="#installation">Installation</a></li>
+        
+            <li><a href="#getting-started">Getting Started</a></li>
+        
+            <li><a href="#todo">TODO</a></li>
+        
+    
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="ldaptools">LdapTools</h1>
+<p>A feature-rich LDAP library for PHP 5.6+.</p>
+<hr />
+<h2 id="overview">Overview</h2>
+<p>LdapTools is designed to be customizable for use with pretty much any directory service, but contains default attribute converters and schemas 
+for Active Directory and OpenLDAP. </p>
+<ul>
+<li>A fluent and easy to understand syntax for generating LDAP queries.</li>
+<li>A dynamic and customizable attribute converter system to translate data between LDAP and PHP. </li>
+<li>Active Directory specific features to help ease development of applications.</li>
+<li>Includes a comprehensive set of specs for the code.</li>
+</ul>
+<h2 id="installation">Installation</h2>
+<p>The recommended way to install LdapTools is using <a href="http://getcomposer.org/download/">Composer</a>:</p>
+<pre><code class="bash">composer require ldaptools/ldaptools
+</code></pre>
+
+<h2 id="getting-started">Getting Started</h2>
+<p>The easiest way to get started is by creating a YAML config file. See the <a href="https://github.com/ldaptools/ldaptools/tree/master/resources/config/example.yml">example config</a> file for basic usage. Once you have a configuration file defined, you can get up and running by doing the following:</p>
+<pre><code class="php">use LdapTools\Configuration;
+use LdapTools\LdapManager;
+
+$config = (new Configuration())-&gt;load('/path/to/ldap/config.yml');
+$ldap = new LdapManager($config);
+
+$query = $ldap-&gt;buildLdapQuery()
+    -&gt;select()
+    -&gt;fromUsers()
+    -&gt;where(['firstName' =&gt; 'Foo'])
+    -&gt;orWhere(['firstName' =&gt; 'Bar']);
+
+// Returns an array of all users whose first name is 'Foo' or 'Bar'
+$users = $query-&gt;getLdapQuery()-&gt;execute();
+
+// It also supports the concepts of repositories...
+$userRepository = $ldap-&gt;getRepository('user');
+
+// Find all users whose last name equals Smith.
+$users = $userRepository-&gt;findByLastName('Smith');
+
+// Get the first user whose username equals 'jsmith'
+$user = $userRepository-&gt;findOneByUsername('jsmith');
+</code></pre>
+
+<p>The query syntax is very similar to <a href="http://www.doctrine-project.org">Doctrine ORM</a>.</p>
+<h2 id="todo">TODO</h2>
+<p>There are still several features that need to be implemented:</p>
+<ul>
+<li>Creating and modifying LDAP entries.</li>
+<li>An object hydration process in addition to the array hydrator.</li>
+<li>Automatic generation of the schema based off of information in LDAP.</li>
+<li>A logging mechanism.</li>
+<li>An event system.</li>
+<li>More work needed on the OpenLDAP schema.</li>
+</ul>
+</div>
+            
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+            <p>Copyright &copy; 2015, Chad Sikorra.</p>
+            
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+
+        
+
+        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="./js/bootstrap-3.0.3.min.js"></script>
+        <script src="./js/prettify-1.0.min.js"></script>
+        <script src="./js/highlight.pack.js"></script>
+        <script src="./js/base.js"></script>
+    </body>
+</html>

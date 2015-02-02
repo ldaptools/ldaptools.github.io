@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="Chad Sikorra">
+        <link rel="canonical" href="http://www.phpldaptools.com/tutorials/building-ldap-queries/">
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+
+        <title>Building ldap queries - LdapTools</title>
+
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../..">LdapTools</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reference <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            <li >
+                                <a href="../../reference/attribute-converters">Attribute converters</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../../reference/default-schema-attributes">Default schema attributes</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../../reference/main-configuration">Main configuration</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../../reference/schema-configuration">Schema configuration</a>
+                            </li>
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            <li class="active">
+                                <a href=".">Building ldap queries</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../using-the-ldap-manager">Using the ldap manager</a>
+                            </li>
+                        
+                        </ul>
+                    </li>
+                
+                
+                </ul>
+            
+
+            
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                
+                
+                <li >
+                    <a rel="next" href="../../reference/schema-configuration">
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </li>
+                <li >
+                    <a rel="prev" href="../using-the-ldap-manager">
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </li>
+                
+                
+                <li>
+                    <a href="https://github.com/ldaptools/ldaptools/">
+                        
+                            <i class="fa fa-github"></i>
+                        
+                        GitHub
+                    </a>
+                </li>
+                
+            </ul>
+            
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#building-ldap-queries">Building LDAP Queries</a></li>
+        
+            <li><a href="#generating-ldap-filters-without-ldapmanager">Generating LDAP Filters Without LdapManager</a></li>
+        
+            <li><a href="#generating-queries-when-using-the-ldapmanager">Generating Queries When Using the LdapManager</a></li>
+        
+            <li><a href="#ldapquerybuilder-methods">LdapQueryBuilder Methods</a></li>
+        
+            <li><a href="#filter-method-shortcuts">Filter Method Shortcuts</a></li>
+        
+            <li><a href="#active-directory-filter-method-shortcuts">Active Directory Filter Method Shortcuts</a></li>
+        
+    
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="building-ldap-queries">Building LDAP Queries</h1>
+<hr />
+<p>The <code>LdapQueryBuilder</code> class provides an easy object oriented method of producing LDAP filters of any complexity. Those
+familiar with Doctrine's QueryBuilder will find this syntax easy to adapt to, as it is pretty much the same. This class
+takes care of escaping all values passed to it when generating the filter.</p>
+<ul>
+<li><a href="#ldapquerybuilder-methods">LdapQueryBuilder Methods</a></li>
+<li><a href="#filter-method-shortcuts">Filter Method Shorcuts</a></li>
+</ul>
+<h2 id="generating-ldap-filters-without-ldapmanager">Generating LDAP Filters Without LdapManager</h2>
+<hr />
+<p>This class is most easily used in the context of the <code>LdapManager</code>, but it is also possible to use on its own if your 
+only desire is to generate LDAP filters.</p>
+<pre><code class="php">use LdapTools\Query\LdapQueryBuilder;
+
+$lqb = new LdapQueryBuilder();
+
+$filter = $lqb-&gt;select('givenName', 'sn', 'l')
+    -&gt;where('objectClass','user')
+    -&gt;andWhere($lqb-&gt;filter-&gt;like('sAMAccountName','*smith'))
+    -&gt;getLdapFilter();
+
+echo &quot;LDAP Filter: &quot;.$filter.PHP_EOL;
+</code></pre>
+
+<h2 id="generating-queries-when-using-the-ldapmanager">Generating Queries When Using the LdapManager</h2>
+<hr />
+<p>When you call <code>createLdapQuery</code> in the <code>LdapManager</code> you will get an instance of the <code>LdapQueryBuilder</code> class that knows
+all the information about the schema of your domain, and a <code>LdapConnection</code> capable of executing the query. With this
+information it can do a lot of the heavy lifting to allow it to easily generate any LDAP filter.</p>
+<pre><code class="php">$lqb = $ldapManager-&gt;buildLdapQuery();
+
+// When no attributes are specifically selected, it will pull a default set defined in the schema.
+$users = $lqb-&gt;select()
+    -&gt;fromUsers()
+    -&gt;Where(['state' =&gt; 'Wisconsin'])
+    -&gt;getLdapQuery()
+    -&gt;execute();
+
+foreach ($users as $user) {
+    foreach ($user as $attribute =&gt; $value) {
+        echo $attribute.' =&gt; '.$value.PHP_EOL;
+    }
+}
+</code></pre>
+
+<h2 id="ldapquerybuilder-methods">LdapQueryBuilder Methods</h2>
+<p>This class provides many methods that simplify the process of creating complex LDAP filters. The following is a list of
+the methods and their general use.</p>
+<hr />
+<h4 id="selectattributes">select($attributes)</h4>
+<p>The <code>select</code> method allows you to choose specifically which attributes you would like to return from the query. Simply
+pass an array of attribute names to it that you would like. In the absence of anything passed to it, it will select the
+default set of attributes for the query as defined for the type in the schema.</p>
+<p>Attribute names are looked for in the schema to see if they map to specific LDAP attributes.</p>
+<pre><code class="php">$lqb-&gt;select(['firstName', 'city', 'state', 'sid']);
+
+// Attribute names will always be returned in the case you enter it in, irrespective of how LDAP returns the data.
+$lqb-&gt;select(['FirstName', 'City', 'State', 'SID']);
+</code></pre>
+
+<p>If you want the raw data to be returned from LDAP you can select LDAP attribute names explicitly. You can also include 
+schema names at the same time. <strong>NOTE:</strong> Attributes selected by their LDAP attribute name will <strong>NOT</strong> have attribute 
+conversion done.</p>
+<pre><code class="php">// Will return 'objectSid' AND 'sid'
+$lqb-&gt;select(['givenName', 'l', 'objectSid', 'sid']);
+</code></pre>
+
+<hr />
+<h4 id="fromldaptype">from($ldapType)</h4>
+<p>The <code>from</code> method requires an argument for the LDAP type. This type must be defined in your LDAP schema. Common types
+that are in the schema by default include: <code>user</code>, <code>group</code>, <code>contact</code>, <code>computer</code>. These types are defined as constants
+in the <code>\LdapTools\Object\LdapObjectTypes</code> class. Using this method makes the query aware of the attribute name mapping
+and converters defined for the type.</p>
+<pre><code class="php">use LdapTools\Object\LdapObjectType;
+
+// Search for users
+$lqb-&gt;from(LdapObjectType::USER);
+
+// Search for computers
+$lqb-&gt;from(LdapObjectType::COMPUTER);
+</code></pre>
+
+<hr />
+<h4 id="fromusers">fromUsers()</h4>
+<p>A convenience shortcut of the the <code>from</code> method to select from LDAP <code>user</code> types.</p>
+<pre><code class="php">// Search for users
+$lqb-&gt;fromUsers();
+</code></pre>
+
+<hr />
+<h4 id="fromgroups">fromGroups()</h4>
+<p>A convenience shortcut of the the <code>from</code> method to select from LDAP <code>group</code> types.</p>
+<pre><code class="php">// Search for groups
+$lqb-&gt;fromGroups();
+</code></pre>
+
+<hr />
+<h4 id="wherestatements">where(...$statements)</h4>
+<p>This method encapsulates its arguments into a logical 'AND' statement. You can either pass a simple array of attributes
+and values that must be met, or any number of filter operator statements.</p>
+<pre><code class="php">// Pass a simple array of attributes =&gt; values. These attributes must be equal to these values.
+$lqb-&gt;where(['firstName' =&gt; 'Timmy', 'state' =&gt; 'Wyoming]);
+
+// Pass filter operator statements instead. It will take care of attribute value conversions as well.
+$lqb-&gt;where($lqb-&gt;filter-&gt;gte('created', new \DateTime('5-4-2000'));
+
+// A more complex series of statements
+$lqb-&gt;where(
+    $lqb-&gt;filter-&gt;neq('firstName', 'Jimbo'),
+    $lqb-&gt;filter-&gt;bOr(
+        $lqb-&gt;filter-&gt;eq('lastName', 'Dodgson'), 
+        $lqb-&gt;filter-&gt;eq('lastName', 'Venkman')
+    )
+);
+</code></pre>
+
+<hr />
+<h4 id="andwherestatements">andWhere(...$statements)</h4>
+<p>This method is the same as the <code>where</code> method. It encapsulates its arguments into a logical 'AND' statement. Statements
+passed will be added to the same logical 'AND' statement that the <code>where</code> method created.</p>
+<hr />
+<h4 id="orwherestatements">orWhere(...$statements)</h4>
+<p>This method is the same as the <code>where</code> method, but it will instead encapsulate any passed arguments into a logical 'OR'
+statement.</p>
+<hr />
+<h4 id="addstatements">add(...$statements)</h4>
+<p>This is a low-level method that will take any object that is an instance of a <code>BaseOperator</code> and add it to the query.
+The shorthand <code>$lqb-&gt;filter()</code> methods is what does the heavy-lifting for creating the various operator objects. You
+should not need to call this method explicitly, but it is included if you need it.</p>
+<hr />
+<h4 id="setbasednbasedn">setBaseDn($baseDn)</h4>
+<p>This method sets the base DN (distinguished name) for the query. That means that any LDAP object at or below this point
+in the directory will be queried for. This will default to whatever you set in the domain configuration for the
+<code>base_dn</code> value.</p>
+<pre><code class="php">$lqb-&gt;setBaseDn('OU=Employees,OU=Users,DC=example,DC=com')
+</code></pre>
+
+<hr />
+<h4 id="setscopesubtree">setScopeSubTree()</h4>
+<p>'subtree' is the default search scope for the query and should not need to be called explicitly. This method sets the 
+LDAP search scope recursively from the point of the base DN onwards.</p>
+<hr />
+<h4 id="setscopeonelevel">setScopeOneLevel()</h4>
+<p>This method sets the LDAP search scope to one level at the point of the base DN. This is equivalent to a non-recursive
+ listing of the contents of a folder directory. The search will not recurse any further than the level of the base DN.</p>
+<hr />
+<h4 id="setscopebase">setScopeBase()</h4>
+<p>This method sets the LDAP search scope to the base level. This is used to retrieve the contents of a single entry, is
+likely most commonly used to retrieve  the RootDSE of a domain.</p>
+<p>Example usage to return the RootDSE for a domain:</p>
+<pre><code class="php">$rootDse = $lqb-&gt;where($lqb-&gt;filter-&gt;present('objectClass'))
+                -&gt;setBaseDn('')
+                -&gt;setScopeBase()
+                -&gt;getLdapQuery()
+                -&gt;execute();
+</code></pre>
+
+<hr />
+<h4 id="setpagesizesize">setPageSize($size)</h4>
+<p>This methods sets the paging size for the query. It will default to whatever value you set in your configuration. The
+default when no value is explicitly set is 1000.</p>
+<pre><code class="php">$lqb-&gt;setPageSize(500);
+</code></pre>
+
+<hr />
+<h4 id="getldapfilter">getLdapFilter()</h4>
+<p>Gets the LDAP filter, as a string, that the query would produce.</p>
+<pre><code class="php">$filter = $lqb-&gt;getLdapFilter();
+</code></pre>
+
+<hr />
+<h4 id="getldapquery">getLdapQuery()</h4>
+<p>Retrieves an instance of the <code>LdapQuery</code> object that you can then call the <code>execute</code> method on to get your results. The
+<code>LdapQuery</code> object has the filter, page size, base DN, scope, etc that you set in the builder and takes care of
+converting the LDAP results array using a hydration process. It returns an easier to use associative array of the
+ LDAP entries.</p>
+<pre><code class="php">$results = $lqb-&gt;getLdapQuery()-&gt;execute();
+</code></pre>
+
+<hr />
+<h2 id="filter-method-shortcuts">Filter Method Shortcuts</h2>
+<p>The <code>filter()</code> method of the <code>LdapQueryBuilder</code> returns a helper class that provides many shortcut methods for creating
+the LDAP operator classes within the <code>\LdapTools\Query\Operator</code> namespace. This way you do not have to manually
+construct the operators by doing:</p>
+<pre><code class="php">use \LdapTools\Query\Operator\bOr;
+use \LdapTools\Query\Operator\Comparison;
+
+// ...
+$lqb-&gt;where(new bOr(
+    new Comparison('firstName', Comparison::EQ, 'Bill'),
+    new Comparison('firstName', Comparison::EQ, 'Egon')
+));
+</code></pre>
+
+<p>Instead you can write:</p>
+<pre><code class="php">$lqb-&gt;where($lqb-&gt;filter-&gt;or(
+    $lqb-&gt;filter-&gt;eq('firstName', 'Bill'),
+    $lqb-&gt;filter-&gt;eq('firstName', 'Egon')
+));
+</code></pre>
+
+<p>When you call <code>filter()</code> you are just calling a method on the <code>\LdapTools\Query\Builder\FilterBuilder</code> class. The full 
+list and description of available methods is below.</p>
+<hr />
+<h4 id="aeqattribute-value">aeq($attribute, $value)</h4>
+<p>Creates an "approximately-equal-to" comparison between the attribute and the value. The results are dependent on the
+LDAP specific implementation of this operator. But it will typically function like a "sounds like" comparison: 
+<code>(attribute~=value)</code></p>
+<hr />
+<h4 id="eqattribute-value">eq($attribute, $value)</h4>
+<p>Creates an "equal-to" comparison between the attribute and the value: <code>(attribute=value)</code></p>
+<hr />
+<h4 id="neqattribute-value">neq($attribute, $value)</h4>
+<p>Creates a "not-equal-to" comparison between the attribute and the value. This is equivalent to wrapping a
+ <code>eq($attribute, $value)</code> within a 'NOT' statement: <code>(!(attribute=value))</code></p>
+<hr />
+<h4 id="leqattribute-value">leq($attribute, $value)</h4>
+<p>Creates a "less-than-or-equal-to" comparison between the attribute and the value: <code>(attribute&lt;=value)</code></p>
+<hr />
+<h4 id="geqattribute-value">geq($attribute, $value)</h4>
+<p>Creates a "greater-than-or-equal-to" comparison between the attribute and the value: <code>(attribute&gt;=value)</code></p>
+<hr />
+<h4 id="bitwiseandattribute-value">bitwiseAnd($attribute, $value)</h4>
+<p>Creates a bitwise 'AND' comparison between the attribute and the value: <code>(attribute:1.2.840.113556.1.4.803:=value)</code></p>
+<hr />
+<h4 id="bitwiseorattribute-value">bitwiseOr($attribute, $value)</h4>
+<p>Creates a bitwise 'OR' comparison between the attribute and the value: <code>(attribute:1.2.840.113556.1.4.804:=value)</code></p>
+<hr />
+<h4 id="startswithattribute-value">startsWith($attribute, $value)</h4>
+<p>Creates a "equal-to" comparison with a wildcard after the value: <code>(attribute=value*)</code></p>
+<hr />
+<h4 id="endswithattribute-value">endsWith($attribute, $value)</h4>
+<p>Creates a "equal-to" comparison with a wildcard before the value: <code>(attribute=*value)</code></p>
+<hr />
+<h4 id="containsattribute-value">contains($attribute, $value)</h4>
+<p>Creates a "equal-to" comparison with a wildcards at each end of the value: <code>(attribute=*value*)</code></p>
+<hr />
+<h4 id="likeattribute-value">like($attribute, $value)</h4>
+<p>Creates a "equal-to" comparison that will not escape any wildcards you use in the value: <code>(attribute=v*a*l*u*e)</code>.</p>
+<hr />
+<h4 id="presentattribute">present($attribute)</h4>
+<p>Creates a "equal-to" comparison with a single wildcard as the value. Returns any entry with this attribute populated: 
+<code>(attribute=*)</code></p>
+<hr />
+<h4 id="notpresentattribute">notPresent($attribute)</h4>
+<p>Creates a negated form of the <code>present($attribute)</code> method. Returns any entry that does not contain the attribute: 
+<code>(!(attribute=*))</code></p>
+<hr />
+<h4 id="bandstatements">bAnd(...$statements)</h4>
+<p>Creates a logical 'AND' statement against all other operators passed to it: <code>(&amp;((attribute=value)(attribute=value)))</code></p>
+<hr />
+<h4 id="borstatements">bOr(...$statements)</h4>
+<p>Creates a logical 'OR' statement against all other operators passed to it: <code>(|((attribute=value)(attribute=value)))</code></p>
+<hr />
+<h4 id="bnotstatements">bNot($statements)</h4>
+<p>Creates a logical 'NOT' statement against whatever other statement you pass it it: <code>(!(attribute=value))</code></p>
+<h2 id="active-directory-filter-method-shortcuts">Active Directory Filter Method Shortcuts</h2>
+<p>If you're using a <code>LdapConnection</code> that has a LDAP type set as <code>ad</code>, then when you call <code>filter()</code> you will also have
+additional filter method shortcuts that are specific to Active Directory:</p>
+<hr />
+<h4 id="accountisdisabled">accountIsDisabled()</h4>
+<p>Checks for disabled accounts. Creates a bitwise 'AND' comparison against the <code>userAccountControl</code> attribute.</p>
+<hr />
+<h4 id="accountislocked">accountIsLocked()</h4>
+<p>Check for locked accounts. Creates a "greater-than-or-equal-to" comparison against the <code>lockoutTime</code> attribute.</p>
+<hr />
+<h4 id="passwordmustchange">passwordMustChange()</h4>
+<p>Checks for accounts that must change their password on the next login. Creates an "equal-to" comparison against the
+<code>pwdLastSet</code> attribute.</p>
+<hr />
+<h4 id="passwordneverexpires">passwordNeverExpires()</h4>
+<p>Checks for accounts that have passwords that are set to never expire. Creates a bitwise 'AND' comparison against the 
+<code>userAccountControl</code> attribute.</p>
+<hr />
+<h4 id="hasmemberrecursivelyuserdn">hasMemberRecursively($userDn)</h4>
+<hr />
+<p>Recursively checks a groups for a member specified by their full distinguished name. Creates a matching rule comparison 
+using the OID <code>IN_CHAIN</code> against the groups <code>member</code> attribute.</p>
+<hr />
+<h4 id="isrecursivelymemberofgroupdn">isRecursivelyMemberOf($groupDn)</h4>
+<p>Recursively checks a user's group membership for a group specified by its full distinguished name. Creates a matching 
+rule comparison using the OID <code>IN_CHAIN</code> against the users <code>memberOf</code> attribute. To make this a bit easier to use, you
+could do something like the following:</p>
+<pre><code class="php">use LdapTools\Object\LdapObjectType;
+
+// ...
+
+$groupRepo = $ldapManager-&gt;getRepository(LdapObjectType::GROUP);
+$group = $groupRepo-&gt;findOneByName('Domain Administrators');
+
+$query = $ldapManager-&gt;buildLdapQuery();
+$users = $query-&gt;select()
+    -&gt;fromUsers()
+    -&gt;where($query-&gt;filter()-&gt;isRecursivelyMemberOf($group['dn']))
+    -&gt;getLdapQuery()
+    -&gt;execute();
+</code></pre>
+
+</div>
+            
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+            <p>Copyright &copy; 2015, Chad Sikorra.</p>
+            
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+
+        
+
+        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/prettify-1.0.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script>
+        <script src="../../js/base.js"></script>
+    </body>
+</html>
