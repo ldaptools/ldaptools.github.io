@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="Chad Sikorra">
+        <link rel="canonical" href="http://www.phpldaptools.com/tutorials/creating-ldap-objects/">
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+
+        <title>Creating ldap objects - LdapTools</title>
+
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../..">LdapTools</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reference <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            <li >
+                                <a href="../../reference/attribute-converters">Attribute converters</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../../reference/default-schema-attributes">Default schema attributes</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../../reference/main-configuration">Main configuration</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../../reference/schema-configuration">Schema configuration</a>
+                            </li>
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            <li >
+                                <a href="../building-ldap-queries">Building ldap queries</a>
+                            </li>
+                        
+                            <li class="active">
+                                <a href=".">Creating ldap objects</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../using-the-ldap-manager">Using the ldap manager</a>
+                            </li>
+                        
+                        </ul>
+                    </li>
+                
+                
+                </ul>
+            
+
+            
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                
+                
+                <li >
+                    <a rel="next" href="../building-ldap-queries">
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </li>
+                <li >
+                    <a rel="prev" href="../using-the-ldap-manager">
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </li>
+                
+                
+                <li>
+                    <a href="https://github.com/ldaptools/ldaptools/">
+                        
+                            <i class="fa fa-github"></i>
+                        
+                        GitHub
+                    </a>
+                </li>
+                
+            </ul>
+            
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#creating-ldap-objects">Creating LDAP Objects</a></li>
+        
+            <li><a href="#using-parameters-in-attribute-values">Using Parameters in Attribute Values</a></li>
+        
+            <li><a href="#ldapobjectcreator-methods">LdapObjectCreator Methods</a></li>
+        
+    
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="creating-ldap-objects">Creating LDAP Objects</h1>
+<hr />
+<p>The <code>LdapObjectCreator</code> class provides an easy method for creating LDAP objects. It can accessed directly from the LDAP
+Manager and provides shortcuts and helpers for creating Users, Groups, Contacts, and Computers using the default schema.
+It also supports setting parameters within attribute values to avoid repetition.</p>
+<p>To get an instance of the object creator class and create some objects:</p>
+<pre><code class="php">$ldapObject = $ldapManager-&gt;createLdapObject();
+
+// Creating a user account (enabled by default)
+$ldapObject-&gt;createUser()
+    -&gt;in('cn=Users,dc=example,dc=local')
+    -&gt;with(['username' =&gt; 'jsmith', 'password' =&gt; '12345'])
+    -&gt;execute();
+
+// Create a typical AD global security group...
+$ldapObject-&gt;createGroup()
+    -&gt;in('dc=example,dc=local')
+    -&gt;with(['name' =&gt; 'Generic Security Group'])
+    -&gt;execute();
+
+// Creates a contact user...
+$ldapObject-&gt;createContact()
+    -&gt;in('dc=example,dc=local')
+    -&gt;with(['name' =&gt; 'Some Guy', 'emailAddress' =&gt; 'SomeGuy@SomeDomain.com'])
+    -&gt;execute();
+
+// Creates a computer object...
+$ldapObject-&gt;createComputer()
+    -&gt;in('dc=example,dc=local')
+    -&gt;with(['name' =&gt; 'MYWOKRSTATION'])
+    -&gt;execute();
+</code></pre>
+
+<h2 id="using-parameters-in-attribute-values">Using Parameters in Attribute Values</h2>
+<hr />
+<p>When you create a generic <code>user</code>, <code>group</code>, <code>contact</code>, etc there are very few values you need to explicitly set for them
+to be created. Part of the reason for this is that the schema is leveraging parameters to fill in values for the rest of
+the required attributes. You can use parameters to fill in attribute values based off other attributes, or any value you
+want. For instance:</p>
+<pre><code class="php">$object-&gt;createContact()
+    -&gt;in('dc=awesome,dc=local')
+    -&gt;with([
+        'name' =&gt; '%firstname% %lastname%',
+        'firstName' =&gt; 'Some',
+        'lastName' =&gt; 'Guy',
+        'emailAddress' =&gt; '%firstname%.%lastname%@%somedomain%'
+    ])
+    -&gt;setParameter('somedomain','foo.bar')
+    -&gt;execute();
+</code></pre>
+
+<p>This contains 3 parameters. All parameters start and end with a percentage symbol. The <code>%firstname%</code> and <code>%lastname%</code>
+ parameters will populate their value with their corresponding attribute name. However, <code>%somedomain%</code> does not 
+correspond to a known attribute, so the parameter must be defined. It will be filled in with <code>foo.bar</code> as defined.</p>
+<p>There is also a special parameter called <code>%_domainname_%</code> when creating LDAP objects that will resolve to the fully
+qualified domain name of the connection in the current context (ie. <code>example.com</code>).</p>
+<h2 id="ldapobjectcreator-methods">LdapObjectCreator Methods</h2>
+<p>This class provides a few methods to make it easier to create LDAP objects.</p>
+<hr />
+<h4 id="incontainer">in($container)</h4>
+<p>The <code>in</code> method specifies the container/OU you want to place the LDAP object. It should be a string with the common LDAP
+distinguished name form (ie. <code>ou=users,dc=mydomain,dc=com</code>).</p>
+<p>You can also specify a default location all objects of a certain type by defining the <code>default_container</code> directive in 
+your schema (see <a href="../../reference/schema-configuration">the schema configuration reference</a>). If you define that can omit this method.</p>
+<hr />
+<h4 id="withattributes">with($attributes)</h4>
+<p>This specifies the attributes and values you would like for the object to have once created in LDAP. All attribute values are
+converted and renamed to their proper LDAP form based on your schema.</p>
+<hr />
+<h4 id="setdncontainer">setDn($container)</h4>
+<p>This method allows you to explicitly state the distinguished name for the object you are creating. Typically you should
+not have to call this. The DN is determined automatically based off the <code>name</code> attribute in your schema, and the
+location you specified with the <code>in($container)</code> method.</p>
+<hr />
+<h4 id="setparametercontainer">setParameter($container)</h4>
+<p>This allows you to set any parameter you want that you can later use within an attribute value to have it resolve to the
+parameter value. See the full explanation of parameters near the start of this document.</p>
+<hr />
+<h4 id="execute">execute()</h4>
+<p>Takes all of your set attributes, parameters, OU location, etc and adds the object to LDAP. If an issue is encountered
+while adding to LDAP it will throw an exception...</p>
+<pre><code class="php">use LdapTools\Exception\LdapConnectionException;
+
+//...
+
+$ldapObject = $ldapManager-&gt;createLdapObject();
+
+// Creating a user account (enabled by default)
+try {
+    $object-&gt;createUser()
+        -&gt;in('cn=Users,dc=example,dc=local')
+        -&gt;with(['username' =&gt; 'jsmith', 'password' =&gt; '12345'])
+        -&gt;execute();
+} catch (LdapConnectionException $e) {
+    echo &quot;Failed to add user!&quot;.PHP_EOL;
+    echo $e-&gt;getMessage().PHP_EOL;
+}
+</code></pre>
+
+</div>
+            
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+            <p>Copyright &copy; 2015, Chad Sikorra.</p>
+            
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+
+        
+
+        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/prettify-1.0.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script>
+        <script src="../../js/base.js"></script>
+    </body>
+</html>
