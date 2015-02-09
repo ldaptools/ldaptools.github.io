@@ -87,6 +87,10 @@
                             </li>
                         
                             <li >
+                                <a href="../creating-ldap-objects">Creating ldap objects</a>
+                            </li>
+                        
+                            <li >
                                 <a href="../using-the-ldap-manager">Using the ldap manager</a>
                             </li>
                         
@@ -108,7 +112,7 @@
                     </a>
                 </li>
                 <li >
-                    <a rel="prev" href="../using-the-ldap-manager">
+                    <a rel="prev" href="../creating-ldap-objects">
                         Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -253,7 +257,7 @@ $lqb-&gt;fromGroups();
 <p>This method encapsulates its arguments into a logical 'AND' statement. You can either pass a simple array of attributes
 and values that must be met, or any number of filter operator statements.</p>
 <pre><code class="php">// Pass a simple array of attributes =&gt; values. These attributes must be equal to these values.
-$lqb-&gt;where(['firstName' =&gt; 'Timmy', 'state' =&gt; 'Wyoming]);
+$lqb-&gt;where(['firstName' =&gt; 'Timmy', 'state' =&gt; 'Wyoming']);
 
 // Pass filter operator statements instead. It will take care of attribute value conversions as well.
 $lqb-&gt;where($lqb-&gt;filter-&gt;gte('created', new \DateTime('5-4-2000'));

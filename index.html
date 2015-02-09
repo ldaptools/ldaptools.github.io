@@ -87,6 +87,10 @@
                             </li>
                         
                             <li >
+                                <a href="tutorials/creating-ldap-objects/">Creating ldap objects</a>
+                            </li>
+                        
+                            <li >
                                 <a href="tutorials/using-the-ldap-manager/">Using the ldap manager</a>
                             </li>
                         
@@ -157,6 +161,7 @@
 for Active Directory and OpenLDAP. </p>
 <ul>
 <li>A fluent and easy to understand syntax for generating LDAP queries.</li>
+<li>Easily create common LDAP objects (Users, Groups, Contacts, Computers).</li>
 <li>A dynamic and customizable attribute converter system to translate data between LDAP and PHP. </li>
 <li>Active Directory specific features to help ease development of applications.</li>
 <li>Includes a comprehensive set of specs for the code.</li>
@@ -191,13 +196,39 @@ $users = $userRepository-&gt;findByLastName('Smith');
 
 // Get the first user whose username equals 'jsmith'
 $user = $userRepository-&gt;findOneByUsername('jsmith');
+
+$ldapObject = $ldap-&gt;createLdapObject();
+
+// Creating a user account (enabled by default)
+$ldapObject-&gt;createUser()
+    -&gt;in('cn=Users,dc=example,dc=local')
+    -&gt;with(['username' =&gt; 'jsmith', 'password' =&gt; '12345'])
+    -&gt;execute();
+
+// Create a typical AD global security group...
+$ldapObject-&gt;createGroup()
+    -&gt;in('dc=example,dc=local')
+    -&gt;with(['name' =&gt; 'Generic Security Group'])
+    -&gt;execute();
+
+// Creates a contact user...
+$ldapObject-&gt;createContact()
+    -&gt;in('dc=example,dc=local')
+    -&gt;with(['name' =&gt; 'Some Guy', 'emailAddress' =&gt; 'SomeGuy@SomeDomain.com'])
+    -&gt;execute();
+
+// Creates a computer object...
+$ldapObject-&gt;createComputer()
+    -&gt;in('dc=example,dc=local')
+    -&gt;with(['name' =&gt; 'MYWOKRSTATION'])
+    -&gt;execute();
 </code></pre>
 
 <p>The query syntax is very similar to <a href="http://www.doctrine-project.org">Doctrine ORM</a>.</p>
 <h2 id="todo">TODO</h2>
 <p>There are still several features that need to be implemented:</p>
 <ul>
-<li>Creating and modifying LDAP entries.</li>
+<li>Modifying LDAP entries.</li>
 <li>An object hydration process in addition to the array hydrator.</li>
 <li>Automatic generation of the schema based off of information in LDAP.</li>
 <li>A logging mechanism.</li>

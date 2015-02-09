@@ -87,6 +87,10 @@
                             </li>
                         
                             <li >
+                                <a href="../../tutorials/creating-ldap-objects">Creating ldap objects</a>
+                            </li>
+                        
+                            <li >
                                 <a href="../../tutorials/using-the-ldap-manager">Using the ldap manager</a>
                             </li>
                         
@@ -205,6 +209,36 @@ complete listing of possible built-in attribute converters, see this <a href="..
 <h4 id="repository">repository</h4>
 <p>The full name class name (ie <code>\MyNamespace\MyClasses\CustomRepository</code>) to use as the default repository when calling
  <code>getRepository('object_type')</code> on the <code>LdapManager</code> class. The class must extend <code>\LdapTools\LdapObjectRepository</code>.</p>
+<hr />
+<h4 id="default_values">default_values</h4>
+<p>An array of attributes with what their default value should be set to whe creating this object using the 
+<code>LdapObjectCreator</code>. These values also accept parameter values encased within % symbols that can resolve to other 
+attribute values.</p>
+<pre><code class="yaml">    attributes_to_select:
+        firstName: &quot;%username%&quot;
+        displayName: &quot;%lastName%, %firstName%&quot;
+        description: &quot;%displayName%: Located in %city%&quot;
+        city: &quot;Utah&quot;
+</code></pre>
+
+<hr />
+<h4 id="attributes_required">attributes_required</h4>
+<p>An array of attributes that are required when creating this object type. If these are not present, an exception will be
+thrown. This will only happen if they are not specified on creation and not contained within the <code>default_values</code> list.</p>
+<pre><code class="yaml">    required_attributes:
+        - 'username'
+        - 'password'
+        - 'firstName'
+        - 'lastName'
+</code></pre>
+
+<hr />
+<h4 id="default_container">default_container</h4>
+<p>This should be a string in DN format that represents the OU/container where new objects for this LDAP type should be
+placed by default when created.</p>
+<pre><code class="yaml">    default_container: 'OU=Accounting,OU=Employees,DC=example,DC=local'
+</code></pre>
+
 </div>
             
         </div>
