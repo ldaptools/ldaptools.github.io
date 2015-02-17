@@ -79,6 +79,19 @@
                 
                 
                     <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cookbook <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            <li >
+                                <a href="../../cookbook/creating-a-custom-repository">Creating a custom repository</a>
+                            </li>
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
@@ -88,6 +101,10 @@
                         
                             <li >
                                 <a href="../../tutorials/creating-ldap-objects">Creating ldap objects</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../../tutorials/modifying-ldap-objects">Modifying ldap objects</a>
                             </li>
                         
                             <li >
@@ -112,7 +129,7 @@
                     </a>
                 </li>
                 <li >
-                    <a rel="prev" href="../../tutorials/building-ldap-queries">
+                    <a rel="prev" href="../../cookbook/creating-a-custom-repository">
                         Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -207,12 +224,12 @@ complete listing of possible built-in attribute converters, see this <a href="..
 
 <hr />
 <h4 id="repository">repository</h4>
-<p>The full name class name (ie <code>\MyNamespace\MyClasses\CustomRepository</code>) to use as the default repository when calling
+<p>The full class name (ie <code>\MyNamespace\MyClasses\CustomRepository</code>) to use as the default repository when calling
  <code>getRepository('object_type')</code> on the <code>LdapManager</code> class. The class must extend <code>\LdapTools\LdapObjectRepository</code>.</p>
 <hr />
 <h4 id="default_values">default_values</h4>
 <p>An array of attributes with what their default value should be set to whe creating this object using the 
-<code>LdapObjectCreator</code>. These values also accept parameter values encased within % symbols that can resolve to other 
+<code>LdapObjectCreator</code>. These values also accept parameter values encased within <code>%</code> symbols that can resolve to other 
 attribute values.</p>
 <pre><code class="yaml">    attributes_to_select:
         firstName: &quot;%username%&quot;

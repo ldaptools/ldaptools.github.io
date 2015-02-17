@@ -6,10 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         <meta name="author" content="Chad Sikorra">
-        <link rel="canonical" href="http://www.phpldaptools.com/reference/attribute-converters/">
+        <link rel="canonical" href="http://www.phpldaptools.com/cookbook/creating-a-custom-repository/">
         <link rel="shortcut icon" href="../../img/favicon.ico">
 
-        <title>Attribute converters - LdapTools</title>
+        <title>Creating a custom repository - LdapTools</title>
 
         <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -53,24 +53,24 @@
                 <ul class="nav navbar-nav">
                 
                 
-                    <li class="dropdown active">
+                    <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reference <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
-                            <li class="active">
-                                <a href=".">Attribute converters</a>
+                            <li >
+                                <a href="../../reference/attribute-converters">Attribute converters</a>
                             </li>
                         
                             <li >
-                                <a href="../default-schema-attributes">Default schema attributes</a>
+                                <a href="../../reference/default-schema-attributes">Default schema attributes</a>
                             </li>
                         
                             <li >
-                                <a href="../main-configuration">Main configuration</a>
+                                <a href="../../reference/main-configuration">Main configuration</a>
                             </li>
                         
                             <li >
-                                <a href="../schema-configuration">Schema configuration</a>
+                                <a href="../../reference/schema-configuration">Schema configuration</a>
                             </li>
                         
                         </ul>
@@ -78,12 +78,12 @@
                 
                 
                 
-                    <li class="dropdown">
+                    <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cookbook <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
-                            <li >
-                                <a href="../../cookbook/creating-a-custom-repository">Creating a custom repository</a>
+                            <li class="active">
+                                <a href=".">Creating a custom repository</a>
                             </li>
                         
                         </ul>
@@ -124,12 +124,12 @@
                 
                 
                 <li >
-                    <a rel="next" href="../..">
+                    <a rel="next" href="../../reference/schema-configuration">
                         <i class="fa fa-arrow-left"></i> Previous
                     </a>
                 </li>
                 <li >
-                    <a rel="prev" href="../default-schema-attributes">
+                    <a rel="prev" href="../../tutorials/building-ldap-queries">
                         Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -155,113 +155,50 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#attribute-converters">Attribute Converters</a></li>
-        
-            <li><a href="#default-attribute-converters">Default Attribute Converters</a></li>
+        <li class="main active"><a href="#creating-a-custom-repository">Creating a Custom Repository</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="attribute-converters">Attribute Converters</h1>
+<h1 id="creating-a-custom-repository">Creating a Custom Repository</h1>
 <hr />
-<p>Attribute converters are responsible for converting data from LDAP to the format you want it as in PHP, and vice-versa.
-Several attribute converters are built-in and exist under the <code>\LdapTools\AttributeConverter</code> namespace. All attribute
-converters have the methods <code>toLdap($value)</code> and <code>fromLdap($value)</code> that you can use to convert your data to the correct
-form. Typically this is done automatically from the schema definition, but you can also use them on their own as long as
-they don't have a dependency on the <code>LdapConnection</code> to make the data conversion.</p>
-<pre><code class="php">use LdapTools\Factory\AttributeConvertFactory;
+<p>A LDAP Object Repository gives a way to encapsulate and reuse common queries you may run against LDAP. So rather than
+recoding the same query in several spots, you can code it once in the repository then use the repository method instead.</p>
+<p>Your custom repository class should extend the <code>\LdapTools\LdapObjectRepository</code> class. For instance, your class could
+be something like:</p>
+<pre><code class="php">namespace Acme\Demo;
 
-// will return the string form of an objectGuid binary value.
-$guid = AttributeConverterFactory::get('windows_guid')-&gt;fromLdap($value)
+use LdapTools\LdapObjectRepository;
+
+class CustomUserRepository extends LdapObjectRepository
+{
+    public function getAllSmiths()
+    {
+        // You can use the buildQuery() method to construct a LdapQueryBuilder instance.
+        return $this-&gt;buildQuery()
+            -&gt;where(['lastName' =&gt; 'Smith'])
+            -&gt;getLdapQuery()
+            -&gt;execute();
+    }
+}
 </code></pre>
 
-<p>The <code>AttributeConverterInterface</code> requires a method called <code>setLdapConnection</code>. This is called during the data hydration
-process and the converter may use the connection to make LDAP calls to resolve data as necessary.</p>
-<h2 id="default-attribute-converters">Default Attribute Converters</h2>
-<hr />
-<h4 id="bool"><em>bool</em></h4>
-<ul>
-<li>
-<p><code>toLdap</code>: Converts a PHP bool to a string of 'TRUE' or 'FALSE'.</p>
-</li>
-<li>
-<p><code>fromLdap</code>: Converts a LDAP 'TRUE' or 'FALSE' string into a corresponding PHP bool.</p>
-</li>
-</ul>
-<h4 id="int"><em>int</em></h4>
-<ul>
-<li>
-<p><code>toLdap</code>: Converts a PHP int to a string.</p>
-</li>
-<li>
-<p><code>fromLdap</code>: Converts a LDAP numeric string to a PHP int.</p>
-</li>
-</ul>
-<h4 id="string_to_utf8"><em>string_to_utf8</em></h4>
-<ul>
-<li>
-<p><code>toLdap</code>: Converts a string to a UTF8 encoded string.</p>
-</li>
-<li>
-<p><code>fromLdap</code>: Returns the UTF8 string from LDAP.</p>
-</li>
-</ul>
-<h4 id="generalized_time"><em>generalized_time</em></h4>
-<ul>
-<li>
-<p><code>toLdap</code>: Converts a PHP <code>\DateTime</code> object to a generalized timestamp string.</p>
-</li>
-<li>
-<p><code>fromLdap</code>: Converts a LDAP generalized timestamp into a PHP <code>\DateTime</code> object.</p>
-</li>
-</ul>
-<h4 id="windows_generalized_time"><em>windows_generalized_time</em></h4>
-<ul>
-<li>
-<p><code>toLdap</code>: Converts a PHP <code>\DateTime</code> object to the generalized timestamp format string that Active Directory expects.</p>
-</li>
-<li>
-<p><code>fromLdap</code>: Converts an Active Directory generalized timestamp format to a PHP <code>\DateTime</code> object.</p>
-</li>
-</ul>
-<h4 id="windows_guid"><em>windows_guid</em></h4>
-<ul>
-<li>
-<p><code>toLdap</code>: Converts a string GUID to an escaped hex sequence string.</p>
-</li>
-<li>
-<p><code>fromLdap</code>: Converts a binary GUID to its string representation.</p>
-</li>
-</ul>
-<h4 id="windows_sid"><em>windows_sid</em></h4>
-<ul>
-<li>
-<p><code>toLdap</code>: Converts a string SID to an escaped hex sequence string.</p>
-</li>
-<li>
-<p><code>fromLdap</code>: Converts a binary SID to its string representation.</p>
-</li>
-</ul>
-<h4 id="windows_time"><em>windows_time</em></h4>
-<ul>
-<li>
-<p><code>toLdap</code>: Converts a PHP <code>\DateTime</code> object into a string representation of Windows time (nanoseconds).</p>
-</li>
-<li>
-<p><code>fromLdap</code>: Converts a Windows timestamp into a PHP <code>\DateTime</code> object.</p>
-</li>
-</ul>
-<h4 id="encode_windows_password"><em>encode_windows_password</em></h4>
-<ul>
-<li>
-<p><code>toLdap</code>: Encodes a string to its unicodePwd representation, which is a quote encased UTF-16LE encoded value.</p>
-</li>
-<li>
-<p><code>fromLdap</code>: This will not do anything since a unicodePwd attribute cannot be queried.</p>
-</li>
-</ul>
+<p>Then make sure to define your new repository in the the schema config as a directive underneat the <code>user</code> object type:</p>
+<pre><code class="yaml">objects:
+    #...
+    user_type:
+        #...
+        repository: '\Acme\Demo\CustomUserRepository'
+</code></pre>
+
+<p>Then once you have your <code>LdapManager</code> class instantiated you can get your custom repository and use it:</p>
+<p>```php
+ // Assuming you defined the custom repository under the 'user' object type.
+ $repository = $ldapManager-&gt;getRepository('user');</p>
+<p>$smiths = $repository-&gt;getAllSmiths();
+```</p>
 </div>
             
         </div>

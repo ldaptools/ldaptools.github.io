@@ -78,6 +78,19 @@
                 
                 
                 
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cookbook <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            <li >
+                                <a href="../../cookbook/creating-a-custom-repository">Creating a custom repository</a>
+                            </li>
+                        
+                        </ul>
+                    </li>
+                
+                
+                
                     <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
                         <ul class="dropdown-menu">
@@ -88,6 +101,10 @@
                         
                             <li >
                                 <a href="../creating-ldap-objects">Creating ldap objects</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../modifying-ldap-objects">Modifying ldap objects</a>
                             </li>
                         
                             <li >
@@ -107,7 +124,7 @@
                 
                 
                 <li >
-                    <a rel="next" href="../../reference/schema-configuration">
+                    <a rel="next" href="../../cookbook/creating-a-custom-repository">
                         <i class="fa fa-arrow-left"></i> Previous
                     </a>
                 </li>
@@ -182,7 +199,7 @@ echo &quot;LDAP Filter: &quot;.$filter.PHP_EOL;
 
 <h2 id="generating-queries-when-using-the-ldapmanager">Generating Queries When Using the LdapManager</h2>
 <hr />
-<p>When you call <code>createLdapQuery</code> in the <code>LdapManager</code> you will get an instance of the <code>LdapQueryBuilder</code> class that knows
+<p>When you call <code>buildLdapQuery</code> in the <code>LdapManager</code> you will get an instance of the <code>LdapQueryBuilder</code> class that knows
 all the information about the schema of your domain, and a <code>LdapConnection</code> capable of executing the query. With this
 information it can do a lot of the heavy lifting to allow it to easily generate any LDAP filter.</p>
 <pre><code class="php">$lqb = $ldapManager-&gt;buildLdapQuery();
@@ -195,7 +212,7 @@ $users = $lqb-&gt;select()
     -&gt;execute();
 
 foreach ($users as $user) {
-    foreach ($user as $attribute =&gt; $value) {
+    foreach ($user-&gt;toArray() as $attribute =&gt; $value) {
         echo $attribute.' =&gt; '.$value.PHP_EOL;
     }
 }
@@ -432,7 +449,7 @@ additional filter method shortcuts that are specific to Active Directory:</p>
 <hr />
 <h4 id="hasmemberrecursivelyuserdn">hasMemberRecursively($userDn)</h4>
 <hr />
-<p>Recursively checks a groups for a member specified by their full distinguished name. Creates a matching rule comparison 
+<p>Recursively checks groups for a member specified by their full distinguished name. Creates a matching rule comparison 
 using the OID <code>IN_CHAIN</code> against the groups <code>member</code> attribute.</p>
 <hr />
 <h4 id="isrecursivelymemberofgroupdn">isRecursivelyMemberOf($groupDn)</h4>
@@ -449,7 +466,7 @@ $group = $groupRepo-&gt;findOneByName('Domain Administrators');
 $query = $ldapManager-&gt;buildLdapQuery();
 $users = $query-&gt;select()
     -&gt;fromUsers()
-    -&gt;where($query-&gt;filter()-&gt;isRecursivelyMemberOf($group['dn']))
+    -&gt;where($query-&gt;filter()-&gt;isRecursivelyMemberOf($group-&gt;getDn()))
     -&gt;getLdapQuery()
     -&gt;execute();
 </code></pre>

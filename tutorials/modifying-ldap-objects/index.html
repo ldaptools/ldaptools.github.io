@@ -6,10 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         <meta name="author" content="Chad Sikorra">
-        <link rel="canonical" href="http://www.phpldaptools.com/tutorials/creating-ldap-objects/">
+        <link rel="canonical" href="http://www.phpldaptools.com/tutorials/modifying-ldap-objects/">
         <link rel="shortcut icon" href="../../img/favicon.ico">
 
-        <title>Creating ldap objects - LdapTools</title>
+        <title>Modifying ldap objects - LdapTools</title>
 
         <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -99,12 +99,12 @@
                                 <a href="../building-ldap-queries">Building ldap queries</a>
                             </li>
                         
-                            <li class="active">
-                                <a href=".">Creating ldap objects</a>
+                            <li >
+                                <a href="../creating-ldap-objects">Creating ldap objects</a>
                             </li>
                         
-                            <li >
-                                <a href="../modifying-ldap-objects">Modifying ldap objects</a>
+                            <li class="active">
+                                <a href=".">Modifying ldap objects</a>
                             </li>
                         
                             <li >
@@ -124,12 +124,12 @@
                 
                 
                 <li >
-                    <a rel="next" href="../building-ldap-queries">
+                    <a rel="next" href="../creating-ldap-objects">
                         <i class="fa fa-arrow-left"></i> Previous
                     </a>
                 </li>
                 <li >
-                    <a rel="prev" href="../modifying-ldap-objects">
+                    <a rel="prev" href="../using-the-ldap-manager">
                         Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -155,116 +155,98 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#creating-ldap-objects">Creating LDAP Objects</a></li>
+        <li class="main active"><a href="#modifying-ldap-objects">Modifying LDAP Objects</a></li>
         
-            <li><a href="#using-parameters-in-attribute-values">Using Parameters in Attribute Values</a></li>
+            <li><a href="#automatic-setters-and-getters">Automatic Setters and Getters</a></li>
         
-            <li><a href="#ldapobjectcreator-methods">LdapObjectCreator Methods</a></li>
+            <li><a href="#automatic-property-access">Automatic Property Access</a></li>
+        
+            <li><a href="#standard-method-access">Standard Method Access</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="creating-ldap-objects">Creating LDAP Objects</h1>
+<h1 id="modifying-ldap-objects">Modifying LDAP Objects</h1>
 <hr />
-<p>The <code>LdapObjectCreator</code> class provides an easy method for creating LDAP objects. It can accessed directly from the LDAP
-Manager and provides shortcuts and helpers for creating Users, Groups, Contacts, and Computers using the default schema.
-It also supports setting parameters within attribute values to avoid repetition.</p>
-<p>To get an instance of the object creator class and create some objects:</p>
-<pre><code class="php">$ldapObject = $ldapManager-&gt;createLdapObject();
-
-// Creating a user account (enabled by default)
-$ldapObject-&gt;createUser()
-    -&gt;in('cn=Users,dc=example,dc=local')
-    -&gt;with(['username' =&gt; 'jsmith', 'password' =&gt; '12345'])
-    -&gt;execute();
-
-// Create a typical AD global security group...
-$ldapObject-&gt;createGroup()
-    -&gt;in('dc=example,dc=local')
-    -&gt;with(['name' =&gt; 'Generic Security Group'])
-    -&gt;execute();
-
-// Creates a contact user...
-$ldapObject-&gt;createContact()
-    -&gt;in('dc=example,dc=local')
-    -&gt;with(['name' =&gt; 'Some Guy', 'emailAddress' =&gt; 'SomeGuy@SomeDomain.com'])
-    -&gt;execute();
-
-// Creates a computer object...
-$ldapObject-&gt;createComputer()
-    -&gt;in('dc=example,dc=local')
-    -&gt;with(['name' =&gt; 'MYWOKRSTATION'])
-    -&gt;execute();
-</code></pre>
-
-<h2 id="using-parameters-in-attribute-values">Using Parameters in Attribute Values</h2>
-<hr />
-<p>When you create a generic <code>user</code>, <code>group</code>, <code>contact</code>, etc there are very few values you need to explicitly set for them
-to be created. Part of the reason for this is that the schema is leveraging parameters to fill in values for the rest of
-the required attributes. You can use parameters to fill in attribute values based off other attributes, or any value you
-want. For instance:</p>
-<pre><code class="php">$object-&gt;createContact()
-    -&gt;in('dc=awesome,dc=local')
-    -&gt;with([
-        'name' =&gt; '%firstname% %lastname%',
-        'firstName' =&gt; 'Some',
-        'lastName' =&gt; 'Guy',
-        'emailAddress' =&gt; '%firstname%.%lastname%@%somedomain%'
-    ])
-    -&gt;setParameter('somedomain','foo.bar')
-    -&gt;execute();
-</code></pre>
-
-<p>This contains 3 parameters. All parameters start and end with a percentage symbol. The <code>%firstname%</code> and <code>%lastname%</code>
- parameters will populate their value with their corresponding attribute name. However, <code>%somedomain%</code> does not 
-correspond to a known attribute, so the parameter must be defined. It will be filled in with <code>foo.bar</code> as defined.</p>
-<p>There is also a special parameter called <code>%_domainname_%</code> when creating LDAP objects that will resolve to the fully
-qualified domain name of the connection in the current context (ie. <code>example.com</code>).</p>
-<h2 id="ldapobjectcreator-methods">LdapObjectCreator Methods</h2>
-<p>This class provides a few methods to make it easier to create LDAP objects.</p>
-<hr />
-<h4 id="incontainer">in($container)</h4>
-<p>The <code>in</code> method specifies the container/OU you want to place the LDAP object. It should be a string with the common LDAP
-distinguished name form (ie. <code>ou=users,dc=mydomain,dc=com</code>).</p>
-<p>You can also specify a default location all objects of a certain type by defining the <code>default_container</code> directive in 
-your schema (see <a href="../../reference/schema-configuration">the schema configuration reference</a>). If you define that can omit this method.</p>
-<hr />
-<h4 id="withattributes">with($attributes)</h4>
-<p>This specifies the attributes and values you would like for the object to have once created in LDAP. All attribute values are
-converted and renamed to their proper LDAP form based on your schema.</p>
-<hr />
-<h4 id="setdncontainer">setDn($container)</h4>
-<p>This method allows you to explicitly state the distinguished name for the object you are creating. Typically you should
-not have to call this. The DN is determined automatically based off the <code>name</code> attribute in your schema, and the
-location you specified with the <code>in($container)</code> method.</p>
-<hr />
-<h4 id="setparametercontainer">setParameter($container)</h4>
-<p>This allows you to set any parameter you want that you can later use within an attribute value to have it resolve to the
-parameter value. See the full explanation of parameters near the start of this document.</p>
-<hr />
-<h4 id="execute">execute()</h4>
-<p>Takes all of your set attributes, parameters, OU location, etc and adds the object to LDAP. If an issue is encountered
-while adding to LDAP it will throw an exception...</p>
-<pre><code class="php">use LdapTools\Exception\LdapConnectionException;
+<p>Modifying an existing LDAP object is as easy as searching for it, making your changes to the object via either the 
+setters/properties then sending the object back to the <code>LdapManager</code> class with the <code>persist()</code> method. All the changes
+you make to the object are tracked and when you call <code>persist()</code> it will only update the attributes you actually changed.</p>
+<p>A simple example:</p>
+<pre><code class="php">use LdapTools\Object\LdapObjectType;
 
 //...
 
-$ldapObject = $ldapManager-&gt;createLdapObject();
+$repository = $ldapManager-&gt;getRepository(LdapObjectType::USER);
 
-// Creating a user account (enabled by default)
+$user = $repository-&gt;findOneByUsername('chad');
+
+// Replaces the current title with whatever you choose.
+$user-&gt;setTitle('CEO');
+// Resets whatever value might have been set to this attribute.
+$user-&gt;resetMobilePhone();
+// Remove a specific value from a multi-valued attribute. Careful! If it doesn't exist LDAP will complain.
+$user-&gt;removePhoneNumber('555-5555');
+// Adds a value to an attribute in addition to what it might already have
+$user-&gt;addIpPhone('#001-1000');
+
+// Now actually save the changes back to LDAP
 try {
-    $object-&gt;createUser()
-        -&gt;in('cn=Users,dc=example,dc=local')
-        -&gt;with(['username' =&gt; 'jsmith', 'password' =&gt; '12345'])
-        -&gt;execute();
-} catch (LdapConnectionException $e) {
-    echo &quot;Failed to add user!&quot;.PHP_EOL;
-    echo $e-&gt;getMessage().PHP_EOL;
+    $ldapManager-&gt;persist($user);
+} catch (\Exception $e) {
+    echo &quot;Error updating user! &quot;.$e-&gt;getMessage();
 }
 </code></pre>
 
+<h2 id="automatic-setters-and-getters">Automatic Setters and Getters</h2>
+<p>When you search for and retrieve an object in LDAP you will get an <code>LdapObject</code> instance by default. This class has
+several "magic" PHP methods defined to make your life easier. You can get/set any attribute by its actual schema name
+just as if it had an actual setter defined. So to get the <code>firstName</code> attribute you can call <code>getFirstName()</code>. And
+to change it you simply call <code>setFirstName($firstName)</code>.</p>
+<p>However, be sure to check if the attribute exists in the returned object first by calling <code>hasAttribute($attributeName)</code>
+before trying to actually get its value.</p>
+<h2 id="automatic-property-access">Automatic Property Access</h2>
+<p>In addition to the automatic setters/getters mentioned above, you can also access attributes by simply accessing them as
+if they were public properties on the object. Behind the scenes it still tracks any changes you might make by setting a 
+property this way.</p>
+<pre><code>// Instead of '$user-&gt;getFirstName()' ...
+echo &quot;First Name:&quot;.$user-&gt;firstName.PHP_EOL;
+echo &quot;Last Name:&quot;.$user-&gt;lastName.PHP_EOL;
+
+// Or set them this way too, which is equivalent to calling: $user-&gt;setFirstName('Some Dude')
+$user-&gt;firstName = 'Fred';
+$user-&gt;lastName = 'Fuchs';
+
+// You can also call isset on a property to determine if it exists on the object...
+
+if (isset($user.phoneNumber)) {
+    echo &quot;Phone: &quot;.$user.phoneNumber.PHP_EOL; 
+}
+</code></pre>
+
+<hr />
+<h2 id="standard-method-access">Standard Method Access</h2>
+<p>In Addition to all of the easy automatic property/setters/getters described above, you can also do it through more
+verbose methods. All of the below methods are ultimately what the automatic methods use to do everything behind the
+scenes.</p>
+<hr />
+<h4 id="setattribute-value">set($attribute, $value)</h4>
+<p>Replaces any value that might exist in the attribute with the value you specify.</p>
+<hr />
+<h4 id="addattribute-value">add($attribute, $value)</h4>
+<p>Adds a value to an attribute in addition to what it already may have. It will keep the existing value intact.</p>
+<hr />
+<h4 id="removeattribute-value">remove($attribute, $value)</h4>
+<p>Remove a specific value from an attribute. Be careful with this. If the value does not actually exist within the
+attribute then an exception will be thrown during persist. It's best to wrap persist in a try/catch block.</p>
+<hr />
+<h4 id="resetattribute">reset($attribute)</h4>
+<p>Resets an attribute by removing any values it may contain.</p>
+<hr />
+<h4 id="hasattributeattribute">hasAttribute($attribute)</h4>
+<p>Check for the existence of an attribute before you attempt to retrieve its value. If you attempt to get the value of a
+non-existent attribute then it will throw an exception.</p>
 </div>
             
         </div>

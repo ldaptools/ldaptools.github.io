@@ -79,6 +79,19 @@
                 
                 
                     <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cookbook <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            <li >
+                                <a href="cookbook/creating-a-custom-repository/">Creating a custom repository</a>
+                            </li>
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
@@ -88,6 +101,10 @@
                         
                             <li >
                                 <a href="tutorials/creating-ldap-objects/">Creating ldap objects</a>
+                            </li>
+                        
+                            <li >
+                                <a href="tutorials/modifying-ldap-objects/">Modifying ldap objects</a>
                             </li>
                         
                             <li >
@@ -162,6 +179,8 @@ for Active Directory and OpenLDAP. </p>
 <ul>
 <li>A fluent and easy to understand syntax for generating LDAP queries.</li>
 <li>Easily create common LDAP objects (Users, Groups, Contacts, Computers).</li>
+<li>Easily modify LDAP objects with automatic setters/getters/properties/etc.</li>
+<li>Retrieve LDAP objects as either a simple array or an object with automagic setters/getters.</li>
 <li>A dynamic and customizable attribute converter system to translate data between LDAP and PHP. </li>
 <li>Active Directory specific features to help ease development of applications.</li>
 <li>Includes a comprehensive set of specs for the code.</li>
@@ -185,8 +204,13 @@ $query = $ldap-&gt;buildLdapQuery()
     -&gt;where(['firstName' =&gt; 'Foo'])
     -&gt;orWhere(['firstName' =&gt; 'Bar']);
 
-// Returns an array of all users whose first name is 'Foo' or 'Bar'
+// Returns a `LdapObjectCollection` of all users whose first name is 'Foo' or 'Bar'
 $users = $query-&gt;getLdapQuery()-&gt;execute();
+
+echo &quot;Found &quot;.$users-&gt;count().&quot; user(s).&quot;.PHP_EOL;
+foreach ($users as $user) {
+    echo &quot;User: &quot;.$user-&gt;getUsername().PHP_EOL;
+}
 
 // It also supports the concepts of repositories...
 $userRepository = $ldap-&gt;getRepository('user');
@@ -194,8 +218,27 @@ $userRepository = $ldap-&gt;getRepository('user');
 // Find all users whose last name equals Smith.
 $users = $userRepository-&gt;findByLastName('Smith');
 
-// Get the first user whose username equals 'jsmith'
+// Get the first user whose username equals 'jsmith'. Returns a `LdapObject`.
 $user = $userRepository-&gt;findOneByUsername('jsmith');
+echo &quot;First name &quot;.$user-&gt;getFirstName().&quot; and last name &quot;.$user-&gt;getLastName().PHP_EOL;
+
+// Make some modifications to the user account...
+$user-&gt;setTitle('CEO');
+$user-&gt;resetMobilePhone();
+
+// Now actually save the changes back to LDAP...
+try {
+    $ldap-&gt;persist($user);
+} catch (\Exception $e) {
+    echo &quot;Error updating user! &quot;.$e-&gt;getMessage();
+}
+
+// Decide they no longer work here and should be deleted?
+try {
+    $ldap-&gt;delete($user);
+} catch (\Exception $e) {
+    echo &quot;Error deleting user! &quot;.$e-&gt;getMessage();
+}
 
 $ldapObject = $ldap-&gt;createLdapObject();
 
@@ -228,8 +271,6 @@ $ldapObject-&gt;createComputer()
 <h2 id="todo">TODO</h2>
 <p>There are still several features that need to be implemented:</p>
 <ul>
-<li>Modifying LDAP entries.</li>
-<li>An object hydration process in addition to the array hydrator.</li>
 <li>Automatic generation of the schema based off of information in LDAP.</li>
 <li>A logging mechanism.</li>
 <li>An event system.</li>
