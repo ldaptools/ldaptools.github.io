@@ -83,6 +83,10 @@
                         <ul class="dropdown-menu">
                         
                             <li >
+                                <a href="../../cookbook/Authenticating-a-User">Authenticating a User</a>
+                            </li>
+                        
+                            <li >
                                 <a href="../../cookbook/Creating-a-Custom-Repository">Creating a Custom Repository</a>
                             </li>
                         
@@ -94,6 +98,10 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                        
+                            <li >
+                                <a href="../../tutorials/AD-User-Modification">AD User Modification</a>
+                            </li>
                         
                             <li >
                                 <a href="../../tutorials/Building-LDAP-Queries">Building LDAP Queries</a>
@@ -248,6 +256,16 @@ schema each time. If it detects that the schema file has been modified, it will 
 <h4 id="cache_options">cache_options</h4>
 <p>An array of options that will be passed to the cache type when it is instantiated.</p>
 <p><strong>Defaults</strong>: No options are passed by default.</p>
+<hr />
+<h4 id="attribute_converters">attribute_converters</h4>
+<p>An array of convert to class name mappings that will be registered in the <code>LdapManager</code> for use in the schemas.</p>
+<pre><code class="yaml">general:
+    attribute_converters:
+        # This class must extend \LdapTools\AttributeConverter\AttributeConverterInterface !
+        my_converter: '\My\Converter\Class'
+</code></pre>
+
+<p><strong>Defaults</strong>: No additional attribute converters are registered by default.</p>
 <hr />
 <h3 id="domain-section"><strong>Domain Section</strong></h3>
 <hr />

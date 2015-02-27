@@ -6,10 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         <meta name="author" content="Chad Sikorra">
-        <link rel="canonical" href="http://www.phpldaptools.com/tutorials/Creating-LDAP-Objects/">
+        <link rel="canonical" href="http://www.phpldaptools.com/tutorials/AD-User-Modification/">
         <link rel="shortcut icon" href="../../img/favicon.ico">
 
-        <title>Creating LDAP Objects - LdapTools</title>
+        <title>AD User Modification - LdapTools</title>
 
         <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -99,16 +99,16 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
-                            <li >
-                                <a href="../AD-User-Modification">AD User Modification</a>
+                            <li class="active">
+                                <a href=".">AD User Modification</a>
                             </li>
                         
                             <li >
                                 <a href="../Building-LDAP-Queries">Building LDAP Queries</a>
                             </li>
                         
-                            <li class="active">
-                                <a href=".">Creating LDAP Objects</a>
+                            <li >
+                                <a href="../Creating-LDAP-Objects">Creating LDAP Objects</a>
                             </li>
                         
                             <li >
@@ -132,12 +132,12 @@
                 
                 
                 <li >
-                    <a rel="next" href="../Building-LDAP-Queries">
+                    <a rel="next" href="../../cookbook/Creating-a-Custom-Repository">
                         <i class="fa fa-arrow-left"></i> Previous
                     </a>
                 </li>
                 <li >
-                    <a rel="prev" href="../Modifying-LDAP-Objects">
+                    <a rel="prev" href="../Building-LDAP-Queries">
                         Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -163,116 +163,81 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#creating-ldap-objects">Creating LDAP Objects</a></li>
+        <li class="main active"><a href="#ad-user-modification">AD User Modification</a></li>
         
-            <li><a href="#using-parameters-in-attribute-values">Using Parameters in Attribute Values</a></li>
-        
-            <li><a href="#ldapobjectcreator-methods">LdapObjectCreator Methods</a></li>
+            <li><a href="#ad-user-account-properties">AD User Account Properties</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="creating-ldap-objects">Creating LDAP Objects</h1>
+<h1 id="ad-user-modification">AD User Modification</h1>
 <hr />
-<p>The <code>LdapObjectCreator</code> class provides an easy method for creating LDAP objects. It can accessed directly from the LDAP
-Manager and provides shortcuts and helpers for creating Users, Groups, Contacts, and Computers using the default schema.
-It also supports setting parameters within attribute values to avoid repetition.</p>
-<p>To get an instance of the object creator class and create some objects:</p>
-<pre><code class="php">$ldapObject = $ldapManager-&gt;createLdapObject();
-
-// Creating a user account (enabled by default)
-$ldapObject-&gt;createUser()
-    -&gt;in('cn=Users,dc=example,dc=local')
-    -&gt;with(['username' =&gt; 'jsmith', 'password' =&gt; '12345'])
-    -&gt;execute();
-
-// Create a typical AD global security group...
-$ldapObject-&gt;createGroup()
-    -&gt;in('dc=example,dc=local')
-    -&gt;with(['name' =&gt; 'Generic Security Group'])
-    -&gt;execute();
-
-// Creates a contact user...
-$ldapObject-&gt;createContact()
-    -&gt;in('dc=example,dc=local')
-    -&gt;with(['name' =&gt; 'Some Guy', 'emailAddress' =&gt; 'SomeGuy@SomeDomain.com'])
-    -&gt;execute();
-
-// Creates a computer object...
-$ldapObject-&gt;createComputer()
-    -&gt;in('dc=example,dc=local')
-    -&gt;with(['name' =&gt; 'MYWOKRSTATION'])
-    -&gt;execute();
-</code></pre>
-
-<h2 id="using-parameters-in-attribute-values">Using Parameters in Attribute Values</h2>
-<hr />
-<p>When you create a generic <code>user</code>, <code>group</code>, <code>contact</code>, etc there are very few values you need to explicitly set for them
-to be created. Part of the reason for this is that the schema is leveraging parameters to fill in values for the rest of
-the required attributes. You can use parameters to fill in attribute values based off other attributes, or any value you
-want. For instance:</p>
-<pre><code class="php">$object-&gt;createContact()
-    -&gt;in('dc=awesome,dc=local')
-    -&gt;with([
-        'name' =&gt; '%firstname% %lastname%',
-        'firstName' =&gt; 'Some',
-        'lastName' =&gt; 'Guy',
-        'emailAddress' =&gt; '%firstname%.%lastname%@%somedomain%'
-    ])
-    -&gt;setParameter('somedomain','foo.bar')
-    -&gt;execute();
-</code></pre>
-
-<p>This contains 3 parameters. All parameters start and end with a percentage symbol. The <code>%firstname%</code> and <code>%lastname%</code>
- parameters will populate their value with their corresponding attribute name. However, <code>%somedomain%</code> does not 
-correspond to a known attribute, so the parameter must be defined. It will be filled in with <code>foo.bar</code> as defined.</p>
-<p>There is also a special parameter called <code>%_domainname_%</code> when creating LDAP objects that will resolve to the fully
-qualified domain name of the connection in the current context (ie. <code>example.com</code>).</p>
-<h2 id="ldapobjectcreator-methods">LdapObjectCreator Methods</h2>
-<p>This class provides a few methods to make it easier to create LDAP objects.</p>
-<hr />
-<h4 id="incontainer">in($container)</h4>
-<p>The <code>in</code> method specifies the container/OU you want to place the LDAP object. It should be a string with the common LDAP
-distinguished name form (ie. <code>ou=users,dc=mydomain,dc=com</code>).</p>
-<p>You can also specify a default location all objects of a certain type by defining the <code>default_container</code> directive in 
-your schema (see <a href="../../reference/Schema-Configuration">the schema configuration reference</a>). If you define that can omit this method.</p>
-<hr />
-<h4 id="withattributes">with($attributes)</h4>
-<p>This specifies the attributes and values you would like for the object to have once created in LDAP. All attribute values are
-converted and renamed to their proper LDAP form based on your schema.</p>
-<hr />
-<h4 id="setdncontainer">setDn($container)</h4>
-<p>This method allows you to explicitly state the distinguished name for the object you are creating. Typically you should
-not have to call this. The DN is determined automatically based off the <code>name</code> attribute in your schema, and the
-location you specified with the <code>in($container)</code> method.</p>
-<hr />
-<h4 id="setparametercontainer">setParameter($container)</h4>
-<p>This allows you to set any parameter you want that you can later use within an attribute value to have it resolve to the
-parameter value. See the full explanation of parameters near the start of this document.</p>
-<hr />
-<h4 id="execute">execute()</h4>
-<p>Takes all of your set attributes, parameters, OU location, etc and adds the object to LDAP. If an issue is encountered
-while adding to LDAP it will throw an exception...</p>
-<pre><code class="php">use LdapTools\Exception\LdapConnectionException;
+<p>Modifying an Active Directory user is really no different than modifying any other LDAP object, but there are a few
+things to note. For example, using a few simple statements you can modify many of the user's properties typically seen
+in the "Account" tab in the "AD Users and Computers" tool:</p>
+<pre><code class="php">use LdapTools\Object\LdapObjectType;
 
 //...
 
-$ldapObject = $ldapManager-&gt;createLdapObject();
+// First get the user object via a repository.
+$repository = $ldapManager-&gt;getRepository(LdapObjectType::USER);
+$user = $repository-&gt;findOneByUsername('chad');
 
-// Creating a user account (enabled by default)
+// Make sure the user account is set to enabled.
+$user-&gt;setDisabled(false);
+// Set their password to never expire.
+$user-&gt;setPasswordNeverExpires(true);
+
 try {
-    $object-&gt;createUser()
-        -&gt;in('cn=Users,dc=example,dc=local')
-        -&gt;with(['username' =&gt; 'jsmith', 'password' =&gt; '12345'])
-        -&gt;execute();
-} catch (LdapConnectionException $e) {
-    echo &quot;Failed to add user!&quot;.PHP_EOL;
-    echo $e-&gt;getMessage().PHP_EOL;
+    $ldapManager-&gt;persist($user);
+} catch (\Exception $e) {
+    echo &quot;Error modifying user! &quot;.$e-&gt;getMessage();
 }
 </code></pre>
 
+<p>With the above statement you have just the user account to be enabled and set the password to never expire.</p>
+<h2 id="ad-user-account-properties">AD User Account Properties</h2>
+<p>This table contains many useful AD attributes you can toggle with a simple <code>true</code> or <code>false</code> value like above.</p>
+<table>
+<thead>
+<tr>
+<th>Property Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>disabled</td>
+<td>Disable (true) or enable (false) the account.</td>
+</tr>
+<tr>
+<td>passwordIsReversible</td>
+<td>Legacy AD setting. Should NOT be used.</td>
+</tr>
+<tr>
+<td>passwordMustChange</td>
+<td>Set that the user's password must change on the next login.</td>
+</tr>
+<tr>
+<td>passwordNeverExpires</td>
+<td>Set the user's password to never expire.</td>
+</tr>
+<tr>
+<td>smartCardRequired</td>
+<td>Set that a smart card is required for interactive login.</td>
+</tr>
+<tr>
+<td>trustedForAllDelegation</td>
+<td>Trust the user for delegation to any service (Kerberos).</td>
+</tr>
+<tr>
+<td>trustedForAnyAuthDelegation</td>
+<td>Delegate using any authentication protocol (When selected for delegation to specific services only).</td>
+</tr>
+</tbody>
+</table>
 </div>
             
         </div>

@@ -83,6 +83,10 @@
                         <ul class="dropdown-menu">
                         
                             <li >
+                                <a href="../../cookbook/Authenticating-a-User">Authenticating a User</a>
+                            </li>
+                        
+                            <li >
                                 <a href="../../cookbook/Creating-a-Custom-Repository">Creating a Custom Repository</a>
                             </li>
                         
@@ -94,6 +98,10 @@
                     <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                        
+                            <li >
+                                <a href="../AD-User-Modification">AD User Modification</a>
+                            </li>
                         
                             <li class="active">
                                 <a href=".">Building LDAP Queries</a>
@@ -124,7 +132,7 @@
                 
                 
                 <li >
-                    <a rel="next" href="../../cookbook/Creating-a-Custom-Repository">
+                    <a rel="next" href="../AD-User-Modification">
                         <i class="fa fa-arrow-left"></i> Previous
                     </a>
                 </li>
@@ -224,10 +232,13 @@ the methods and their general use.</p>
 <hr />
 <h4 id="selectattributes">select($attributes)</h4>
 <p>The <code>select</code> method allows you to choose specifically which attributes you would like to return from the query. Simply
-pass an array of attribute names to it that you would like. In the absence of anything passed to it, it will select the
-default set of attributes for the query as defined for the type in the schema.</p>
+pass an array of attribute names to it that you would like, or a single attribute as a string. In the absence of 
+anything passed to it, it will select the default set of attributes for the query as defined for the type in the schema.</p>
 <p>Attribute names are looked for in the schema to see if they map to specific LDAP attributes.</p>
 <pre><code class="php">$lqb-&gt;select(['firstName', 'city', 'state', 'sid']);
+
+// Select only a single attribute
+$lqb-&gt;select('guid');
 
 // Attribute names will always be returned in the case you enter it in, irrespective of how LDAP returns the data.
 $lqb-&gt;select(['FirstName', 'City', 'State', 'SID']);
@@ -320,10 +331,11 @@ LDAP search scope recursively from the point of the base DN onwards.</p>
  listing of the contents of a folder directory. The search will not recurse any further than the level of the base DN.</p>
 <hr />
 <h4 id="setscopebase">setScopeBase()</h4>
-<p>This method sets the LDAP search scope to the base level. This is used to retrieve the contents of a single entry, is
-likely most commonly used to retrieve  the RootDSE of a domain.</p>
+<p>This method sets the LDAP search scope to the base level. This is used to retrieve the contents of a single entry, and 
+is most commonly used to retrieve the RootDSE of a domain.</p>
 <p>Example usage to return the RootDSE for a domain:</p>
-<pre><code class="php">$rootDse = $lqb-&gt;where($lqb-&gt;filter-&gt;present('objectClass'))
+<pre><code class="php">// NOTE: You can also call the getRootDse() method on the connection object to get the RootDSE...
+$rootDse = $lqb-&gt;where($lqb-&gt;filter-&gt;present('objectClass'))
                 -&gt;setBaseDn('')
                 -&gt;setScopeBase()
                 -&gt;getLdapQuery()
@@ -347,9 +359,26 @@ default when no value is explicitly set is 1000.</p>
 <h4 id="getldapquery">getLdapQuery()</h4>
 <p>Retrieves an instance of the <code>LdapQuery</code> object that you can then call the <code>execute</code> method on to get your results. The
 <code>LdapQuery</code> object has the filter, page size, base DN, scope, etc that you set in the builder and takes care of
-converting the LDAP results array using a hydration process. It returns an easier to use associative array of the
- LDAP entries.</p>
-<pre><code class="php">$results = $lqb-&gt;getLdapQuery()-&gt;execute();
+converting the LDAP results array using a hydration process. It returns an easier to use set of objects. Or you can
+have it return a simple set of arrays with the attributes and values.</p>
+<pre><code class="php">use LdapTools\Factory\HydratorFactory;
+
+// By default the results will be a collection of LdapUser objects you can iterate over...
+$results = $lqb-&gt;getLdapQuery()-&gt;execute();
+
+foreach ($results as $result) {
+    echo $result-&gt;getEmailAddress();
+}
+
+// If you just want simple arrays returned you can specify that
+$results = $lqb-&gt;getLdapQuery()-&gt;execute(HydratorFactory::TO_ARRAY);
+
+foreach ($results as $result) {
+    foreach ($result as $attribute =&gt; $value) {
+        echo &quot;$attribute =&gt; $value&quot;;
+    }
+}
+
 </code></pre>
 
 <hr />

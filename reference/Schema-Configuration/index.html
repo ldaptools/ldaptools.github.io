@@ -83,6 +83,10 @@
                         <ul class="dropdown-menu">
                         
                             <li >
+                                <a href="../../cookbook/Authenticating-a-User">Authenticating a User</a>
+                            </li>
+                        
+                            <li >
                                 <a href="../../cookbook/Creating-a-Custom-Repository">Creating a Custom Repository</a>
                             </li>
                         
@@ -94,6 +98,10 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                        
+                            <li >
+                                <a href="../../tutorials/AD-User-Modification">AD User Modification</a>
+                            </li>
                         
                             <li >
                                 <a href="../../tutorials/Building-LDAP-Queries">Building LDAP Queries</a>
@@ -129,7 +137,7 @@
                     </a>
                 </li>
                 <li >
-                    <a rel="prev" href="../../cookbook/Creating-a-Custom-Repository">
+                    <a rel="prev" href="../../cookbook/Authenticating-a-User">
                         Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -185,6 +193,24 @@ objects:
         # ... More object directives are defined here
 </code></pre>
 
+<h3 id="schema-configuration-options">Schema Configuration Options</h3>
+<hr />
+<h4 id="objects-required">objects <strong><em>(Required)</em></strong></h4>
+<p>Underneath the <code>objects</code> is where you define all your schema object definitions. This option must be defined.</p>
+<h4 id="extends_default">extends_default</h4>
+<hr />
+<p>By using this option you can specify the name of one of the default schemas to extend. Any options contained within that
+schema will be merged into your schema. To add additional options to existing schema types the keys underneath "objects"
+must match between the default schema and your own!</p>
+<pre><code class="yaml"># Extends the default 'ad' schema included within the 'resources/schema' directory.
+extends_default: ad
+objects:
+    # This 'user' key must exist in the default schema for it to merge, otherwise it will be considered a new object type.
+    user:
+        # Sets a custom repository definition for the user object, in addition to everything else in the default schema.
+        repository: '\My\Custom\Repository'
+</code></pre>
+
 <h3 id="schema-object-configuration-options">Schema Object Configuration Options</h3>
 <hr />
 <h4 id="type-required">type <strong><em>(Required)</em></strong></h4>
@@ -206,13 +232,29 @@ within the class, and the <code>value</code> is the name of the attribute in LDA
 <hr />
 <h4 id="converters">converters</h4>
 <p>These should defined as keys with the converters name with an array of attribute name values:</p>
-<pre><code class="yaml">    convert_windows_generalized_time:
+<pre><code class="yaml">    windows_generalized_time:
         - 'created'
         - 'modified'
 </code></pre>
 
 <p>The attribute names can either be the schema defined attribute name, or the actual LDAP attribute name. For a 
 complete listing of possible built-in attribute converters, see this <a href="../Attribute-Converters">reference doc</a>.</p>
+<hr />
+<h4 id="converter_options">converter_options</h4>
+<p>These should defined as keys with the converters name with an array of options that will be passed to the converter:</p>
+<pre><code class="yaml">    converter_options:
+        user_account_control:
+            defaultValue: '512'
+            uacMap:
+                disabled: '2'
+                passwordNeverExpires: '65536'
+                smartCardRequired: '262144'
+                trustedForDelegation: '262144'
+                passwordIsReversible: '128'
+</code></pre>
+
+<p>This results in an array with the keys <code>defaultValue</code> and <code>uacMap</code> (and their respective arrays) being passed to the
+converter. These options are accessible from within the attribute converter by using <code>$this-&gt;options</code>.</p>
 <hr />
 <h4 id="attributes_to_select">attributes_to_select</h4>
 <p>An array of attributes that will be selected by default on LDAP queries when using this type.</p>
@@ -254,6 +296,43 @@ thrown. This will only happen if they are not specified on creation and not cont
 <p>This should be a string in DN format that represents the OU/container where new objects for this LDAP type should be
 placed by default when created.</p>
 <pre><code class="yaml">    default_container: 'OU=Accounting,OU=Employees,DC=example,DC=local'
+</code></pre>
+
+<hr />
+<h4 id="extends">extends</h4>
+<p>By using this option you can explicitly state to make a object type extend another object and inherit everything it
+already has defined. This value can either be a string, meaning that the object to extend already exists within the
+current schema, or it can be an array. The array must be like <code>[ schema, object ]</code>, where <code>schema</code> is the name of a 
+separate schema file within the same schema folder and <code>object</code> is the name of a defined object type within that schema. </p>
+<pre><code class="yaml">objects:
+    user:
+        # A bunch of stuff defined...
+    custom_user:
+        # Tells it to 'extend' the user type defined above and inherit its properties.
+        extends: user
+        # Make sure the define a different type!
+        type: custom_user
+    another_user:
+        # Tells it to look in the schema file called 'custom' for the object type 'user' and extend that.
+        extends: [ custom, user ]
+        type: another_user
+</code></pre>
+
+<hr />
+<h4 id="extends_default_1">extends_default</h4>
+<p>By using this option you can tell the schema to extend a specific object type from a default schema, either <code>ad</code> or 
+<code>openldap</code>. This helps you to avoid repetition when configuring your own schema yet still customize it to your needs.
+This value must be an array that contains the default schema name and object type to extend.</p>
+<pre><code class="yaml">objects:
+    special_user:
+        # Extends the default AD user type.
+        extends_default: [ ad, user ]
+        type: special_user
+        # Put these accounts in a specific OU
+        default_container: 'ou=special accounts,dc=example,dc=local'
+        # Add an additional attribute to select.
+        attributes_to_select:
+            - 'title'
 </code></pre>
 
 </div>

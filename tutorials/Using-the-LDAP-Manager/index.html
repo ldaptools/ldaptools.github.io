@@ -83,6 +83,10 @@
                         <ul class="dropdown-menu">
                         
                             <li >
+                                <a href="../../cookbook/Authenticating-a-User">Authenticating a User</a>
+                            </li>
+                        
+                            <li >
                                 <a href="../../cookbook/Creating-a-Custom-Repository">Creating a Custom Repository</a>
                             </li>
                         
@@ -94,6 +98,10 @@
                     <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                        
+                            <li >
+                                <a href="../AD-User-Modification">AD User Modification</a>
+                            </li>
                         
                             <li >
                                 <a href="../Building-LDAP-Queries">Building LDAP Queries</a>
@@ -168,6 +176,8 @@
             <li><a href="#modifying-ldap-objects">Modifying LDAP Objects</a></li>
         
             <li><a href="#deleting-ldap-objects">Deleting LDAP Objects</a></li>
+        
+            <li><a href="#moving-ldap-objects">Moving LDAP Objects</a></li>
         
     
     </ul>
@@ -280,6 +290,26 @@ try {
     $ldapManager-&gt;delete($user);
 } catch (\Exception $e) {
     echo &quot;Error deleting object from LDAP: &quot;.$e-&gt;getMessage();
+}
+</code></pre>
+
+<h3 id="moving-ldap-objects">Moving LDAP Objects</h3>
+<hr />
+<p>Using the <code>LdapManager</code> class you can move an object from one location to another in LDAP. The method for doing this is 
+to call <code>move($ldapObject, $container)</code>. All this requires is you pass the existing LdapObject and then the new location
+of the OU/container in standard DN form:</p>
+<pre><code class="php">use LdapTools\Object\LdapObjectTypes;
+
+$repository = $ldapManager-&gt;getRepository(LdapObjectTypes::USER);
+
+// Retrieve the user that has a specific GUID.
+$user = $repository-&gt;findOneByGuid('29d46992-a5c4-4dc2-ac51-ac432db2a078');
+
+// Move the object to a new OU...
+try {
+    $ldapManager-&gt;move($user, 'ou=Employees,dc=example,dc=local');
+} catch (\Exception $e) {
+    echo &quot;Error moving object: &quot;.$e-&gt;getMessage();
 }
 </code></pre>
 

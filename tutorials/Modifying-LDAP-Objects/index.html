@@ -83,6 +83,10 @@
                         <ul class="dropdown-menu">
                         
                             <li >
+                                <a href="../../cookbook/Authenticating-a-User">Authenticating a User</a>
+                            </li>
+                        
+                            <li >
                                 <a href="../../cookbook/Creating-a-Custom-Repository">Creating a Custom Repository</a>
                             </li>
                         
@@ -94,6 +98,10 @@
                     <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                        
+                            <li >
+                                <a href="../AD-User-Modification">AD User Modification</a>
+                            </li>
                         
                             <li >
                                 <a href="../Building-LDAP-Queries">Building LDAP Queries</a>
@@ -191,6 +199,16 @@ $user-&gt;removePhoneNumber('555-5555');
 // Adds a value to an attribute in addition to what it might already have
 $user-&gt;addIpPhone('#001-1000');
 
+// Check if a specific attribute exists
+if ($user-&gt;hasEmailAddress()) {
+    // do something....
+}
+
+// Check if an attribute with a specific value exists
+if ($user-&gt;hasState('WI')) {
+    // do something else....
+}
+
 // Now actually save the changes back to LDAP
 try {
     $ldapManager-&gt;persist($user);
@@ -204,7 +222,7 @@ try {
 several "magic" PHP methods defined to make your life easier. You can get/set any attribute by its actual schema name
 just as if it had an actual setter defined. So to get the <code>firstName</code> attribute you can call <code>getFirstName()</code>. And
 to change it you simply call <code>setFirstName($firstName)</code>.</p>
-<p>However, be sure to check if the attribute exists in the returned object first by calling <code>hasAttribute($attributeName)</code>
+<p>However, be sure to check if the attribute exists in the returned object first by calling <code>has($attributeName)</code>
 before trying to actually get its value.</p>
 <h2 id="automatic-property-access">Automatic Property Access</h2>
 <p>In addition to the automatic setters/getters mentioned above, you can also access attributes by simply accessing them as
@@ -243,9 +261,10 @@ attribute then an exception will be thrown during persist. It's best to wrap per
 <h4 id="resetattribute">reset($attribute)</h4>
 <p>Resets an attribute by removing any values it may contain.</p>
 <hr />
-<h4 id="hasattributeattribute">hasAttribute($attribute)</h4>
+<h4 id="hasattribute-value-null">has($attribute, $value = null)</h4>
 <p>Check for the existence of an attribute before you attempt to retrieve its value. If you attempt to get the value of a
-non-existent attribute then it will throw an exception.</p>
+non-existent attribute then it will throw an exception. You can optionally specify a value check as well. In that case 
+the attribute must exist and it must have the specified value for it to return <code>true</code>.</p>
 </div>
             
         </div>

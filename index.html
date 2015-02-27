@@ -83,6 +83,10 @@
                         <ul class="dropdown-menu">
                         
                             <li >
+                                <a href="cookbook/Authenticating-a-User/">Authenticating a User</a>
+                            </li>
+                        
+                            <li >
                                 <a href="cookbook/Creating-a-Custom-Repository/">Creating a Custom Repository</a>
                             </li>
                         
@@ -94,6 +98,10 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                        
+                            <li >
+                                <a href="tutorials/AD-User-Modification/">AD User Modification</a>
+                            </li>
                         
                             <li >
                                 <a href="tutorials/Building-LDAP-Queries/">Building LDAP Queries</a>
@@ -161,10 +169,6 @@
         
             <li><a href="#installation">Installation</a></li>
         
-            <li><a href="#getting-started">Getting Started</a></li>
-        
-            <li><a href="#todo">TODO</a></li>
-        
     
     </ul>
 </div></div>
@@ -190,14 +194,20 @@ for Active Directory and OpenLDAP. </p>
 <pre><code class="bash">composer require ldaptools/ldaptools
 </code></pre>
 
-<h2 id="getting-started">Getting Started</h2>
-<p>The easiest way to get started is by creating a YAML config file. See the <a href="https://github.com/ldaptools/ldaptools/tree/master/resources/config/example.yml">example config</a> file for basic usage. Once you have a configuration file defined, you can get up and running by doing the following:</p>
+<h3 id="getting-started">Getting Started</h3>
+<p>The easiest way to get started is by creating a YAML config file. See the <a href="./resources/config/example.yml">example config</a> file for basic usage.</p>
+<p>Once you have a configuration file defined, you can get up and running by doing the following:</p>
 <pre><code class="php">use LdapTools\Configuration;
 use LdapTools\LdapManager;
 
 $config = (new Configuration())-&gt;load('/path/to/ldap/config.yml');
 $ldap = new LdapManager($config);
+</code></pre>
 
+<h3 id="searching-ldap">Searching LDAP</h3>
+<p>With the <code>LdapManager</code> up and going you can now easily build LDAP queries without having to remember all the special 
+syntax for LDAP filters. All values are also automatically escaped.</p>
+<pre><code class="php">// Get an instance of the query...
 $query = $ldap-&gt;buildLdapQuery()
     -&gt;select()
     -&gt;fromUsers()
@@ -221,10 +231,20 @@ $users = $userRepository-&gt;findByLastName('Smith');
 // Get the first user whose username equals 'jsmith'. Returns a `LdapObject`.
 $user = $userRepository-&gt;findOneByUsername('jsmith');
 echo &quot;First name &quot;.$user-&gt;getFirstName().&quot; and last name &quot;.$user-&gt;getLastName().PHP_EOL;
+</code></pre>
 
-// Make some modifications to the user account...
+<p>The query syntax is very similar to <a href="http://www.doctrine-project.org">Doctrine ORM</a>.</p>
+<h3 id="modifying-ldap-objects">Modifying LDAP Objects</h3>
+<p>Modifying LDAP is as easy as searching for the LDAP object as described above, then making changes directly to the object
+and saving it back to LDAP using the <code>LdapManager</code>.</p>
+<pre><code class="php">$user = $userRepository-&gt;findOneByUsername('jsmith');
+
+// Make some modifications to the user account. All these changes are tracked so it knows how the modify the object.
 $user-&gt;setTitle('CEO');
 $user-&gt;resetMobilePhone();
+
+// Set a field by a property instead...
+$user.enabled = true;
 
 // Now actually save the changes back to LDAP...
 try {
@@ -232,15 +252,25 @@ try {
 } catch (\Exception $e) {
     echo &quot;Error updating user! &quot;.$e-&gt;getMessage();
 }
+</code></pre>
 
-// Decide they no longer work here and should be deleted?
+<h3 id="deleting-ldap-objects">Deleting LDAP Objects</h3>
+<p>Deleting LDAP objects is a simple matter of searching for the object you want to remove, then passing it to the delete
+method on the <code>LdapManager</code>:</p>
+<pre><code class="php">// Decide they no longer work here and should be deleted?
+$user = $userRepository-&gt;findOneByUsername('jsmith');
+
 try {
     $ldap-&gt;delete($user);
 } catch (\Exception $e) {
     echo &quot;Error deleting user! &quot;.$e-&gt;getMessage();
 }
+</code></pre>
 
-$ldapObject = $ldap-&gt;createLdapObject();
+<h3 id="creating-ldap-objects">Creating LDAP Objects</h3>
+<p>Creating LDAP objects is easily performed by just passing what you want the attributes to be and what container/OU the
+object should end up in:</p>
+<pre><code class="php">$ldapObject = $ldap-&gt;createLdapObject();
 
 // Creating a user account (enabled by default)
 $ldapObject-&gt;createUser()
@@ -267,9 +297,18 @@ $ldapObject-&gt;createComputer()
     -&gt;execute();
 </code></pre>
 
-<p>The query syntax is very similar to <a href="http://www.doctrine-project.org">Doctrine ORM</a>.</p>
-<h2 id="todo">TODO</h2>
-<p>There are still several features that need to be implemented:</p>
+<h3 id="documentation">Documentation</h3>
+<ul>
+<li><a href="reference/Main-Configuration/">Main Configuration Reference</a></li>
+<li><a href="reference/Schema-Configuration/">Schema Configuration</a></li>
+<li><a href="tutorials/Using-the-LDAP-Manager/">Using the LdapManager</a></li>
+<li><a href="tutorials/Building-LDAP-Queries/">Building LDAP Queries</a></li>
+<li><a href="tutorials/Creating-LDAP-Objects/">Creating LDAP Objects</a></li>
+<li><a href="tutorials/Modifying-LDAP-Objects/">Modifying LDAP Objects</a></li>
+<li><a href="reference/Default-Schema-Attributes/">Default Schema Attributes</a></li>
+</ul>
+<h3 id="todo">TODO</h3>
+<p>Things that still need to be implemented:</p>
 <ul>
 <li>Automatic generation of the schema based off of information in LDAP.</li>
 <li>A logging mechanism.</li>

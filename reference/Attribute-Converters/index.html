@@ -83,6 +83,10 @@
                         <ul class="dropdown-menu">
                         
                             <li >
+                                <a href="../../cookbook/Authenticating-a-User">Authenticating a User</a>
+                            </li>
+                        
+                            <li >
                                 <a href="../../cookbook/Creating-a-Custom-Repository">Creating a Custom Repository</a>
                             </li>
                         
@@ -94,6 +98,10 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                        
+                            <li >
+                                <a href="../../tutorials/AD-User-Modification">AD User Modification</a>
+                            </li>
                         
                             <li >
                                 <a href="../../tutorials/Building-LDAP-Queries">Building LDAP Queries</a>
@@ -215,6 +223,15 @@ process and the converter may use the connection to make LDAP calls to resolve d
 </li>
 <li>
 <p><code>fromLdap</code>: Converts a LDAP generalized timestamp into a PHP <code>\DateTime</code> object.</p>
+</li>
+</ul>
+<h4 id="password_must_change"><em>password_must_change</em></h4>
+<ul>
+<li>
+<p><code>toLdap</code>: Converts a PHP bool to either a -1 (false) or 0 (true). This toggles the "Password Must Change" property.</p>
+</li>
+<li>
+<p><code>fromLdap</code>: Converts a LDAP '0' (true - password must change) or '&gt;0' (false - password doesn't have to change).</p>
 </li>
 </ul>
 <h4 id="windows_generalized_time"><em>windows_generalized_time</em></h4>

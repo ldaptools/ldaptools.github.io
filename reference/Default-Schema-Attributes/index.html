@@ -83,6 +83,10 @@
                         <ul class="dropdown-menu">
                         
                             <li >
+                                <a href="../../cookbook/Authenticating-a-User">Authenticating a User</a>
+                            </li>
+                        
+                            <li >
                                 <a href="../../cookbook/Creating-a-Custom-Repository">Creating a Custom Repository</a>
                             </li>
                         
@@ -94,6 +98,10 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                        
+                            <li >
+                                <a href="../../tutorials/AD-User-Modification">AD User Modification</a>
+                            </li>
                         
                             <li >
                                 <a href="../../tutorials/Building-LDAP-Queries">Building LDAP Queries</a>
@@ -235,6 +243,11 @@ used when generating queries and returning data from LDAP.</p>
 <td>string</td>
 </tr>
 <tr>
+<td>disabled</td>
+<td>userAccountControl</td>
+<td>bool</td>
+</tr>
+<tr>
 <td>displayName</td>
 <td>displayName</td>
 <td>string</td>
@@ -263,6 +276,26 @@ used when generating queries and returning data from LDAP.</p>
 <td>employeeNumber</td>
 <td>employeeNumber</td>
 <td>int</td>
+</tr>
+<tr>
+<td>exchangeMailboxDatabase</td>
+<td>homeMDB</td>
+<td>string</td>
+</tr>
+<tr>
+<td>exchangePolicyRBAC</td>
+<td>msExchRBACPolicyLink</td>
+<td>string</td>
+</tr>
+<tr>
+<td>exchangePolicyActiveSync</td>
+<td>msExchMobileMailboxPolicyLink</td>
+<td>string</td>
+</tr>
+<tr>
+<td>exchangePolicyRetention</td>
+<td>msExchMailboxTemplateLink</td>
+<td>string</td>
 </tr>
 <tr>
 <td>fax</td>
@@ -340,9 +373,24 @@ used when generating queries and returning data from LDAP.</p>
 <td>string</td>
 </tr>
 <tr>
+<td>passwordIsReversible</td>
+<td>userAccountControl</td>
+<td>bool</td>
+</tr>
+<tr>
 <td>passwordLastSet</td>
 <td>pwdLastSet</td>
 <td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>passwordMustChange</td>
+<td>pwdLastSet</td>
+<td>bool</td>
+</tr>
+<tr>
+<td>passwordNeverExpires</td>
+<td>userAccountControl</td>
+<td>bool</td>
 </tr>
 <tr>
 <td>pager</td>
@@ -375,6 +423,11 @@ used when generating queries and returning data from LDAP.</p>
 <td>string</td>
 </tr>
 <tr>
+<td>smartCardRequired</td>
+<td>userAccountControl</td>
+<td>bool</td>
+</tr>
+<tr>
 <td>state</td>
 <td>st</td>
 <td>string</td>
@@ -388,6 +441,16 @@ used when generating queries and returning data from LDAP.</p>
 <td>title</td>
 <td>title</td>
 <td>string</td>
+</tr>
+<tr>
+<td>trustedForAllDelegation</td>
+<td>userAccountControl</td>
+<td>bool</td>
+</tr>
+<tr>
+<td>trustedForAnyAuthDelegation</td>
+<td>userAccountControl</td>
+<td>bool</td>
 </tr>
 <tr>
 <td>username</td>
