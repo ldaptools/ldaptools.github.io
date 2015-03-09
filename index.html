@@ -239,12 +239,12 @@ echo &quot;First name &quot;.$user-&gt;getFirstName().&quot; and last name &quot
 and saving it back to LDAP using the <code>LdapManager</code>.</p>
 <pre><code class="php">$user = $userRepository-&gt;findOneByUsername('jsmith');
 
-// Make some modifications to the user account. All these changes are tracked so it knows how the modify the object.
+// Make some modifications to the user account. All these changes are tracked so it knows how to modify the object.
 $user-&gt;setTitle('CEO');
 $user-&gt;resetMobilePhone();
 
 // Set a field by a property instead...
-$user.enabled = true;
+$user-&gt;disabled = false;
 
 // Now actually save the changes back to LDAP...
 try {
