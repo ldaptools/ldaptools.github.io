@@ -354,7 +354,7 @@ $rootDse = $lqb-&gt;where($lqb-&gt;filter-&gt;present('objectClass'))
 </code></pre>
 
 <hr />
-<h4 id="addorderbyattribute-direction-asc">addOrderBy($attribute, $direction = 'ASC')</h4>
+<h4 id="orderbyattribute-direction-asc">orderBy($attribute, $direction = 'ASC')</h4>
 <p>This method sets the attribute to order the results by in either ascending (default) or descending order. Calling this 
 overwrites any already set orderBy statements. To stack multiple order statements call <code>addOrderBy($attribute)</code>.</p>
 <pre><code class="php">// Order results by last name (ascending).
@@ -374,7 +374,7 @@ $users = $lqb-&gt;select()
 </code></pre>
 
 <hr />
-<h4 id="addorderbyattribute-direction-asc_1">addOrderBy($attribute, $direction = 'ASC')</h4>
+<h4 id="addorderbyattribute-direction-asc">addOrderBy($attribute, $direction = 'ASC')</h4>
 <p>This method works the same as <code>orderBy($attribute)</code>, only calling this one will not overwrite already declared order-by 
 statements. Call this when you want to order by multiple attributes.</p>
 <hr />
