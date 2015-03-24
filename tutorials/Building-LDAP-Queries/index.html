@@ -90,6 +90,10 @@
                                 <a href="../../cookbook/Creating-a-Custom-Repository">Creating a Custom Repository</a>
                             </li>
                         
+                            <li >
+                                <a href="../../cookbook/Modifying-GPO-Links-on-OUs">Modifying GPO Links on OUs</a>
+                            </li>
+                        
                         </ul>
                     </li>
                 
@@ -254,7 +258,7 @@ $lqb-&gt;select(['givenName', 'l', 'objectSid', 'sid']);
 <hr />
 <h4 id="fromldaptype">from($ldapType)</h4>
 <p>The <code>from</code> method requires an argument for the LDAP type. This type must be defined in your LDAP schema. Common types
-that are in the schema by default include: <code>user</code>, <code>group</code>, <code>contact</code>, <code>computer</code>. These types are defined as constants
+that are in the schema by default include: <code>user</code>, <code>group</code>, <code>contact</code>, <code>computer</code>, <code>ou</code>. These types are defined as constants
 in the <code>\LdapTools\Object\LdapObjectTypes</code> class. Using this method makes the query aware of the attribute name mapping
 and converters defined for the type.</p>
 <pre><code class="php">use LdapTools\Object\LdapObjectType;
@@ -268,16 +272,23 @@ $lqb-&gt;from(LdapObjectType::COMPUTER);
 
 <hr />
 <h4 id="fromusers">fromUsers()</h4>
-<p>A convenience shortcut of the the <code>from</code> method to select from LDAP <code>user</code> types.</p>
+<p>A convenience shortcut of the <code>from</code> method to select from LDAP <code>user</code> types.</p>
 <pre><code class="php">// Search for users
 $lqb-&gt;fromUsers();
 </code></pre>
 
 <hr />
 <h4 id="fromgroups">fromGroups()</h4>
-<p>A convenience shortcut of the the <code>from</code> method to select from LDAP <code>group</code> types.</p>
+<p>A convenience shortcut of the <code>from</code> method to select from LDAP <code>group</code> types.</p>
 <pre><code class="php">// Search for groups
 $lqb-&gt;fromGroups();
+</code></pre>
+
+<hr />
+<h4 id="fromous">fromOUs()</h4>
+<p>A convenience shortcut of the <code>from</code> method to select from LDAP <code>ou</code> types.</p>
+<pre><code class="php">// Search for OUs
+$lqb-&gt;fromOUs();
 </code></pre>
 
 <hr />
@@ -342,6 +353,30 @@ $rootDse = $lqb-&gt;where($lqb-&gt;filter-&gt;present('objectClass'))
                 -&gt;execute();
 </code></pre>
 
+<hr />
+<h4 id="addorderbyattribute-direction-asc">addOrderBy($attribute, $direction = 'ASC')</h4>
+<p>This method sets the attribute to order the results by in either ascending (default) or descending order. Calling this 
+overwrites any already set orderBy statements. To stack multiple order statements call <code>addOrderBy($attribute)</code>.</p>
+<pre><code class="php">// Order results by last name (ascending).
+$users = $lqb-&gt;select()
+    -&gt;fromUsers()
+    -&gt;where(['firstName' =&gt; 'John'])
+    -&gt;orderBy('lastName') 
+    -&gt;execute();
+
+// Order results by last name (descending) and first name (ascending).
+$users = $lqb-&gt;select()
+    -&gt;fromUsers()
+    -&gt;where(['state' =&gt; 'Wisconsin'])
+    -&gt;orderBy('lastName', 'DESC')
+    -&gt;addOrderBy('firstName', 'ASC')
+    -&gt;execute();
+</code></pre>
+
+<hr />
+<h4 id="addorderbyattribute-direction-asc_1">addOrderBy($attribute, $direction = 'ASC')</h4>
+<p>This method works the same as <code>orderBy($attribute)</code>, only calling this one will not overwrite already declared order-by 
+statements. Call this when you want to order by multiple attributes.</p>
 <hr />
 <h4 id="setpagesizesize">setPageSize($size)</h4>
 <p>This methods sets the paging size for the query. It will default to whatever value you set in your configuration. The
@@ -500,6 +535,38 @@ $users = $query-&gt;select()
     -&gt;execute();
 </code></pre>
 
+<hr />
+<h4 id="mailenabled">mailEnabled()</h4>
+<hr />
+<p>Performs a simple check to determine whether an LDAP object is mail-enabled (ie. can receive email from Exchange).</p>
+<hr />
+<h4 id="groupisdomainlocal">groupIsDomainLocal()</h4>
+<hr />
+<p>Performs a bitwiseAnd check to determine whether a group is domain local in scope.</p>
+<hr />
+<h4 id="groupisglobal">groupIsGlobal()</h4>
+<hr />
+<p>Performs a bitwiseAnd check to determine whether a group is global in scope.</p>
+<hr />
+<h4 id="groupisuniversal">groupIsUniversal()</h4>
+<hr />
+<p>Performs a bitwiseAnd check to determine whether a group is universal in scope.</p>
+<hr />
+<h4 id="groupissecurityenabled">groupIsSecurityEnabled()</h4>
+<hr />
+<p>Performs a bitwiseAnd check to determine whether a group is security enabled.</p>
+<hr />
+<h4 id="groupisuniversal_1">groupIsUniversal()</h4>
+<hr />
+<p>Performs negation of the security enabled bitwiseAnd check to determine whether a group is a distribution type.</p>
+<hr />
+<h4 id="accountexpires">accountExpires()</h4>
+<hr />
+<p>Performs a check to determine if the account is set to expire at a certain date.</p>
+<hr />
+<h4 id="accountneverexpires">accountNeverExpires()</h4>
+<hr />
+<p>Performs a check to determine if the account is set to never expire.</p>
 </div>
             
         </div>

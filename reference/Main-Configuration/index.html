@@ -90,6 +90,10 @@
                                 <a href="../../cookbook/Creating-a-Custom-Repository">Creating a Custom Repository</a>
                             </li>
                         
+                            <li >
+                                <a href="../../cookbook/Modifying-GPO-Links-on-OUs">Modifying GPO Links on OUs</a>
+                            </li>
+                        
                         </ul>
                     </li>
                 
@@ -282,8 +286,8 @@ schema each time. If it detects that the schema file has been modified, it will 
 <p>The password to use when binding to LDAP.</p>
 <hr />
 <h4 id="servers-required">servers <strong>(REQUIRED)</strong></h4>
-<p>An array of LDAP servers (ie. <code>[ 'dc01' ]</code>). When more than one is used it will attempt it each server until it finds
-one it can connect to.</p>
+<p>An array of LDAP servers (ie. <code>[ 'dc01' ]</code>). When more than one server name is used it will attempt each one until it
+successfully connects.</p>
 <hr />
 <h4 id="server_selection">server_selection</h4>
 <p>When more than one server is listed for a domain, choose which one is selected for the connection. The possible choices 

@@ -90,6 +90,10 @@
                                 <a href="cookbook/Creating-a-Custom-Repository/">Creating a Custom Repository</a>
                             </li>
                         
+                            <li >
+                                <a href="cookbook/Modifying-GPO-Links-on-OUs/">Modifying GPO Links on OUs</a>
+                            </li>
+                        
                         </ul>
                     </li>
                 
@@ -182,7 +186,7 @@
 for Active Directory and OpenLDAP. </p>
 <ul>
 <li>A fluent and easy to understand syntax for generating LDAP queries.</li>
-<li>Easily create common LDAP objects (Users, Groups, Contacts, Computers).</li>
+<li>Easily create common LDAP objects (Users, Groups, Contacts, Computers, OUs).</li>
 <li>Easily modify LDAP objects with automatic setters/getters/properties/etc.</li>
 <li>Retrieve LDAP objects as either a simple array or an object with automagic setters/getters.</li>
 <li>A dynamic and customizable attribute converter system to translate data between LDAP and PHP. </li>
@@ -212,9 +216,12 @@ $query = $ldap-&gt;buildLdapQuery()
     -&gt;select()
     -&gt;fromUsers()
     -&gt;where(['firstName' =&gt; 'Foo'])
-    -&gt;orWhere(['firstName' =&gt; 'Bar']);
+    -&gt;orWhere(['lastName' =&gt; 'Bar'])
+    -&gt;orWhere(['lastName' =&gt; 'Smith'])
+    -&gt;orderBy('state');
 
-// Returns a `LdapObjectCollection` of all users whose first name is 'Foo' or 'Bar'
+// Returns a `LdapObjectCollection` of all users whose first name is 'Foo' and last name is 'Bar' or 'Smith'
+// The result set will also be ordered by state name (ascending).
 $users = $query-&gt;getLdapQuery()-&gt;execute();
 
 echo &quot;Found &quot;.$users-&gt;count().&quot; user(s).&quot;.PHP_EOL;
@@ -294,6 +301,12 @@ $ldapObject-&gt;createContact()
 $ldapObject-&gt;createComputer()
     -&gt;in('dc=example,dc=local')
     -&gt;with(['name' =&gt; 'MYWOKRSTATION'])
+    -&gt;execute();
+
+// Creates an OU object...
+$ldapObject-&gt;createOU()
+    -&gt;in('dc=example,dc=local')
+    -&gt;with(['name' =&gt; 'Employees'])
     -&gt;execute();
 </code></pre>
 

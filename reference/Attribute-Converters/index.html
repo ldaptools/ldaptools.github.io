@@ -90,6 +90,10 @@
                                 <a href="../../cookbook/Creating-a-Custom-Repository">Creating a Custom Repository</a>
                             </li>
                         
+                            <li >
+                                <a href="../../cookbook/Modifying-GPO-Links-on-OUs">Modifying GPO Links on OUs</a>
+                            </li>
+                        
                         </ul>
                     </li>
                 
@@ -268,6 +272,42 @@ process and the converter may use the connection to make LDAP calls to resolve d
 </li>
 <li>
 <p><code>fromLdap</code>: This will not do anything since a unicodePwd attribute cannot be queried.</p>
+</li>
+</ul>
+<h4 id="exchange_proxy_address"><em>exchange_proxy_address</em></h4>
+<ul>
+<li>
+<p><code>toLdap</code>: Takes an array of email addresses and formats them properly for the proxyAddresses attribute.</p>
+</li>
+<li>
+<p><code>fromLdap</code>: Parses through the proxyAddresses attribute to return only the address portion for a specific address type.</p>
+</li>
+</ul>
+<h4 id="logon_workstations"><em>logon_workstations</em></h4>
+<ul>
+<li>
+<p><code>toLdap</code>: Takes an array of computer names and formats it as a comma-separated list for LDAP.</p>
+</li>
+<li>
+<p><code>fromLdap</code>: Formats the comma-separated list from LDAP as an array of computer names.</p>
+</li>
+</ul>
+<h4 id="account_expires"><em>account_expires</em></h4>
+<ul>
+<li>
+<p><code>toLdap</code>: Takes either a bool false (never expires) or a <code>\DateTime</code> object for when it should expire.</p>
+</li>
+<li>
+<p><code>fromLdap</code>: Will either be false (never expires) or a <code>\DateTime</code> object of when it will expire.</p>
+</li>
+</ul>
+<h4 id="group_type"><em>group_type</em></h4>
+<ul>
+<li>
+<p><code>toLdap</code>: Takes a bool and switches the group between domain local, universal, global, security, or distribution.</p>
+</li>
+<li>
+<p><code>fromLdap</code>: Depending on the attribute, does a bitwise conversion to set a specific type as true or false.</p>
 </li>
 </ul>
 </div>

@@ -90,6 +90,10 @@
                                 <a href="../Creating-a-Custom-Repository">Creating a Custom Repository</a>
                             </li>
                         
+                            <li >
+                                <a href="../Modifying-GPO-Links-on-OUs">Modifying GPO Links on OUs</a>
+                            </li>
+                        
                         </ul>
                     </li>
                 
@@ -165,6 +169,8 @@
     
         <li class="main active"><a href="#authenticating-a-user">Authenticating a User</a></li>
         
+            <li><a href="#authentication-error-messages">Authentication Error Messages</a></li>
+        
     
     </ul>
 </div></div>
@@ -183,6 +189,75 @@ if ($ldapManager-&gt;authenticate($username, $password)) {
 
 <p>This method actually uses the already existing <code>authenticate()</code> method of the <code>LdapConnection</code> class in the current
 context and is included as a quick shortcut for not having to do <code>$ldapManager-&gt;getConnection()-&gt;authenticate($username, $password)</code>.</p>
+<h2 id="authentication-error-messages">Authentication Error Messages</h2>
+<p>There are many times where you may want to provide a more meaningful response as to why authentication for a user has
+failed. This information is possible to get by passing additional optional variables to the <code>authenticate()</code> method.</p>
+<pre><code class="php">
+// With your LdapManager class already instantiated...
+if ($ldapManager-&gt;authenticate($username, $password, $message, $code)) {
+     echo &quot;Error ($code): $message&quot;;
+}
+</code></pre>
+
+<p>When using Active Directory, the above can give you very helpful information as to why the user cannot log in. Such as a
+disabled account, a locked account, or an account whose password needs to change before they can login again. The most
+common error codes you may see in AD:</p>
+<table>
+<thead>
+<tr>
+<th>Error Number</th>
+<th>Constant</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1317</td>
+<td><code>ACCOUNT_INVALID</code></td>
+</tr>
+<tr>
+<td>1326</td>
+<td><code>ACCOUNT_CREDENTIALS_INVALID</code></td>
+</tr>
+<tr>
+<td>1327</td>
+<td><code>ACCOUNT_RESTRICTIONS</code></td>
+</tr>
+<tr>
+<td>1328</td>
+<td><code>ACCOUNT_RESTRICTIONS_TIME</code></td>
+</tr>
+<tr>
+<td>1329</td>
+<td><code>ACCOUNT_RESTRICTIONS_DEVICE</code></td>
+</tr>
+<tr>
+<td>1330</td>
+<td><code>ACCOUNT_PASSWORD_EXPIRED</code></td>
+</tr>
+<tr>
+<td>1331</td>
+<td><code>ACCOUNT_DISABLED</code></td>
+</tr>
+<tr>
+<td>1384</td>
+<td><code>ACCOUNT_CONTEXT_IDS</code></td>
+</tr>
+<tr>
+<td>1793</td>
+<td><code>ACCOUNT_EXPIRED</code></td>
+</tr>
+<tr>
+<td>1907</td>
+<td><code>ACCOUNT_PASSWORD_MUST_CHANGE</code></td>
+</tr>
+<tr>
+<td>1909</td>
+<td><code>ACCOUNT_LOCKED</code></td>
+</tr>
+</tbody>
+</table>
+<p>All constants are located in <code>\LdapTools\Connection\ADResponseCodes</code>. You should use those constants to compare against 
+the received error number to take a specific action for an event.</p>
 </div>
             
         </div>

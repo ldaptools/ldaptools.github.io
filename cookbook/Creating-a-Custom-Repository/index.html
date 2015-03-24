@@ -90,6 +90,10 @@
                                 <a href=".">Creating a Custom Repository</a>
                             </li>
                         
+                            <li >
+                                <a href="../Modifying-GPO-Links-on-OUs">Modifying GPO Links on OUs</a>
+                            </li>
+                        
                         </ul>
                     </li>
                 
@@ -137,7 +141,7 @@
                     </a>
                 </li>
                 <li >
-                    <a rel="prev" href="../../tutorials/AD-User-Modification">
+                    <a rel="prev" href="../Modifying-GPO-Links-on-OUs">
                         Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -193,10 +197,13 @@ class CustomUserRepository extends LdapObjectRepository
 }
 </code></pre>
 
-<p>Then make sure to define your new repository in the the schema config as a directive underneat the <code>user</code> object type:</p>
-<pre><code class="yaml">objects:
+<p>Then make sure to define your new repository in the the schema config as a directive underneath the <code>user</code> object type:</p>
+<pre><code class="yaml"># If you just want a custom repository for the default user type, you could use a schema that extends the default...
+#
+# extends_default: ad
+objects:
     #...
-    user_type:
+    user:
         #...
         repository: '\Acme\Demo\CustomUserRepository'
 </code></pre>

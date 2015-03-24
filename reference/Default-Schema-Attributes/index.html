@@ -90,6 +90,10 @@
                                 <a href="../../cookbook/Creating-a-Custom-Repository">Creating a Custom Repository</a>
                             </li>
                         
+                            <li >
+                                <a href="../../cookbook/Modifying-GPO-Links-on-OUs">Modifying GPO Links on OUs</a>
+                            </li>
+                        
                         </ul>
                     </li>
                 
@@ -188,11 +192,13 @@ used when generating queries and returning data from LDAP.</p>
 <li><a href="#ad-group-types">Groups</a></li>
 <li><a href="#ad-computer-types">Computers</a></li>
 <li><a href="#ad-contact-types">Contacts</a></li>
+<li><a href="#ad-ou-types">OUs</a></li>
 </ul>
 <h4 id="openldap-schema">OpenLDAP Schema</h4>
 <ul>
 <li><a href="#openldap-user-types">Users</a></li>
 <li><a href="#openldap-group-types">Groups</a></li>
+<li><a href="#openldap-ou-types">OUs</a></li>
 </ul>
 <h3 id="the-active-directory-schema">The Active Directory Schema</h3>
 <hr />
@@ -286,6 +292,11 @@ used when generating queries and returning data from LDAP.</p>
 <td>exchangeAlias</td>
 <td>mailNickname</td>
 <td>string</td>
+</tr>
+<tr>
+<td>exchangeHideFromGAL</td>
+<td>msExchHideFromAddressLists</td>
+<td>bool</td>
 </tr>
 <tr>
 <td>exchangeMailboxDatabase</td>
@@ -566,6 +577,11 @@ used when generating queries and returning data from LDAP.</p>
 <td>string</td>
 </tr>
 <tr>
+<td>exchangeHideFromGAL</td>
+<td>msExchHideFromAddressLists</td>
+<td>bool</td>
+</tr>
+<tr>
 <td>exchangeInternalOnly</td>
 <td>msExchRequireAuthToSendTo</td>
 <td>bool</td>
@@ -757,6 +773,11 @@ used when generating queries and returning data from LDAP.</p>
 <td>string</td>
 </tr>
 <tr>
+<td>exchangeHideFromGAL</td>
+<td>msExchHideFromAddressLists</td>
+<td>bool</td>
+</tr>
+<tr>
 <td>exchangeSmtpAddresses</td>
 <td>proxyAddresses</td>
 <td>array</td>
@@ -794,6 +815,84 @@ used when generating queries and returning data from LDAP.</p>
 <tr>
 <td>sid</td>
 <td>objectSid</td>
+<td>string</td>
+</tr>
+</tbody>
+</table>
+<h4 id="ad-ou-types">AD OU Types</h4>
+<p>These are typical LDAP OU objects (<code>objectCategory=organizationalUnit</code>).</p>
+<table>
+<thead>
+<tr>
+<th>LdapTools Name</th>
+<th>LDAP Attribute</th>
+<th>Value Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>city</td>
+<td>l</td>
+<td>string</td>
+</tr>
+<tr>
+<td>country</td>
+<td>c</td>
+<td>string</td>
+</tr>
+<tr>
+<td>created</td>
+<td>whenCreated</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>description</td>
+<td>description</td>
+<td>string</td>
+</tr>
+<tr>
+<td>dn</td>
+<td>dn</td>
+<td>string</td>
+</tr>
+<tr>
+<td>gpoLinks</td>
+<td>gPLink</td>
+<td>array</td>
+</tr>
+<tr>
+<td>guid</td>
+<td>objectGuid</td>
+<td>string</td>
+</tr>
+<tr>
+<td>modified</td>
+<td>whenModified</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>name</td>
+<td>ou</td>
+<td>string</td>
+</tr>
+<tr>
+<td>sid</td>
+<td>objectSid</td>
+<td>string</td>
+</tr>
+<tr>
+<td>state</td>
+<td>st</td>
+<td>string</td>
+</tr>
+<tr>
+<td>streetAddress</td>
+<td>streetAddress</td>
+<td>string</td>
+</tr>
+<tr>
+<td>zipCode</td>
+<td>postalCode</td>
 <td>string</td>
 </tr>
 </tbody>
@@ -992,6 +1091,39 @@ used when generating queries and returning data from LDAP.</p>
 <tr>
 <td>name</td>
 <td>cn</td>
+<td>string</td>
+</tr>
+</tbody>
+</table>
+<h4 id="openldap-ou-types">OpenLDAP OU Types</h4>
+<p>These are typical LDAP OU objects (<code>objectClass=organizationalUnit</code>).</p>
+<table>
+<thead>
+<tr>
+<th>LdapTools Name</th>
+<th>LDAP Attribute</th>
+<th>Value Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>created</td>
+<td>createTimestamp</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>dn</td>
+<td>dn</td>
+<td>string</td>
+</tr>
+<tr>
+<td>modified</td>
+<td>modifyTimestamp</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>name</td>
+<td>ou</td>
 <td>string</td>
 </tr>
 </tbody>

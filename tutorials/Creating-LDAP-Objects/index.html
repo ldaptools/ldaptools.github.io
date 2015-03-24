@@ -90,6 +90,10 @@
                                 <a href="../../cookbook/Creating-a-Custom-Repository">Creating a Custom Repository</a>
                             </li>
                         
+                            <li >
+                                <a href="../../cookbook/Modifying-GPO-Links-on-OUs">Modifying GPO Links on OUs</a>
+                            </li>
+                        
                         </ul>
                     </li>
                 
@@ -205,6 +209,12 @@ $ldapObject-&gt;createComputer()
     -&gt;in('dc=example,dc=local')
     -&gt;with(['name' =&gt; 'MYWOKRSTATION'])
     -&gt;execute();
+
+// Creates an OU object...
+$ldapObject-&gt;createOU()
+    -&gt;in('dc=example,dc=local')
+    -&gt;with(['name' =&gt; 'Employees'])
+    -&gt;execute();
 </code></pre>
 
 <h2 id="using-parameters-in-attribute-values">Using Parameters in Attribute Values</h2>
@@ -248,9 +258,28 @@ converted and renamed to their proper LDAP form based on your schema.</p>
 not have to call this. The DN is determined automatically based off the <code>name</code> attribute in your schema, and the
 location you specified with the <code>in($container)</code> method.</p>
 <hr />
-<h4 id="setparametercontainer">setParameter($container)</h4>
+<h4 id="setparametername-value">setParameter($name, $value)</h4>
 <p>This allows you to set any parameter you want that you can later use within an attribute value to have it resolve to the
 parameter value. See the full explanation of parameters near the start of this document.</p>
+<hr />
+<h4 id="createuser">createUser()</h4>
+<p>This specifies that the resulting object should be a user LDAP object type.</p>
+<hr />
+<h4 id="creategroup">createGroup()</h4>
+<p>This specifies that the resulting object should be a group LDAP object type.</p>
+<hr />
+<h4 id="createou">createOU()</h4>
+<p>This specifies that the resulting object should be a OU LDAP object type.</p>
+<hr />
+<h4 id="createcomputer">createComputer()</h4>
+<p>This specifies that the resulting object should be a computer LDAP object type.</p>
+<hr />
+<h4 id="createcontact">createContact()</h4>
+<p>This specifies that the resulting object should be a contact LDAP object type.</p>
+<hr />
+<h4 id="createtype">create($type)</h4>
+<p>This allows you to manually specify a LDAP object type from the schema that you would like to create. This is the method
+that all the other shorthand <code>create*</code> methods actually call. </p>
 <hr />
 <h4 id="execute">execute()</h4>
 <p>Takes all of your set attributes, parameters, OU location, etc and adds the object to LDAP. If an issue is encountered

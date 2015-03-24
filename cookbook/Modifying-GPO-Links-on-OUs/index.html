@@ -6,10 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         <meta name="author" content="Chad Sikorra">
-        <link rel="canonical" href="http://www.phpldaptools.com/tutorials/AD-User-Modification/">
+        <link rel="canonical" href="http://www.phpldaptools.com/cookbook/Modifying-GPO-Links-on-OUs/">
         <link rel="shortcut icon" href="../../img/favicon.ico">
 
-        <title>AD User Modification - LdapTools</title>
+        <title>Modifying GPO Links on OUs - LdapTools</title>
 
         <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -78,20 +78,20 @@
                 
                 
                 
-                    <li class="dropdown">
+                    <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cookbook <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
                             <li >
-                                <a href="../../cookbook/Authenticating-a-User">Authenticating a User</a>
+                                <a href="../Authenticating-a-User">Authenticating a User</a>
                             </li>
                         
                             <li >
-                                <a href="../../cookbook/Creating-a-Custom-Repository">Creating a Custom Repository</a>
+                                <a href="../Creating-a-Custom-Repository">Creating a Custom Repository</a>
                             </li>
                         
-                            <li >
-                                <a href="../../cookbook/Modifying-GPO-Links-on-OUs">Modifying GPO Links on OUs</a>
+                            <li class="active">
+                                <a href=".">Modifying GPO Links on OUs</a>
                             </li>
                         
                         </ul>
@@ -99,28 +99,28 @@
                 
                 
                 
-                    <li class="dropdown active">
+                    <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
-                            <li class="active">
-                                <a href=".">AD User Modification</a>
+                            <li >
+                                <a href="../../tutorials/AD-User-Modification">AD User Modification</a>
                             </li>
                         
                             <li >
-                                <a href="../Building-LDAP-Queries">Building LDAP Queries</a>
+                                <a href="../../tutorials/Building-LDAP-Queries">Building LDAP Queries</a>
                             </li>
                         
                             <li >
-                                <a href="../Creating-LDAP-Objects">Creating LDAP Objects</a>
+                                <a href="../../tutorials/Creating-LDAP-Objects">Creating LDAP Objects</a>
                             </li>
                         
                             <li >
-                                <a href="../Modifying-LDAP-Objects">Modifying LDAP Objects</a>
+                                <a href="../../tutorials/Modifying-LDAP-Objects">Modifying LDAP Objects</a>
                             </li>
                         
                             <li >
-                                <a href="../Using-the-LDAP-Manager">Using the LDAP Manager</a>
+                                <a href="../../tutorials/Using-the-LDAP-Manager">Using the LDAP Manager</a>
                             </li>
                         
                         </ul>
@@ -136,12 +136,12 @@
                 
                 
                 <li >
-                    <a rel="next" href="../../cookbook/Modifying-GPO-Links-on-OUs">
+                    <a rel="next" href="../Creating-a-Custom-Repository">
                         <i class="fa fa-arrow-left"></i> Previous
                     </a>
                 </li>
                 <li >
-                    <a rel="prev" href="../Building-LDAP-Queries">
+                    <a rel="prev" href="../../tutorials/AD-User-Modification">
                         Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -167,109 +167,65 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#ad-user-modification">AD User Modification</a></li>
+        <li class="main active"><a href="#modifying-gpo-links-on-ous">Modifying GPO Links on OUs</a></li>
         
-            <li><a href="#ad-user-account-properties">AD User Account Properties</a></li>
+            <li><a href="#creating-an-ou-with-a-linked-gpo">Creating an OU With a Linked GPO</a></li>
         
-            <li><a href="#user-log-on-to-workstations-list">User Log On To Workstations List</a></li>
-        
-            <li><a href="#account-expiration-date">Account Expiration Date</a></li>
+            <li><a href="#modifying-gpos-on-an-existing-ou">Modifying GPOs on an Existing OU</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="ad-user-modification">AD User Modification</h1>
+<h1 id="modifying-gpo-links-on-ous">Modifying GPO Links on OUs</h1>
 <hr />
-<p>Modifying an Active Directory user is really no different than modifying any other LDAP object, but there are a few
-things to note. For example, using a few simple statements you can modify many of the user's properties typically seen
-in the "Account" tab in the "AD Users and Computers" tool:</p>
+<p>When working with Active Directory OUs you may want to add, remove, or display GPOs that are linked to a specific OU.
+This can be accomplished through the use of the <code>gpoLinks</code> attribute for the OU type. This attribute can be leveraged on
+OU creation or modification to easily set what GPOs should be linked at that OU level. The attribute value functions as
+an array of GPO names that are linked to the OU.</p>
+<h2 id="creating-an-ou-with-a-linked-gpo">Creating an OU With a Linked GPO</h2>
+<p>For example, assume you would like to create an OU named "Employees" that should have 2 GPOs linked to it named 
+"Employee Policy" and "Require Screensaver":</p>
+<pre><code class="php">
+$ldapObject = $ldapManager-&gt;createLdapObject();
+
+try {
+    $object-&gt;createOU()
+        -&gt;in('dc=example,dc=local')
+        -&gt;with(['name' =&gt; 'Employees', 'gpoLinks' =&gt; ['Employee Policy', 'Require Screensaver']])
+        -&gt;execute();
+} catch (LdapConnectionException $e) {
+    echo &quot;Failed to create OU - &quot;.$e-&gt;getMessage();
+}
+</code></pre>
+
+<h2 id="modifying-gpos-on-an-existing-ou">Modifying GPOs on an Existing OU</h2>
+<p>Assume you have an existing OU and would like to remove or add a GPO link from it:</p>
 <pre><code class="php">use LdapTools\Object\LdapObjectType;
 
 //...
 
-// First get the user object via a repository.
-$repository = $ldapManager-&gt;getRepository(LdapObjectType::USER);
-$user = $repository-&gt;findOneByUsername('chad');
+$repository = $ldapManager-&gt;getRepository(LdapObjectType::OU);
 
-// Make sure the user account is set to enabled.
-$user-&gt;setDisabled(false);
-// Set their password to never expire.
-$user-&gt;setPasswordNeverExpires(true);
+// gpoLinks are not retrieved by default, so make sure to select them.
+$repository-&gt;setAttributes(['name', 'gpoLinks']);
+$ou = $repository-&gt;findOneByName('My Special OU');
 
-try {
-    $ldapManager-&gt;persist($user);
-} catch (\Exception $e) {
-    echo &quot;Error modifying user! &quot;.$e-&gt;getMessage();
+// Check for, and then remove, the name of an existing GPO if it is linked...
+if ($ou-&gt;hasGpoLinks('Require Screensaver')) {
+    $ou-&gt;removeGpoLinks('Require Screensaver');
 }
-</code></pre>
 
-<p>With the above statement you have just the user account to be enabled and set the password to never expire.</p>
-<h2 id="ad-user-account-properties">AD User Account Properties</h2>
-<p>This table contains many useful AD attributes you can toggle with a simple <code>true</code> or <code>false</code> value like above.</p>
-<table>
-<thead>
-<tr>
-<th>Property Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>disabled</td>
-<td>Disable (true) or enable (false) the account.</td>
-</tr>
-<tr>
-<td>passwordIsReversible</td>
-<td>Legacy AD setting. Should NOT be used.</td>
-</tr>
-<tr>
-<td>passwordMustChange</td>
-<td>Set that the user's password must change on the next login.</td>
-</tr>
-<tr>
-<td>passwordNeverExpires</td>
-<td>Set the user's password to never expire.</td>
-</tr>
-<tr>
-<td>smartCardRequired</td>
-<td>Set that a smart card is required for interactive login.</td>
-</tr>
-<tr>
-<td>trustedForAllDelegation</td>
-<td>Trust the user for delegation to any service (Kerberos).</td>
-</tr>
-<tr>
-<td>trustedForAnyAuthDelegation</td>
-<td>Delegate using any authentication protocol (When selected for delegation to specific services only).</td>
-</tr>
-</tbody>
-</table>
-<h2 id="user-log-on-to-workstations-list">User Log On To Workstations List</h2>
-<p>To easily modify the workstations that an account can log into, you can use the <code>logonWorkstations</code> attribute. This
-attribute functions like an array and maps to to the "Log on To..." section of an account.</p>
-<pre><code class="php">
-// A LdapObject as the result of a search. Set the workstations allowed...
-$user-&gt;setLogonWorkstations(['PC01', 'PC02', 'PC03']);
+// Add a new GPO link to the OU...
+$ou-&gt;addGpoLinks('Restricted Access');
 
-// Add only one workstation...
-$user-&gt;addLogonWorkstations('PC04');
-
-// Remove one of the workstations...
-$user-&gt;removeLogonWorkstations('PC01');
-</code></pre>
-
-<h2 id="account-expiration-date">Account Expiration Date</h2>
-<p>To modify the date at which an account will expire, which will prevent the user from logging in past that time, you can 
-use the <code>accountExpirationDate</code> attribute. This attribute accepts either a bool <code>false</code> (the account never expires) or
- a PHP <code>\DateTime</code> object specifying the date at which the account should expire.</p>
-<pre><code class="php">
-// A LdapObject as the result of a search. Set the account to never expire.
-$user-&gt;setAccountExpirationDate(false);
-
-// Instead, set the account to expire sometime in the future.
-$user-&gt;setAccountExpirationDate(new \DateTime('2228-3-22'));
+// Now actually save the changes back to LDAP
+try {
+    $ldapManager-&gt;persist($ou);
+} catch (\Exception $e) {
+    echo &quot;Failed to modify OU - &quot;.$e-&gt;getMessage();
+}
 </code></pre>
 
 </div>
