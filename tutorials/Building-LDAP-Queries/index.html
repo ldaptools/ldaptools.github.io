@@ -175,6 +175,8 @@
         
             <li><a href="#ldapquerybuilder-methods">LdapQueryBuilder Methods</a></li>
         
+            <li><a href="#ldapquery-methods-to-retrieve-ldap-results">LdapQuery Methods to Retrieve LDAP Results</a></li>
+        
             <li><a href="#filter-method-shortcuts">Filter Method Shortcuts</a></li>
         
             <li><a href="#active-directory-filter-method-shortcuts">Active Directory Filter Method Shortcuts</a></li>
@@ -390,12 +392,15 @@ default when no value is explicitly set is 1000.</p>
 <pre><code class="php">$filter = $lqb-&gt;getLdapFilter();
 </code></pre>
 
+<h2 id="ldapquery-methods-to-retrieve-ldap-results">LdapQuery Methods to Retrieve LDAP Results</h2>
 <hr />
-<h4 id="getldapquery">getLdapQuery()</h4>
-<p>Retrieves an instance of the <code>LdapQuery</code> object that you can then call the <code>execute</code> method on to get your results. The
-<code>LdapQuery</code> object has the filter, page size, base DN, scope, etc that you set in the builder and takes care of
-converting the LDAP results array using a hydration process. It returns an easier to use set of objects. Or you can
-have it return a simple set of arrays with the attributes and values.</p>
+<p>There are a few ways to retrieve LDAP results after you have a query built. How you retrieve the results depends upon
+what type of data you're looking for. To start to retrieve results you need to first get a <code>LdapQuery</code> instance by using
+the <code>getLdapQuery()</code> method.</p>
+<p>The <code>getLdapQuery()</code> method retrieves an instance of the <code>LdapQuery</code> object that you can then call methods on to get 
+your results. The <code>LdapQuery</code> object has the filter, page size, base DN, scope, etc that you set in the builder and 
+takes care of converting the LDAP results array using a hydration process. It returns an easier to use set of objects. 
+Or you can have it return a simple set of arrays with the attributes and values.</p>
 <pre><code class="php">use LdapTools\Factory\HydratorFactory;
 
 // By default the results will be a collection of LdapUser objects you can iterate over...
@@ -416,8 +421,67 @@ foreach ($results as $result) {
 
 </code></pre>
 
+<h4 id="executehydrationtype-hydratorfactoryto_object">execute($hydrationType = HydratorFactory::TO_OBJECT)</h4>
 <hr />
+<p>This <code>LdapQuery</code> method executes the LDAP filter with the options you have set and returns the results as either a set
+objects (this is the default) or as an array (use the hydration type <code>HydratorFactory::TO_ARRAY</code>). See previous example 
+for full usage.</p>
+<h4 id="getresulthydrationtype-hydratorfactoryto_object">getResult($hydrationType = HydratorFactory::TO_OBJECT)</h4>
+<hr />
+<p>This is an alias for the <code>execute()</code> method. It will return a <code>LdapObjectCollection</code> by default, or an array of LDAP
+entries if specified as <code>getResult(HydratorFactory::TO_ARRAY)</code>.</p>
+<h4 id="getarrayresult">getArrayResult()</h4>
+<hr />
+<p>This functions the same as the <code>getResult()</code> method, but it will always return the LDAP entries as an array instead of a
+collection of objects. This is identical to calling <code>getResult(HydratorFactory::TO_ARRAY)</code>.</p>
+<h4 id="getsingleresulthydrationtype-hydratorfactoryto_object">getSingleResult($hydrationType = HydratorFactory::TO_OBJECT)</h4>
+<hr />
+<p>This <code>LdapQuery</code> method will retrieve a single result from LDAP. So instead of a collection of objects or arrays you
+will be given a single result you can immediately begin to work with.</p>
+<pre><code class="php">$lqb = $ldapManager-&gt;buildLdapQuery();
+
+// Retrieve a single LdapObject from a query...a.
+$user = $lqb-&gt;select()
+    -&gt;fromUsers()
+    -&gt;Where(['username' =&gt; 'chad'])
+    -&gt;getLdapQuery()
+    -&gt;getSingleResult();
+
+echo &quot;DN : &quot;.$user-&gt;getDn();
+</code></pre>
+
+<p>If an empty result set is returned from LDAP then it will throw a <code>\LdapTools\Exception\EmptyResultException</code>. If more
+than one result is returned from LDAP then it will throw a <code>\LdapTools\Exception\MultiResultException</code>. Additionally, 
+you may pass an explicit hydration type to this method if you wish to get the result as a single array of attributes and
+values.</p>
+<h4 id="getoneornullresulthydrationtype-hydratorfactoryto_object">getOneOrNullResult($hydrationType = HydratorFactory::TO_OBJECT)</h4>
+<hr />
+<p>The behavior of this method is very similar to <code>getSingleResult()</code>, but if no results are found for the query it will
+return <code>null</code> instead of throwing an exception. However, it will still throw an exception in the case that more than one
+result is returned from LDAP.</p>
+<h4 id="getsinglescalarresult">getSingleScalarResult()</h4>
+<hr />
+<p>Using this method you can get the value of a single attribute from the query. If the LDAP object or attribute does not
+exist then it will throw an exception.</p>
+<pre><code class="php">$lqb = $ldapManager-&gt;buildLdapQuery();
+
+// Retrieve the GUID string of a specific AD user...
+$guid = $lqb-&gt;select('guid')
+    -&gt;fromUsers()
+    -&gt;Where(['username' =&gt; 'chad'])
+    -&gt;getLdapQuery()
+    -&gt;getSingleScalarResult();
+
+echo &quot;GUID : &quot;.$guid;
+</code></pre>
+
+<h4 id="getsinglescalarornullresult">getSingleScalarOrNullResult()</h4>
+<hr />
+<p>The behavior of this method is very similar to <code>getSingleScalarResult()</code>, but if the attribute is not found/set
+for the LDAP object it will return <code>null</code> instead of throwing an exception. However, it will still throw an exception
+in the case that more than one result is returned from LDAP or if the LDAP object does not exist.</p>
 <h2 id="filter-method-shortcuts">Filter Method Shortcuts</h2>
+<hr />
 <p>The <code>filter()</code> method of the <code>LdapQueryBuilder</code> returns a helper class that provides many shortcut methods for creating
 the LDAP operator classes within the <code>\LdapTools\Query\Operator</code> namespace. This way you do not have to manually
 construct the operators by doing:</p>
@@ -513,24 +577,36 @@ additional filter method shortcuts that are specific to Active Directory:</p>
 <hr />
 <h4 id="hasmemberrecursivelyuserdn">hasMemberRecursively($userDn)</h4>
 <hr />
-<p>Recursively checks groups for a member specified by their full distinguished name. Creates a matching rule comparison 
+<p>Recursively checks groups for a member specified by their full distinguished name. Creates a matching rule comparison
 using the OID <code>IN_CHAIN</code> against the groups <code>member</code> attribute.</p>
 <hr />
-<h4 id="isrecursivelymemberofgroupdn">isRecursivelyMemberOf($groupDn)</h4>
-<p>Recursively checks a user's group membership for a group specified by its full distinguished name. Creates a matching 
-rule comparison using the OID <code>IN_CHAIN</code> against the users <code>memberOf</code> attribute. To make this a bit easier to use, you
-could do something like the following:</p>
+<h4 id="isrecursivelymemberofgroup">isRecursivelyMemberOf($group)</h4>
+<p>Recursively checks an object's group membership for a group. The <code>$group</code> parameter can be any of the following:</p>
+<ul>
+<li>The name of a group.</li>
+<li>The GUID of a group (ie. a value like <code>bee66f2f-bcf7-4905-b65b-2f36d5008f1e</code>)</li>
+<li>The SID of a group (ie. a value like <code>S-1-5-21-1004336348-1177238915-682003330-512</code>)</li>
+<li>The full distinguished name of a group.</li>
+</ul>
+<p>This creates a matching rule comparison using the OID <code>IN_CHAIN</code> against the users <code>memberOf</code> attribute.</p>
 <pre><code class="php">use LdapTools\Object\LdapObjectType;
 
 // ...
 
-$groupRepo = $ldapManager-&gt;getRepository(LdapObjectType::GROUP);
-$group = $groupRepo-&gt;findOneByName('Domain Administrators');
-
+// Query by a group name...
 $query = $ldapManager-&gt;buildLdapQuery();
 $users = $query-&gt;select()
     -&gt;fromUsers()
-    -&gt;where($query-&gt;filter()-&gt;isRecursivelyMemberOf($group-&gt;getDn()))
+    -&gt;where($query-&gt;filter()-&gt;isRecursivelyMemberOf('Employees'))
+    -&gt;getLdapQuery()
+    -&gt;execute();
+
+// If you are not targeting a specific set of objects from the schema, then you must
+// pass 'false' as the second argument and specify a full DN. Otherwise this method
+// will attempt to use the 'groups' attribute from the schema by default.
+$ldapObjects = $query-&gt;select('description')
+    -&gt;where(['cn' =&gt; 'foo'])
+    -&gt;andWhere($query-&gt;filter()-&gt;isRecursivelyMemberOf('CN=Foo,DC=foo,DC=bar', false))
     -&gt;getLdapQuery()
     -&gt;execute();
 </code></pre>

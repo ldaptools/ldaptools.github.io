@@ -310,6 +310,33 @@ process and the converter may use the connection to make LDAP calls to resolve d
 <p><code>fromLdap</code>: Depending on the attribute, does a bitwise conversion to set a specific type as true or false.</p>
 </li>
 </ul>
+<h4 id="gpo_link"><em>gpo_link</em></h4>
+<ul>
+<li>
+<p><code>toLdap</code>: Takes an array of GPO names, retrieves their DNs, and returns a valid string for the gPLink attribute.</p>
+</li>
+<li>
+<p><code>fromLdap</code>: Takes a gPLink attribute string, splits it into the distinct GPOs, and returns an array of GPO names.</p>
+</li>
+</ul>
+<h4 id="value_to_dn"><em>value_to_dn</em></h4>
+<ul>
+<li>
+<p><code>toLdap</code>: Takes an objects GUID, SID, DN, or name and returns the full distinguished name after validating it exists.</p>
+</li>
+<li>
+<p><code>fromLdap</code>: Returns a common name for the object instead of the full distinguished name.</p>
+</li>
+</ul>
+<h4 id="primary_group"><em>primary_group</em></h4>
+<ul>
+<li>
+<p><code>toLdap</code>: Takes a group name and converts it to its RID decimal value for the primaryGroupID attribute.</p>
+</li>
+<li>
+<p><code>fromLdap</code>: Takes the RID of a group and returns the group's name.</p>
+</li>
+</ul>
 </div>
             
         </div>

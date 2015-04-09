@@ -280,7 +280,16 @@ schema each time. If it detects that the schema file has been modified, it will 
 <p>The base DN for searches (ie. <code>dc=example,dc=com</code>).</p>
 <hr />
 <h4 id="username-required">username <strong>(REQUIRED)</strong></h4>
-<p>The username to use when binding to LDAP.</p>
+<p>The username to use when binding to LDAP. When using Active Directory, the username can be in any of these formats:</p>
+<ul>
+<li>A typical username in UPN form (ie. <code>user@domain.com</code>).</li>
+<li>A string GUID of an account (ie. <code>8227ab9b-b307-45eb-a50c-6f6cb3946318</code>)</li>
+<li>A string SID of an account (ie. <code>S-1-5-21-1004336348-1177238915-682003330-512</code>)</li>
+<li>The full distinguished name of an account.</li>
+</ul>
+<p>If none of those forms are detected, then by default it will force the username into UPN form based off of the domain
+name. However, if the LDAP type is <code>openldap</code>, then it will just pass the unmodified username along. This behavior can 
+be modified using the <code>bind_format</code> option.</p>
 <hr />
 <h4 id="password-required">password <strong>(REQUIRED)</strong></h4>
 <p>The password to use when binding to LDAP.</p>
@@ -288,6 +297,11 @@ schema each time. If it detects that the schema file has been modified, it will 
 <h4 id="servers-required">servers <strong>(REQUIRED)</strong></h4>
 <p>An array of LDAP servers (ie. <code>[ 'dc01' ]</code>). When more than one server name is used it will attempt each one until it
 successfully connects.</p>
+<hr />
+<h4 id="bind_format">bind_format</h4>
+<p>Defines how the username will be passed to LDAP on a bind/authentication attempt. This is a string that accepts 2
+parameters: <code>%username%</code> and <code>%domainname%</code>. By default, the AD bind format is <code>%username%@%domainname%</code>. With OpenLDAP
+it is simply <code>%username%</code>. However, you could set it to an DN path, such as: <code>CN=%username%,OU=Users,DC=example,DC=com</code></p>
 <hr />
 <h4 id="server_selection">server_selection</h4>
 <p>When more than one server is listed for a domain, choose which one is selected for the connection. The possible choices 
