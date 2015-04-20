@@ -87,6 +87,10 @@
                             </li>
                         
                             <li >
+                                <a href="../../cookbook/Common-LDAP-Queries">Common LDAP Queries</a>
+                            </li>
+                        
+                            <li >
                                 <a href="../../cookbook/Creating-a-Custom-Repository">Creating a Custom Repository</a>
                             </li>
                         
@@ -109,6 +113,10 @@
                         
                             <li >
                                 <a href="../../tutorials/Building-LDAP-Queries">Building LDAP Queries</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../../tutorials/Creating-AD-Password-Settings-Objects">Creating AD Password Settings Objects</a>
                             </li>
                         
                             <li >
@@ -193,6 +201,7 @@ used when generating queries and returning data from LDAP.</p>
 <li><a href="#ad-computer-types">Computers</a></li>
 <li><a href="#ad-contact-types">Contacts</a></li>
 <li><a href="#ad-ou-types">OUs</a></li>
+<li><a href="#ad-password-settings-objects-types">Password Settings Objects</a></li>
 </ul>
 <h4 id="openldap-schema">OpenLDAP Schema</h4>
 <ul>
@@ -424,6 +433,31 @@ used when generating queries and returning data from LDAP.</p>
 <td>string</td>
 </tr>
 <tr>
+<td>otherFaxes</td>
+<td>otherFacsimileTelephoneNumber</td>
+<td>array</td>
+</tr>
+<tr>
+<td>otherHomePhones</td>
+<td>otherHomePhone</td>
+<td>array</td>
+</tr>
+<tr>
+<td>otherIpPhones</td>
+<td>otherIpPhone</td>
+<td>array</td>
+</tr>
+<tr>
+<td>otherPagers</td>
+<td>otherPager</td>
+<td>array</td>
+</tr>
+<tr>
+<td>otherPhoneNumbers</td>
+<td>otherTelephoneNumber</td>
+<td>array</td>
+</tr>
+<tr>
 <td>password</td>
 <td>unicodePwd</td>
 <td>string</td>
@@ -614,6 +648,11 @@ used when generating queries and returning data from LDAP.</p>
 <tr>
 <td>guid</td>
 <td>objectGuid</td>
+<td>string</td>
+</tr>
+<tr>
+<td>managedBy</td>
+<td>managedBy</td>
 <td>string</td>
 </tr>
 <tr>
@@ -828,6 +867,11 @@ used when generating queries and returning data from LDAP.</p>
 <td>string</td>
 </tr>
 <tr>
+<td>manager</td>
+<td>manager</td>
+<td>string</td>
+</tr>
+<tr>
 <td>modified</td>
 <td>whenModified</td>
 <td><code>\DateTime</code></td>
@@ -918,6 +962,110 @@ used when generating queries and returning data from LDAP.</p>
 <tr>
 <td>zipCode</td>
 <td>postalCode</td>
+<td>string</td>
+</tr>
+</tbody>
+</table>
+<h4 id="ad-password-settings-objects-types">AD Password Settings Objects Types</h4>
+<p>These are Password Settings Objects, also known as PSOs, (<code>objectClass=msDS-PasswordSettings</code>). They can be used with 
+the type name <code>PSO</code>.</p>
+<table>
+<thead>
+<tr>
+<th>LdapTools Name</th>
+<th>LDAP Attribute</th>
+<th>Value Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>appliesTo</td>
+<td>msDS-PSOAppliesTo</td>
+<td>array</td>
+</tr>
+<tr>
+<td>created</td>
+<td>whenCreated</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>description</td>
+<td>description</td>
+<td>string</td>
+</tr>
+<tr>
+<td>dn</td>
+<td>distinguishedName</td>
+<td>string</td>
+</tr>
+<tr>
+<td>guid</td>
+<td>objectGuid</td>
+<td>string</td>
+</tr>
+<tr>
+<td>lockoutDuration</td>
+<td>msDS-LockoutDuration</td>
+<td><code>\LdapTools\Utilities\ADTimeSpan</code></td>
+</tr>
+<tr>
+<td>lockoutObservationWindow</td>
+<td>msDS-LockoutObservationWindow</td>
+<td><code>\LdapTools\Utilities\ADTimeSpan</code></td>
+</tr>
+<tr>
+<td>lockoutThreshold</td>
+<td>msDS-LockoutThreshold</td>
+<td>int</td>
+</tr>
+<tr>
+<td>maximumPasswordAge</td>
+<td>msDS-MaximumPasswordAge</td>
+<td><code>\LdapTools\Utilities\ADTimeSpan</code></td>
+</tr>
+<tr>
+<td>minimumPasswordAge</td>
+<td>msDS-MinimumPasswordAge</td>
+<td><code>\LdapTools\Utilities\ADTimeSpan</code></td>
+</tr>
+<tr>
+<td>minimumPasswordLength</td>
+<td>msDS-MinimumPasswordLength</td>
+<td>int</td>
+</tr>
+<tr>
+<td>modified</td>
+<td>whenChanged</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>name</td>
+<td>cn</td>
+<td>string</td>
+</tr>
+<tr>
+<td>passwordComplexity</td>
+<td>msDS-PasswordComplexityEnabled</td>
+<td>bool</td>
+</tr>
+<tr>
+<td>passwordHistoryLength</td>
+<td>msDS-PasswordHistoryLength</td>
+<td>int</td>
+</tr>
+<tr>
+<td>passwordReversibleEncryption</td>
+<td>msDS-PasswordReversibleEncryptionEnabled</td>
+<td>bool</td>
+</tr>
+<tr>
+<td>precedence</td>
+<td>msDS-PasswordSettingsPrecedence</td>
+<td>int</td>
+</tr>
+<tr>
+<td>sid</td>
+<td>objectSid</td>
 <td>string</td>
 </tr>
 </tbody>

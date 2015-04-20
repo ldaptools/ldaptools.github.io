@@ -87,6 +87,10 @@
                             </li>
                         
                             <li >
+                                <a href="../../cookbook/Common-LDAP-Queries">Common LDAP Queries</a>
+                            </li>
+                        
+                            <li >
                                 <a href="../../cookbook/Creating-a-Custom-Repository">Creating a Custom Repository</a>
                             </li>
                         
@@ -109,6 +113,10 @@
                         
                             <li >
                                 <a href="../../tutorials/Building-LDAP-Queries">Building LDAP Queries</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../../tutorials/Creating-AD-Password-Settings-Objects">Creating AD Password Settings Objects</a>
                             </li>
                         
                             <li >
@@ -282,7 +290,7 @@ an array value regardless of the number of values it has. This allows for more p
 <p>The full class name (ie <code>\MyNamespace\MyClasses\CustomRepository</code>) to use as the default repository when calling
  <code>getRepository('object_type')</code> on the <code>LdapManager</code> class. The class must extend <code>\LdapTools\Object\LdapObjectRepository</code>.</p>
 <hr />
-<h4 id="default_values">default_values</h4>
+<h4 id="attributes_to_select_1">attributes_to_select</h4>
 <p>An array of attributes with what their default value should be set to whe creating this object using the 
 <code>LdapObjectCreator</code>. These values also accept parameter values encased within <code>%</code> symbols that can resolve to other 
 attribute values.</p>
@@ -294,7 +302,7 @@ attribute values.</p>
 </code></pre>
 
 <hr />
-<h4 id="attributes_required">attributes_required</h4>
+<h4 id="required_attributes">required_attributes</h4>
 <p>An array of attributes that are required when creating this object type. If these are not present, an exception will be
 thrown. This will only happen if they are not specified on creation and not contained within the <code>default_values</code> list.</p>
 <pre><code class="yaml">    required_attributes:

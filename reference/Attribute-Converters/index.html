@@ -87,6 +87,10 @@
                             </li>
                         
                             <li >
+                                <a href="../../cookbook/Common-LDAP-Queries">Common LDAP Queries</a>
+                            </li>
+                        
+                            <li >
                                 <a href="../../cookbook/Creating-a-Custom-Repository">Creating a Custom Repository</a>
                             </li>
                         
@@ -109,6 +113,10 @@
                         
                             <li >
                                 <a href="../../tutorials/Building-LDAP-Queries">Building LDAP Queries</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../../tutorials/Creating-AD-Password-Settings-Objects">Creating AD Password Settings Objects</a>
                             </li>
                         
                             <li >
@@ -335,6 +343,15 @@ process and the converter may use the connection to make LDAP calls to resolve d
 </li>
 <li>
 <p><code>fromLdap</code>: Takes the RID of a group and returns the group's name.</p>
+</li>
+</ul>
+<h4 id="functional_level"><em>functional_level</em></h4>
+<ul>
+<li>
+<p><code>fromLdap</code>: Takes an Active Directory functional level as an int and converts it to a human readable form.</p>
+</li>
+<li>
+<p><code>toLdap</code>: This should not be used. You should only read the value from LDAP.</p>
 </li>
 </ul>
 </div>

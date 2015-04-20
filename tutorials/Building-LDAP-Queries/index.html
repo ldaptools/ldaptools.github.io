@@ -87,6 +87,10 @@
                             </li>
                         
                             <li >
+                                <a href="../../cookbook/Common-LDAP-Queries">Common LDAP Queries</a>
+                            </li>
+                        
+                            <li >
                                 <a href="../../cookbook/Creating-a-Custom-Repository">Creating a Custom Repository</a>
                             </li>
                         
@@ -109,6 +113,10 @@
                         
                             <li class="active">
                                 <a href=".">Building LDAP Queries</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../Creating-AD-Password-Settings-Objects">Creating AD Password Settings Objects</a>
                             </li>
                         
                             <li >
@@ -141,7 +149,7 @@
                     </a>
                 </li>
                 <li >
-                    <a rel="prev" href="../Creating-LDAP-Objects">
+                    <a rel="prev" href="../Creating-AD-Password-Settings-Objects">
                         Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -204,7 +212,7 @@ only desire is to generate LDAP filters.</p>
 $lqb = new LdapQueryBuilder();
 
 $filter = $lqb-&gt;select('givenName', 'sn', 'l')
-    -&gt;where('objectClass','user')
+    -&gt;where(['objectClass' =&gt; 'user'])
     -&gt;andWhere($lqb-&gt;filter-&gt;like('sAMAccountName','*smith'))
     -&gt;getLdapFilter();
 
@@ -240,6 +248,9 @@ the methods and their general use.</p>
 <p>The <code>select</code> method allows you to choose specifically which attributes you would like to return from the query. Simply
 pass an array of attribute names to it that you would like, or a single attribute as a string. In the absence of 
 anything passed to it, it will select the default set of attributes for the query as defined for the type in the schema.</p>
+<p>To retrieve all attributes defined in the schema you can pass a single wildcard <code>*</code> as a selected attribute. In the
+absence of a schema doing that will also select all LDAP attributes. To select all LDAP attributes and all schema
+attributes for a LDAP object you can pass a double wildcard <code>**</code> as a selected attribute.</p>
 <p>Attribute names are looked for in the schema to see if they map to specific LDAP attributes.</p>
 <pre><code class="php">$lqb-&gt;select(['firstName', 'city', 'state', 'sid']);
 
@@ -248,10 +259,16 @@ $lqb-&gt;select('guid');
 
 // Attribute names will always be returned in the case you enter it in, irrespective of how LDAP returns the data.
 $lqb-&gt;select(['FirstName', 'City', 'State', 'SID']);
+
+// Select all attributes defined in the schema for a LDAP object
+$lqb-&gt;select('*');
+
+// Select all attributes both in the schema and from LDAP for an object
+$lqb-&gt;select('**');
 </code></pre>
 
 <p>If you want the raw data to be returned from LDAP you can select LDAP attribute names explicitly. You can also include 
-schema names at the same time. <strong>NOTE:</strong> Attributes selected by their LDAP attribute name will <strong>NOT</strong> have attribute 
+schema names at the same time. <strong>NOTE:</strong> Attributes selected by their LDAP attribute name will <strong>NOTE</strong> have attribute 
 conversion done.</p>
 <pre><code class="php">// Will return 'objectSid' AND 'sid'
 $lqb-&gt;select(['givenName', 'l', 'objectSid', 'sid']);
@@ -348,7 +365,7 @@ LDAP search scope recursively from the point of the base DN onwards.</p>
 is most commonly used to retrieve the RootDSE of a domain.</p>
 <p>Example usage to return the RootDSE for a domain:</p>
 <pre><code class="php">// NOTE: You can also call the getRootDse() method on the connection object to get the RootDSE...
-$rootDse = $lqb-&gt;where($lqb-&gt;filter-&gt;present('objectClass'))
+$rootDse = $lqb-&gt;where($lqb-&gt;filter()-&gt;present('objectClass'))
                 -&gt;setBaseDn('')
                 -&gt;setScopeBase()
                 -&gt;getLdapQuery()
@@ -575,10 +592,19 @@ additional filter method shortcuts that are specific to Active Directory:</p>
 <p>Checks for accounts that have passwords that are set to never expire. Creates a bitwise 'AND' comparison against the 
 <code>userAccountControl</code> attribute.</p>
 <hr />
-<h4 id="hasmemberrecursivelyuserdn">hasMemberRecursively($userDn)</h4>
+<h4 id="hasmemberrecursivelymember-attribute-members">hasMemberRecursively($member, $attribute = 'members')</h4>
 <hr />
-<p>Recursively checks groups for a member specified by their full distinguished name. Creates a matching rule comparison
-using the OID <code>IN_CHAIN</code> against the groups <code>member</code> attribute.</p>
+<p>Recursively checks groups for a specific member. The <code>$member</code> parameter can be any of the following:</p>
+<ul>
+<li>A username. This must be unique! If a computer and user share the same name then an exception will be thrown.</li>
+<li>The GUID of an object (ie. a value like <code>bee66f2f-bcf7-4905-b65b-2f36d5008f1e</code>)</li>
+<li>The SID of an object (ie. a value like <code>S-1-5-21-1004336348-1177238915-682003330-512</code>)</li>
+<li>The full distinguished name of an object.</li>
+<li>A <code>LdapObject</code> as the result of another query.</li>
+</ul>
+<p>This creates a matching rule comparison using the OID <code>IN_CHAIN</code> against the groups <code>members</code> attribute by default. If
+you have a custom attribute, or some other attribute you would like to run it against, you must pass it as the second
+argument.</p>
 <hr />
 <h4 id="isrecursivelymemberofgroup">isRecursivelyMemberOf($group)</h4>
 <p>Recursively checks an object's group membership for a group. The <code>$group</code> parameter can be any of the following:</p>
@@ -587,8 +613,9 @@ using the OID <code>IN_CHAIN</code> against the groups <code>member</code> attri
 <li>The GUID of a group (ie. a value like <code>bee66f2f-bcf7-4905-b65b-2f36d5008f1e</code>)</li>
 <li>The SID of a group (ie. a value like <code>S-1-5-21-1004336348-1177238915-682003330-512</code>)</li>
 <li>The full distinguished name of a group.</li>
+<li>A <code>LdapObject</code> as the result of another query.</li>
 </ul>
-<p>This creates a matching rule comparison using the OID <code>IN_CHAIN</code> against the users <code>memberOf</code> attribute.</p>
+<p>This creates a matching rule comparison using the OID <code>IN_CHAIN</code> against the users <code>groups</code> attribute.</p>
 <pre><code class="php">use LdapTools\Object\LdapObjectType;
 
 // ...

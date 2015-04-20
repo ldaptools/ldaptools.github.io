@@ -87,6 +87,10 @@
                             </li>
                         
                             <li >
+                                <a href="../Common-LDAP-Queries">Common LDAP Queries</a>
+                            </li>
+                        
+                            <li >
                                 <a href="../Creating-a-Custom-Repository">Creating a Custom Repository</a>
                             </li>
                         
@@ -109,6 +113,10 @@
                         
                             <li >
                                 <a href="../../tutorials/Building-LDAP-Queries">Building LDAP Queries</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../../tutorials/Creating-AD-Password-Settings-Objects">Creating AD Password Settings Objects</a>
                             </li>
                         
                             <li >
@@ -141,7 +149,7 @@
                     </a>
                 </li>
                 <li >
-                    <a rel="prev" href="../Creating-a-Custom-Repository">
+                    <a rel="prev" href="../Common-LDAP-Queries">
                         Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -169,6 +177,8 @@
     
         <li class="main active"><a href="#authenticating-a-user">Authenticating a User</a></li>
         
+            <li><a href="#valid-username-formats">Valid Username Formats</a></li>
+        
             <li><a href="#authentication-error-messages">Authentication Error Messages</a></li>
         
     
@@ -189,6 +199,11 @@ if ($ldapManager-&gt;authenticate($username, $password)) {
 
 <p>This method actually uses the already existing <code>authenticate()</code> method of the <code>LdapConnection</code> class in the current
 context and is included as a quick shortcut for not having to do <code>$ldapManager-&gt;getConnection()-&gt;authenticate($username, $password)</code>.</p>
+<h2 id="valid-username-formats">Valid Username Formats</h2>
+<p>The <code>authenticate()</code> method username argument can be the same value types as the username you defined in your config. For
+Active Directory, this means you can authenticate a user using either a UPN, a text SID, a text GUID, a
+distinguished name, or just a normal username. With OpenLDAP the username must be a full DN. However, you can adjust the
+<code>bind_format</code> option for the domain configuration to modify this behavior.</p>
 <h2 id="authentication-error-messages">Authentication Error Messages</h2>
 <p>There are many times where you may want to provide a more meaningful response as to why authentication for a user has
 failed. This information is possible to get by passing additional optional variables to the <code>authenticate()</code> method.</p>
@@ -207,52 +222,64 @@ common error codes you may see in AD:</p>
 <tr>
 <th>Error Number</th>
 <th>Constant</th>
+<th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>1317</td>
 <td><code>ACCOUNT_INVALID</code></td>
+<td>Account does not exist.</td>
 </tr>
 <tr>
 <td>1326</td>
 <td><code>ACCOUNT_CREDENTIALS_INVALID</code></td>
+<td>Account password is invalid.</td>
 </tr>
 <tr>
 <td>1327</td>
 <td><code>ACCOUNT_RESTRICTIONS</code></td>
+<td>Account Restrictions prevent this user from signing in.</td>
 </tr>
 <tr>
 <td>1328</td>
 <td><code>ACCOUNT_RESTRICTIONS_TIME</code></td>
+<td>Time Restriction - The account cannot login at this time.</td>
 </tr>
 <tr>
 <td>1329</td>
 <td><code>ACCOUNT_RESTRICTIONS_DEVICE</code></td>
+<td>Device Restriction - The account is not allowed to log on to this computer.</td>
 </tr>
 <tr>
 <td>1330</td>
 <td><code>ACCOUNT_PASSWORD_EXPIRED</code></td>
+<td>The password for the account has expired.</td>
 </tr>
 <tr>
 <td>1331</td>
 <td><code>ACCOUNT_DISABLED</code></td>
+<td>The account is currently disabled.</td>
 </tr>
 <tr>
 <td>1384</td>
 <td><code>ACCOUNT_CONTEXT_IDS</code></td>
+<td>The account is a member of too many groups and cannot be logged on.</td>
 </tr>
 <tr>
 <td>1793</td>
 <td><code>ACCOUNT_EXPIRED</code></td>
+<td>The account has expired.</td>
 </tr>
 <tr>
 <td>1907</td>
 <td><code>ACCOUNT_PASSWORD_MUST_CHANGE</code></td>
+<td>The accounts password must change before it can login.</td>
 </tr>
 <tr>
 <td>1909</td>
 <td><code>ACCOUNT_LOCKED</code></td>
+<td>The account is currently locked out.</td>
 </tr>
 </tbody>
 </table>

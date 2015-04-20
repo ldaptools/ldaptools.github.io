@@ -87,6 +87,10 @@
                             </li>
                         
                             <li >
+                                <a href="../../cookbook/Common-LDAP-Queries">Common LDAP Queries</a>
+                            </li>
+                        
+                            <li >
                                 <a href="../../cookbook/Creating-a-Custom-Repository">Creating a Custom Repository</a>
                             </li>
                         
@@ -109,6 +113,10 @@
                         
                             <li >
                                 <a href="../Building-LDAP-Queries">Building LDAP Queries</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../Creating-AD-Password-Settings-Objects">Creating AD Password Settings Objects</a>
                             </li>
                         
                             <li >
@@ -174,6 +182,8 @@
             <li><a href="#user-log-on-to-workstations-list">User Log On To Workstations List</a></li>
         
             <li><a href="#account-expiration-date">Account Expiration Date</a></li>
+        
+            <li><a href="#manager-modification">Manager Modification</a></li>
         
     
     </ul>
@@ -270,6 +280,43 @@ $user-&gt;setAccountExpirationDate(false);
 
 // Instead, set the account to expire sometime in the future.
 $user-&gt;setAccountExpirationDate(new \DateTime('2228-3-22'));
+</code></pre>
+
+<h2 id="manager-modification">Manager Modification</h2>
+<p>You can set the <code>manager</code> attribute by using several values: A string GUID, string SID, a distinguished name, username,
+or a <code>LdapObject</code>:</p>
+<pre><code class="php">// First get the user object via a query.
+$user = $ldapManager-&gt;buildLdapQuery()
+    -&gt;select('manager')
+    -&gt;fromUsers()
+    -&gt;where(['username' =&gt; 'Chad'])
+    -&gt;getLdapQuery()
+    -&gt;getSingleResult();
+
+// Set the manager via username
+$user-&gt;setManager('Tim');
+// Set the manager via a SID
+$user-&gt;setManager('S-1-5-21-1004336348-1177238915-682003330-512');
+// Set the manager via a GUID
+$user-&gt;setManager('270db4d0-249d-46a7-9cc5-eb695d9af9ac');
+// Set the manager via a DN
+$user-&gt;setManager('CN=Tim,OU=Employees,DC=example,DC=local');
+
+// Set the manager as a result of an LDAP object for a different query
+$manager = $ldapManager-&gt;buildLdapQuery()
+    -&gt;select()
+    -&gt;fromUsers()
+    -&gt;where(['lastName' =&gt; 'Smith', 'office' =&gt; 'Head Office'])
+    -&gt;getLdapQuery()
+    -&gt;getSingleResult();
+$user-&gt;setManager($manager);
+
+// All of the above will ultimately produce the same result.
+try {
+    $ldapManager-&gt;persist($user);
+} catch (\Exception $e) {
+    echo &quot;Error changing the manager: &quot;.$e-&gt;getMessage();
+}
 </code></pre>
 
 </div>

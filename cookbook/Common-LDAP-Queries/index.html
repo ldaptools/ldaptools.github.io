@@ -4,17 +4,17 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="A feature-rich LDAP library for PHP 5.6+.">
-        <meta name="author" content="Chad Sikorra">
         
-        <link rel="shortcut icon" href="./img/favicon.ico">
+        <meta name="author" content="Chad Sikorra">
+        <link rel="canonical" href="http://www.phpldaptools.com/cookbook/Common-LDAP-Queries/">
+        <link rel="shortcut icon" href="../../img/favicon.ico">
 
-        <title></title>
+        <title>Common LDAP Queries - LdapTools</title>
 
-        <link href="./css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="./css/font-awesome-4.0.3.css" rel="stylesheet">
-        <link href="./css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="./css/highlight.css">
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -43,7 +43,7 @@
             
 
             <!-- Main title -->
-            <a class="navbar-brand" href=".">LdapTools</a>
+            <a class="navbar-brand" href="../..">LdapTools</a>
         </div>
 
         <!-- Expanded navigation -->
@@ -58,19 +58,19 @@
                         <ul class="dropdown-menu">
                         
                             <li >
-                                <a href="reference/Attribute-Converters/">Attribute Converters</a>
+                                <a href="../../reference/Attribute-Converters">Attribute Converters</a>
                             </li>
                         
                             <li >
-                                <a href="reference/Default-Schema-Attributes/">Default Schema Attributes</a>
+                                <a href="../../reference/Default-Schema-Attributes">Default Schema Attributes</a>
                             </li>
                         
                             <li >
-                                <a href="reference/Main-Configuration/">Main Configuration</a>
+                                <a href="../../reference/Main-Configuration">Main Configuration</a>
                             </li>
                         
                             <li >
-                                <a href="reference/Schema-Configuration/">Schema Configuration</a>
+                                <a href="../../reference/Schema-Configuration">Schema Configuration</a>
                             </li>
                         
                         </ul>
@@ -78,24 +78,24 @@
                 
                 
                 
-                    <li class="dropdown">
+                    <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cookbook <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
                             <li >
-                                <a href="cookbook/Authenticating-a-User/">Authenticating a User</a>
+                                <a href="../Authenticating-a-User">Authenticating a User</a>
+                            </li>
+                        
+                            <li class="active">
+                                <a href=".">Common LDAP Queries</a>
                             </li>
                         
                             <li >
-                                <a href="cookbook/Common-LDAP-Queries/">Common LDAP Queries</a>
+                                <a href="../Creating-a-Custom-Repository">Creating a Custom Repository</a>
                             </li>
                         
                             <li >
-                                <a href="cookbook/Creating-a-Custom-Repository/">Creating a Custom Repository</a>
-                            </li>
-                        
-                            <li >
-                                <a href="cookbook/Modifying-GPO-Links-on-OUs/">Modifying GPO Links on OUs</a>
+                                <a href="../Modifying-GPO-Links-on-OUs">Modifying GPO Links on OUs</a>
                             </li>
                         
                         </ul>
@@ -108,27 +108,27 @@
                         <ul class="dropdown-menu">
                         
                             <li >
-                                <a href="tutorials/AD-User-Modification/">AD User Modification</a>
+                                <a href="../../tutorials/AD-User-Modification">AD User Modification</a>
                             </li>
                         
                             <li >
-                                <a href="tutorials/Building-LDAP-Queries/">Building LDAP Queries</a>
+                                <a href="../../tutorials/Building-LDAP-Queries">Building LDAP Queries</a>
                             </li>
                         
                             <li >
-                                <a href="tutorials/Creating-AD-Password-Settings-Objects/">Creating AD Password Settings Objects</a>
+                                <a href="../../tutorials/Creating-AD-Password-Settings-Objects">Creating AD Password Settings Objects</a>
                             </li>
                         
                             <li >
-                                <a href="tutorials/Creating-LDAP-Objects/">Creating LDAP Objects</a>
+                                <a href="../../tutorials/Creating-LDAP-Objects">Creating LDAP Objects</a>
                             </li>
                         
                             <li >
-                                <a href="tutorials/Modifying-LDAP-Objects/">Modifying LDAP Objects</a>
+                                <a href="../../tutorials/Modifying-LDAP-Objects">Modifying LDAP Objects</a>
                             </li>
                         
                             <li >
-                                <a href="tutorials/Using-the-LDAP-Manager/">Using the LDAP Manager</a>
+                                <a href="../../tutorials/Using-the-LDAP-Manager">Using the LDAP Manager</a>
                             </li>
                         
                         </ul>
@@ -143,13 +143,13 @@
             <ul class="nav navbar-nav navbar-right">
                 
                 
-                <li class="disabled">
-                    <a rel="next" >
+                <li >
+                    <a rel="next" href="../Authenticating-a-User">
                         <i class="fa fa-arrow-left"></i> Previous
                     </a>
                 </li>
-                <li class="disabled">
-                    <a rel="prev" >
+                <li >
+                    <a rel="prev" href="../Creating-a-Custom-Repository">
                         Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -172,15 +172,57 @@
 
         <div class="container">
             
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#common-ldap-queries">Common LDAP Queries</a></li>
+        
+            <li><a href="#get-all-groups-that-a-user-is-a-member-of-recursively">Get All Groups That a User is a Member Of (Recursively)</a></li>
+        
+            <li><a href="#get-all-users-that-belong-to-a-group-recursively">Get All Users That Belong to a Group (Recursively)</a></li>
+        
+    
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
 
-    <div class="row-fluid">
-      <div id="main-content" class="span12">
-        <h1 id="404-page-not-found" style="text-align: center">404</h1>
-        <p style="text-align: center"><strong>Page not found</strong></p>
-      </div>
-    </div>
+<h1 id="common-ldap-queries">Common LDAP Queries</h1>
+<hr />
+<p>The following examples are all queries built using the <code>LdapQueryBuilder</code>.  It assumes you have already loaded the
+config and have an instance of the <code>LdapManager</code> so you can call <code>buildLdapQuery()</code>:</p>
+<pre><code class="php">use LdapTools\Configuration;
+use LdapTools\LdapManager;
 
+$config = (new Configuration())-&gt;load('/path/to/ldap/config.yml');
+$ldap = new LdapManager($config);
+</code></pre>
 
+<h3 id="get-all-groups-that-a-user-is-a-member-of-recursively">Get All Groups That a User is a Member Of (Recursively)</h3>
+<hr />
+<p>This query is Active Directory specific as it uses the matching rule OID <code>IN_CHAIN</code> behind the scenes:</p>
+<pre><code class="php">$query = $ldap-&gt;buildLdapQuery();
+
+$groups = $query-&gt;select()
+    -&gt;fromGroups()
+    -&gt;where($query-&gt;filter()-&gt;hasMemberRecursively('ChadSikorra'))
+    -&gt;getLdapQuery()
+    -&gt;getResult();
+</code></pre>
+
+<h3 id="get-all-users-that-belong-to-a-group-recursively">Get All Users That Belong to a Group (Recursively)</h3>
+<hr />
+<p>This query is Active Directory specific as it uses the matching rule OID <code>IN_CHAIN</code> behind the scenes:</p>
+<pre><code class="php">$query = $ldap-&gt;buildLdapQuery();
+
+$users = $query-&gt;select()
+    -&gt;fromUsers()
+    -&gt;where($query-&gt;filter()-&gt;isRecursivelyMemberOf('Awesome Employees'))
+    -&gt;getLdapQuery()
+    -&gt;getResult();
+</code></pre>
+
+</div>
+            
         </div>
 
         <footer class="col-md-12">
@@ -194,9 +236,9 @@
         
 
         <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-        <script src="./js/bootstrap-3.0.3.min.js"></script>
-        <script src="./js/prettify-1.0.min.js"></script>
-        <script src="./js/highlight.pack.js"></script>
-        <script src="./js/base.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/prettify-1.0.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script>
+        <script src="../../js/base.js"></script>
     </body>
 </html>

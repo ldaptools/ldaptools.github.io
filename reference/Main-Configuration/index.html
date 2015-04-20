@@ -87,6 +87,10 @@
                             </li>
                         
                             <li >
+                                <a href="../../cookbook/Common-LDAP-Queries">Common LDAP Queries</a>
+                            </li>
+                        
+                            <li >
                                 <a href="../../cookbook/Creating-a-Custom-Repository">Creating a Custom Repository</a>
                             </li>
                         
@@ -109,6 +113,10 @@
                         
                             <li >
                                 <a href="../../tutorials/Building-LDAP-Queries">Building LDAP Queries</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../../tutorials/Creating-AD-Password-Settings-Objects">Creating AD Password Settings Objects</a>
                             </li>
                         
                             <li >
@@ -276,9 +284,6 @@ schema each time. If it detects that the schema file has been modified, it will 
 <h4 id="domain_name-required">domain_name <strong>(REQUIRED)</strong></h4>
 <p>The FQDN of the domain (ie. <code>example.com</code>).</p>
 <hr />
-<h4 id="base_dn-required">base_dn <strong>(REQUIRED)</strong></h4>
-<p>The base DN for searches (ie. <code>dc=example,dc=com</code>).</p>
-<hr />
 <h4 id="username-required">username <strong>(REQUIRED)</strong></h4>
 <p>The username to use when binding to LDAP. When using Active Directory, the username can be in any of these formats:</p>
 <ul>
@@ -294,9 +299,14 @@ be modified using the <code>bind_format</code> option.</p>
 <h4 id="password-required">password <strong>(REQUIRED)</strong></h4>
 <p>The password to use when binding to LDAP.</p>
 <hr />
-<h4 id="servers-required">servers <strong>(REQUIRED)</strong></h4>
+<h4 id="base_dn">base_dn</h4>
+<p>The base DN for searches (ie. The default naming context: <code>dc=example,dc=com</code>). If this is empty then the RootDSE will
+be queried for the <code>defaultNamingContext</code> value. It is recommended that you define this manually for better performance.</p>
+<hr />
+<h4 id="servers">servers</h4>
 <p>An array of LDAP servers (ie. <code>[ 'dc01' ]</code>). When more than one server name is used it will attempt each one until it
-successfully connects.</p>
+successfully connects. If no servers are given then it will attempt to lookup the LDAP servers for the domain by
+querying DNS. It is recommended that you define this manually for faster and more predictable results.</p>
 <hr />
 <h4 id="bind_format">bind_format</h4>
 <p>Defines how the username will be passed to LDAP on a bind/authentication attempt. This is a string that accepts 2
@@ -323,7 +333,12 @@ the case of Active Directory). Setting this to <code>true</code> also changes th
 <hr />
 <h4 id="use_tls">use_tls</h4>
 <p>Whether or not to initiate TLS when connecting to LDAP. This is required for certain LDAP operations (such as password 
-changes in Active Directory).</p>
+changes in Active Directory). When using this directive you will often have to configure your <code>ldap.conf</code> file and add
+the <code>TLS_REQCERT never</code> line. The <code>ldap.conf</code> file is in the following default locations:</p>
+<ul>
+<li>Windows: <code>C:\OpenLDAP\sysconf\ldap.conf</code> (If this directory structure does not exist, then create it...and the file)</li>
+<li>Linux: <code>/etc/ldap/ldap.conf</code></li>
+</ul>
 <p><strong>Default</strong>: <code>false</code></p>
 <hr />
 <h4 id="ldap_type">ldap_type</h4>

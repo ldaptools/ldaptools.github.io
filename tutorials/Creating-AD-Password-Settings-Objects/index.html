@@ -6,10 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         <meta name="author" content="Chad Sikorra">
-        <link rel="canonical" href="http://www.phpldaptools.com/tutorials/Using-the-LDAP-Manager/">
+        <link rel="canonical" href="http://www.phpldaptools.com/tutorials/Creating-AD-Password-Settings-Objects/">
         <link rel="shortcut icon" href="../../img/favicon.ico">
 
-        <title>Using the LDAP Manager - LdapTools</title>
+        <title>Creating AD Password Settings Objects - LdapTools</title>
 
         <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -115,8 +115,8 @@
                                 <a href="../Building-LDAP-Queries">Building LDAP Queries</a>
                             </li>
                         
-                            <li >
-                                <a href="../Creating-AD-Password-Settings-Objects">Creating AD Password Settings Objects</a>
+                            <li class="active">
+                                <a href=".">Creating AD Password Settings Objects</a>
                             </li>
                         
                             <li >
@@ -127,8 +127,8 @@
                                 <a href="../Modifying-LDAP-Objects">Modifying LDAP Objects</a>
                             </li>
                         
-                            <li class="active">
-                                <a href=".">Using the LDAP Manager</a>
+                            <li >
+                                <a href="../Using-the-LDAP-Manager">Using the LDAP Manager</a>
                             </li>
                         
                         </ul>
@@ -144,12 +144,12 @@
                 
                 
                 <li >
-                    <a rel="next" href="../Modifying-LDAP-Objects">
+                    <a rel="next" href="../Building-LDAP-Queries">
                         <i class="fa fa-arrow-left"></i> Previous
                     </a>
                 </li>
-                <li class="disabled">
-                    <a rel="prev" >
+                <li >
+                    <a rel="prev" href="../Creating-LDAP-Objects">
                         Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -175,154 +175,85 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#using-the-ldapmanager-class">Using the LdapManager Class</a></li>
+        <li class="main active"><a href="#creating-ad-password-settings-objects-psos">Creating AD Password Settings Objects (PSOs)</a></li>
         
-            <li><a href="#getting-a-ldapquerybuilder-instance">Getting a LdapQueryBuilder Instance</a></li>
-        
-            <li><a href="#getting-a-repository-object-for-a-ldap-type">Getting a Repository Object for a LDAP Type</a></li>
-        
-            <li><a href="#switching-domains">Switching Domains</a></li>
-        
-            <li><a href="#getting-the-ldapconnection">Getting The LdapConnection</a></li>
-        
-            <li><a href="#modifying-ldap-objects">Modifying LDAP Objects</a></li>
-        
-            <li><a href="#deleting-ldap-objects">Deleting LDAP Objects</a></li>
-        
-            <li><a href="#moving-ldap-objects">Moving LDAP Objects</a></li>
+            <li><a href="#defining-time-spans-and-durations">Defining Time Spans and Durations</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="using-the-ldapmanager-class">Using the LdapManager Class</h1>
+<h1 id="creating-ad-password-settings-objects-psos">Creating AD Password Settings Objects (PSOs)</h1>
 <hr />
-<p>The <code>LdapManager</code> provides an easy point of access into the different parts of this library after you have setup the
-<a href="../../reference/Main-Configuration">configuration</a>. You can use the <code>LdapManager</code> to generate LDAP queries for a
-certain domain, get a "Repository" for a specific LDAP type in your schema, switch between domains when you have 
-multiple defined in your configuration, and retrieve a <code>LdapConnection</code> object for the domain.</p>
-<h3 id="getting-a-ldapquerybuilder-instance">Getting a LdapQueryBuilder Instance</h3>
-<hr />
-<p>You can retrieve a <code>LdapQueryBuilder</code> for a specific domain. For example, the below query will select all users with 
-the first name 'John', last name starts with a 'S', and whose accounts are not disabled.</p>
-<pre><code class="php">$query = $ldapManager-&gt;buildLdapQuery();
+<p>Password Settings Objects were introduced in Windows Server 2008 as part of the Fine Grained Password Policy changes.
+These are objects that you can create to apply to security groups (recommended) or directly to users. This allows you to
+define multiple password policies in a domain where as prior to this you were limited to what could be defined in the 
+Default Domain Policy.</p>
+<p>The PSOs can be easily created using a schema definition called <code>PSO</code>:</p>
+<pre><code class="php">use LdapTools\Configuration;
+use LdapTools\ADTimeSpan;
+use LdapTools\LdapManager;
 
-$users = $query-&gt;select(['username', 'city', 'state', 'guid'])
-    -&gt;fromUsers()
-    -&gt;where(
-        $query-&gt;filter-&gt;eq('firstName', 'John'),
-        $query-&gt;filter-&gt;startsWith('lastName', 'S'),
-        // 'accountIsDisabled' is an Active Directory specific filter method. Negate a statement using 'not'.
-        $query-&gt;filter-&gt;not($query-&gt;filter-&gt;accountIsDisabled())
-    )
-    -&gt;getLdapQuery()
+$config = (new Configuration())-&gt;load('/path/to/my/ldap.yml');
+$ldap = new LdapManager($config);
+
+// Create a basic PSO that.
+$ldap-&gt;createLdapObject()
+    -&gt;create('PSO')
+    -&gt;with([
+        'name' =&gt; 'Employee Password Policy',
+        'precedence' =&gt; 5,
+        'lockoutDuration' =&gt; (new ADTimeSpan())-&gt;setMinutes(30),
+        'lockoutObservationWindow' =&gt; (new ADTimeSpan())-&gt;setMinutes(30),
+        'lockoutThreshold' =&gt; 6,
+        'maximumPasswordAge' =&gt; (new ADTimeSpan())-&gt;setDays(90),
+        'minimumPasswordAge' =&gt; (new ADTimeSpan())-&gt;setDays(3),
+        'minimumPasswordLength' =&gt; 8,
+        'passwordComplexity' =&gt; true,
+        'passwordHistoryLength' =&gt; 10,
+    ])
+    -&gt;execute();
+
+// Create a more restrictive PSO tied to a specific security group.
+$ldap-&gt;createLdapObject()
+    -&gt;create('PSO')
+    -&gt;with([
+        'name' =&gt; 'Admin Password Policy',
+        'precedence' =&gt; 1,
+        'lockoutDuration' =&gt; (new ADTimeSpan())-&gt;setMinutes(60),
+        'lockoutObservationWindow' =&gt; (new ADTimeSpan())-&gt;setMinutes(60),
+        'lockoutThreshold' =&gt; 3,
+        'maximumPasswordAge' =&gt; (new ADTimeSpan())-&gt;setDays(60),
+        'minimumPasswordAge' =&gt; (new ADTimeSpan())-&gt;setDays(3),
+        'minimumPasswordLength' =&gt; 12,
+        'passwordComplexity' =&gt; true,
+        'passwordHistoryLength' =&gt; 10,
+        'appliesTo' =&gt; 'Network Administrators'     // This can be the name of a security group.
+    ])
     -&gt;execute();
 </code></pre>
 
-<h3 id="getting-a-repository-object-for-a-ldap-type">Getting a Repository Object for a LDAP Type</h3>
-<hr />
-<p>A repository object lets you easily query specific attributes for a LDAP object type to retrieve either a single result
-or many results. You can also define your own custom repository for a LDAP type to encapsulate an reuse your queries.</p>
-<pre><code class="php">use LdapTools\Object\LdapObjectTypes;
+<p>Unlike other default schema types, you do NOT have to specify a default OU/container for this object type. It will be
+automatically placed in the <code>Password Settings Container</code> within your domain's system container. </p>
+<h2 id="defining-time-spans-and-durations">Defining Time Spans and Durations</h2>
+<p>The time span values (lockout duration, password age, etc) are defined by using a special object <code>\LdapTools\Utilities\ADTimeSpan</code>.
+This class can be instantiated to create many different time representations:</p>
+<pre><code class="php">use LdapTools\Utilities\ADTimeSpan;
 
-$repository = $ldapManager-&gt;getRepository(LdapObjectTypes::USER);
+// All of these values are cumulative.
+$adTimeSpan = (new ADTimeSpan())
+    -&gt;setDays(30)
+    -&gt;setHours(5)
+    -&gt;setMinutes(30)
+    -&gt;setSeconds(10);
 
-// Retrieve the user that has a specific GUID.
-$user = $repository-&gt;findOneByGuid('29d46992-a5c4-4dc2-ac51-ac432db2a078');
+// Specify a 'Never' time span. Such as a lockout duration that NEVER expires.
+// While not necessarily recommended, this can be done by doing the following.
+$adTimeSpan = (new ADTimeSpan())-&gt;setNever(true);
 
-// Retrieve the user with a specific username.
-$user = $repository-&gt;findOneByUsername('jsmith');
-
-// Retrieve all users with their city set as Seattle
-$users = $repository-&gt;findByCity('Seattle');
-</code></pre>
-
-<h3 id="switching-domains">Switching Domains</h3>
-<hr />
-<p>If you have multiple domains defined in your configuration, you can easily switch the contexts of your calls in the
-<code>LdapManager</code> by using <code>switchDomain</code>:</p>
-<pre><code class="php">// Now calls to 'getRepository', 'buildLdapQuery', etc will return objects that execute in the context of this domain.
-$ldapManager-&gt;switchDomain('example.local');
-</code></pre>
-
-<h3 id="getting-the-ldapconnection">Getting The LdapConnection</h3>
-<hr />
-<p>The <code>LdapConnection</code> is what ultimately executes queries against LDAP. It encapsulates the PHP <code>ldap_*</code> functions into
-an object oriented form. It has several functions that also may be useful on their own.</p>
-<pre><code class="php">$connection = $ldapManager-&gt;getConnection();
-
-// Attempt to authenticate a user by username/password combination and get the result as a bool
-if ($connection-&gt;authenticate('username','password')) {
-    echo &quot;Successfully authenticated $username!&quot;.PHP_EOL;
-}
-
-// Retrieve an object containing the RootDSE for the domain
-$rootDse = $connection-&gt;getRootDse();
-
-var_dump($rootDse-&gt;toArray());
-var_dump($rootDse-&gt;getDefaultNamingContext());
-</code></pre>
-
-<h3 id="modifying-ldap-objects">Modifying LDAP Objects</h3>
-<hr />
-<p>Using the <code>LdapManager</code> class you can save changes to LDAP users you have searched for back to LDAP using the
-<code>persist($ldapObject)</code> method.</p>
-<pre><code class="php">use LdapTools\Object\LdapObjectTypes;
-
-$repository = $ldapManager-&gt;getRepository(LdapObjectTypes::USER);
-
-// Retrieve the user that has a specific GUID.
-$user = $repository-&gt;findOneByGuid('29d46992-a5c4-4dc2-ac51-ac432db2a078');
-
-// Change some attribute value
-$user-&gt;setCity('Milwaukee');
-
-// Save the changes back to LDAP using the persist method...
-try {
-    $ldapManager-&gt;persist($user);
-} catch (\Exception $e) {
-    echo &quot;Error saving object to LDAP: &quot;.$e-&gt;getMessage();
-}
-</code></pre>
-
-<h3 id="deleting-ldap-objects">Deleting LDAP Objects</h3>
-<hr />
-<p>Using the <code>LdapManager</code> class you can also remove an object from LDAP using the <code>delete($ldapObject)</code> method.</p>
-<p><code>persist($ldapObject)</code> method.</p>
-<pre><code class="php">use LdapTools\Object\LdapObjectTypes;
-
-$repository = $ldapManager-&gt;getRepository(LdapObjectTypes::USER);
-
-// Retrieve the user that has a specific GUID.
-$user = $repository-&gt;findOneByGuid('29d46992-a5c4-4dc2-ac51-ac432db2a078');
-
-// Delete the object from LDAP...
-try {
-    $ldapManager-&gt;delete($user);
-} catch (\Exception $e) {
-    echo &quot;Error deleting object from LDAP: &quot;.$e-&gt;getMessage();
-}
-</code></pre>
-
-<h3 id="moving-ldap-objects">Moving LDAP Objects</h3>
-<hr />
-<p>Using the <code>LdapManager</code> class you can move an object from one location to another in LDAP. The method for doing this is 
-to call <code>move($ldapObject, $container)</code>. All this requires is you pass the existing LdapObject and then the new location
-of the OU/container in standard DN form:</p>
-<pre><code class="php">use LdapTools\Object\LdapObjectTypes;
-
-$repository = $ldapManager-&gt;getRepository(LdapObjectTypes::USER);
-
-// Retrieve the user that has a specific GUID.
-$user = $repository-&gt;findOneByGuid('29d46992-a5c4-4dc2-ac51-ac432db2a078');
-
-// Move the object to a new OU...
-try {
-    $ldapManager-&gt;move($user, 'ou=Employees,dc=example,dc=local');
-} catch (\Exception $e) {
-    echo &quot;Error moving object: &quot;.$e-&gt;getMessage();
-}
+// Specify no values to keep it as '0' which is interpreted as 'None' for some attributes.
+$adTimeSpan = new ADTimeSpan();
 </code></pre>
 
 </div>

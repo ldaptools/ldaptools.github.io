@@ -87,6 +87,10 @@
                             </li>
                         
                             <li >
+                                <a href="cookbook/Common-LDAP-Queries/">Common LDAP Queries</a>
+                            </li>
+                        
+                            <li >
                                 <a href="cookbook/Creating-a-Custom-Repository/">Creating a Custom Repository</a>
                             </li>
                         
@@ -109,6 +113,10 @@
                         
                             <li >
                                 <a href="tutorials/Building-LDAP-Queries/">Building LDAP Queries</a>
+                            </li>
+                        
+                            <li >
+                                <a href="tutorials/Creating-AD-Password-Settings-Objects/">Creating AD Password Settings Objects</a>
                             </li>
                         
                             <li >
@@ -212,22 +220,40 @@ $ldap = new LdapManager($config);
 <p>With the <code>LdapManager</code> up and going you can now easily build LDAP queries without having to remember all the special 
 syntax for LDAP filters. All values are also automatically escaped.</p>
 <pre><code class="php">// Get an instance of the query...
-$query = $ldap-&gt;buildLdapQuery()
-    -&gt;select()
+$query = $ldap-&gt;buildLdapQuery();
+
+// Returns a `LdapObjectCollection` of all users whose first name 
+// starts with 'Foo' and last name is 'Bar' or 'Smith'.
+// The result set will also be ordered by state name (ascending).
+$users = $query-&gt;select()
     -&gt;fromUsers()
-    -&gt;where(['firstName' =&gt; 'Foo'])
+    -&gt;where($query-&gt;filter()-&gt;startsWith('firstName', 'Foo'))
     -&gt;orWhere(['lastName' =&gt; 'Bar'])
     -&gt;orWhere(['lastName' =&gt; 'Smith'])
-    -&gt;orderBy('state');
+    -&gt;orderBy('state')
+    -&gt;getLdapQuery()
+    -&gt;getResult();
 
-// Returns a `LdapObjectCollection` of all users whose first name is 'Foo' and last name is 'Bar' or 'Smith'
-// The result set will also be ordered by state name (ascending).
-$users = $query-&gt;getLdapQuery()-&gt;execute();
-
-echo &quot;Found &quot;.$users-&gt;count().&quot; user(s).&quot;.PHP_EOL;
+echo &quot;Found &quot;.$users-&gt;count().&quot; user(s).&quot;;
 foreach ($users as $user) {
-    echo &quot;User: &quot;.$user-&gt;getUsername().PHP_EOL;
+    echo &quot;User: &quot;.$user-&gt;getUsername();
 }
+
+// Get a single LDAP object...
+$user = $ldap-&gt;buildLdapQuery()
+    -&gt;select()
+    -&gt;fromUsers()
+    -&gt;where(['username' =&gt; 'chad'])
+    -&gt;getLdapQuery()
+    -&gt;getSingleResult();
+
+// Get a single attribute value from a LDAP object...
+$guid = $ldap-&gt;buildLdapQuery()
+    -&gt;select('guid')
+    -&gt;fromUsers()
+    -&gt;where(['username' =&gt; 'chad'])
+    -&gt;getLdapQuery()
+    -&gt;getSingleScalarResult();
 
 // It also supports the concepts of repositories...
 $userRepository = $ldap-&gt;getRepository('user');
@@ -237,21 +263,32 @@ $users = $userRepository-&gt;findByLastName('Smith');
 
 // Get the first user whose username equals 'jsmith'. Returns a `LdapObject`.
 $user = $userRepository-&gt;findOneByUsername('jsmith');
-echo &quot;First name &quot;.$user-&gt;getFirstName().&quot; and last name &quot;.$user-&gt;getLastName().PHP_EOL;
+echo &quot;First name &quot;.$user-&gt;getFirstName().&quot; and last name &quot;.$user-&gt;getLastName();
 </code></pre>
 
 <p>The query syntax is very similar to <a href="http://www.doctrine-project.org">Doctrine ORM</a>.</p>
 <h3 id="modifying-ldap-objects">Modifying LDAP Objects</h3>
 <p>Modifying LDAP is as easy as searching for the LDAP object as described above, then making changes directly to the object
 and saving it back to LDAP using the <code>LdapManager</code>.</p>
-<pre><code class="php">$user = $userRepository-&gt;findOneByUsername('jsmith');
+<pre><code class="php">$user = $ldap-&gt;buildLdapQuery()
+    -&gt;select(['title', 'mobilePhone', 'disabled'])
+    -&gt;fromUsers()
+    -&gt;where(['username' =&gt; 'jsmith'])
+    -&gt;getLdapQuery()
+    -&gt;getSingleResult();
 
-// Make some modifications to the user account. All these changes are tracked so it knows how to modify the object.
+// Make some modifications to the user account.
+// All these changes are tracked so it knows how to modify the object.
 $user-&gt;setTitle('CEO');
-$user-&gt;resetMobilePhone();
+
+if ($user-&gt;hasMobilePhone()) {
+    $user-&gt;resetMobilePhone();
+}
 
 // Set a field by a property instead...
-$user-&gt;disabled = false;
+if ($user-&gt;disabled) {
+    $user-&gt;disabled = false;
+}
 
 // Now actually save the changes back to LDAP...
 try {

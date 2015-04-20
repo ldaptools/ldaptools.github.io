@@ -87,6 +87,10 @@
                             </li>
                         
                             <li >
+                                <a href="../../cookbook/Common-LDAP-Queries">Common LDAP Queries</a>
+                            </li>
+                        
+                            <li >
                                 <a href="../../cookbook/Creating-a-Custom-Repository">Creating a Custom Repository</a>
                             </li>
                         
@@ -109,6 +113,10 @@
                         
                             <li >
                                 <a href="../Building-LDAP-Queries">Building LDAP Queries</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../Creating-AD-Password-Settings-Objects">Creating AD Password Settings Objects</a>
                             </li>
                         
                             <li class="active">
@@ -136,7 +144,7 @@
                 
                 
                 <li >
-                    <a rel="next" href="../Building-LDAP-Queries">
+                    <a rel="next" href="../Creating-AD-Password-Settings-Objects">
                         <i class="fa fa-arrow-left"></i> Previous
                     </a>
                 </li>
@@ -224,7 +232,7 @@ to be created. Part of the reason for this is that the schema is leveraging para
 the required attributes. You can use parameters to fill in attribute values based off other attributes, or any value you
 want. For instance:</p>
 <pre><code class="php">$object-&gt;createContact()
-    -&gt;in('dc=awesome,dc=local')
+    -&gt;in('%OUPath%,%_defaultnamingcontext_%')
     -&gt;with([
         'name' =&gt; '%firstname% %lastname%',
         'firstName' =&gt; 'Some',
@@ -232,22 +240,29 @@ want. For instance:</p>
         'emailAddress' =&gt; '%firstname%.%lastname%@%somedomain%'
     ])
     -&gt;setParameter('somedomain','foo.bar')
+    -&gt;setParameter('OUPath','OU=Sales,OU=Departments')
     -&gt;execute();
 </code></pre>
 
-<p>This contains 3 parameters. All parameters start and end with a percentage symbol. The <code>%firstname%</code> and <code>%lastname%</code>
- parameters will populate their value with their corresponding attribute name. However, <code>%somedomain%</code> does not 
-correspond to a known attribute, so the parameter must be defined. It will be filled in with <code>foo.bar</code> as defined.</p>
-<p>There is also a special parameter called <code>%_domainname_%</code> when creating LDAP objects that will resolve to the fully
-qualified domain name of the connection in the current context (ie. <code>example.com</code>).</p>
+<p>This contains several parameters. All parameters start and end with a percentage symbol. The <code>%firstname%</code> and <code>%lastname%</code>
+ parameters will populate their value with their corresponding attribute name. However, <code>%somedomain%</code> and <code>%OUPath%</code> do
+ not correspond to a known attribute, so the parameter must be defined. It will be filled in with <code>foo.bar</code> and
+<code>OU=Sales,OU=Departments</code>, respectively. With the OU/container value, the parameter must be explicitly specified it cannot
+currently be the value of one of the object's attributes.</p>
+<p>There is also a special parameter for <code>%_domainname_%</code> and <code>%_defaultnamingcontext_%</code> when creating LDAP objects. The 
+<code>%_domainname_%</code> will resolve to the fully qualified domain name of the connection in the current context (ie. 
+<code>example.com</code>). The <code>%_defaultnamingcontext_%</code> will resolve the the base distinguished name of the domain (ie. 
+<code>dc=example,dc=com</code>).</p>
 <h2 id="ldapobjectcreator-methods">LdapObjectCreator Methods</h2>
 <p>This class provides a few methods to make it easier to create LDAP objects.</p>
 <hr />
 <h4 id="incontainer">in($container)</h4>
 <p>The <code>in</code> method specifies the container/OU you want to place the LDAP object. It should be a string with the common LDAP
-distinguished name form (ie. <code>ou=users,dc=mydomain,dc=com</code>).</p>
+distinguished name form (ie. <code>ou=users,dc=mydomain,dc=com</code>). If you use a parameter in this value it must be explicitly 
+specified. The parameter cannot currently be the value of one of the object's attributes.</p>
 <p>You can also specify a default location all objects of a certain type by defining the <code>default_container</code> directive in 
-your schema (see <a href="../../reference/Schema-Configuration">the schema configuration reference</a>). If you define that can omit this method.</p>
+your schema (see <a href="../../reference/Schema-Configuration">the schema configuration reference</a>). If you define that can omit this method.
+You can also place parameters in this value that will be resolved upon creation (ie. <code>%EmployeeOU%,DC=example,DC=com</code>).</p>
 <hr />
 <h4 id="withattributes">with($attributes)</h4>
 <p>This specifies the attributes and values you would like for the object to have once created in LDAP. All attribute values are
