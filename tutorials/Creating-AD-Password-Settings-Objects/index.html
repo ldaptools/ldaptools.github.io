@@ -192,7 +192,7 @@ define multiple password policies in a domain where as prior to this you were li
 Default Domain Policy.</p>
 <p>The PSOs can be easily created using a schema definition called <code>PSO</code>:</p>
 <pre><code class="php">use LdapTools\Configuration;
-use LdapTools\ADTimeSpan;
+use LdapTools\Utilities\ADTimeSpan;
 use LdapTools\LdapManager;
 
 $config = (new Configuration())-&gt;load('/path/to/my/ldap.yml');

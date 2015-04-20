@@ -258,11 +258,12 @@ currently be the value of one of the object's attributes.</p>
 <hr />
 <h4 id="incontainer">in($container)</h4>
 <p>The <code>in</code> method specifies the container/OU you want to place the LDAP object. It should be a string with the common LDAP
-distinguished name form (ie. <code>ou=users,dc=mydomain,dc=com</code>). If you use a parameter in this value it must be explicitly 
-specified. The parameter cannot currently be the value of one of the object's attributes.</p>
+distinguished name form (ie. <code>ou=users,dc=mydomain,dc=com</code>).</p>
 <p>You can also specify a default location all objects of a certain type by defining the <code>default_container</code> directive in 
 your schema (see <a href="../../reference/Schema-Configuration">the schema configuration reference</a>). If you define that can omit this method.
-You can also place parameters in this value that will be resolved upon creation (ie. <code>%EmployeeOU%,DC=example,DC=com</code>).</p>
+You can also place parameters in this value that will be resolved upon creation (ie. <code>%EmployeeOU%,DC=example,DC=com</code>).
+If you use a parameter in this value it must be explicitly specified. The parameter cannot currently be the value of one
+of the object's attributes.</p>
 <hr />
 <h4 id="withattributes">with($attributes)</h4>
 <p>This specifies the attributes and values you would like for the object to have once created in LDAP. All attribute values are
