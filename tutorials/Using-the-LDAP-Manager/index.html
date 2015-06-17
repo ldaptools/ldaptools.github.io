@@ -211,10 +211,10 @@ the first name 'John', last name starts with a 'S', and whose accounts are not d
 $users = $query-&gt;select(['username', 'city', 'state', 'guid'])
     -&gt;fromUsers()
     -&gt;where(
-        $query-&gt;filter-&gt;eq('firstName', 'John'),
-        $query-&gt;filter-&gt;startsWith('lastName', 'S'),
+        $query-&gt;filter()-&gt;eq('firstName', 'John'),
+        $query-&gt;filter()-&gt;startsWith('lastName', 'S'),
         // 'accountIsDisabled' is an Active Directory specific filter method. Negate a statement using 'not'.
-        $query-&gt;filter-&gt;not($query-&gt;filter-&gt;accountIsDisabled())
+        $query-&gt;filter()-&gt;not($query-&gt;filter()-&gt;accountIsDisabled())
     )
     -&gt;getLdapQuery()
     -&gt;execute();

@@ -201,7 +201,7 @@ familiar with Doctrine's QueryBuilder will find this syntax easy to adapt to, as
 takes care of escaping all values passed to it when generating the filter.</p>
 <ul>
 <li><a href="#ldapquerybuilder-methods">LdapQueryBuilder Methods</a></li>
-<li><a href="#filter-method-shortcuts">Filter Method Shorcuts</a></li>
+<li><a href="#filter-method-shortcuts">Filter Method Shortcuts</a></li>
 </ul>
 <h2 id="generating-ldap-filters-without-ldapmanager">Generating LDAP Filters Without LdapManager</h2>
 <hr />
@@ -231,7 +231,7 @@ $users = $lqb-&gt;select()
     -&gt;fromUsers()
     -&gt;Where(['state' =&gt; 'Wisconsin'])
     -&gt;getLdapQuery()
-    -&gt;execute();
+    -&gt;getResult();
 
 foreach ($users as $user) {
     foreach ($user-&gt;toArray() as $attribute =&gt; $value) {
@@ -268,7 +268,7 @@ $lqb-&gt;select('**');
 </code></pre>
 
 <p>If you want the raw data to be returned from LDAP you can select LDAP attribute names explicitly. You can also include 
-schema names at the same time. <strong>NOTE:</strong> Attributes selected by their LDAP attribute name will <strong>NOTE</strong> have attribute 
+schema names at the same time. Attributes selected by their LDAP attribute name will <strong>NOT</strong> have attribute 
 conversion done.</p>
 <pre><code class="php">// Will return 'objectSid' AND 'sid'
 $lqb-&gt;select(['givenName', 'l', 'objectSid', 'sid']);
@@ -369,7 +369,7 @@ $rootDse = $lqb-&gt;where($lqb-&gt;filter()-&gt;present('objectClass'))
                 -&gt;setBaseDn('')
                 -&gt;setScopeBase()
                 -&gt;getLdapQuery()
-                -&gt;execute();
+                -&gt;getSingleResult();
 </code></pre>
 
 <hr />
@@ -381,7 +381,7 @@ $users = $lqb-&gt;select()
     -&gt;fromUsers()
     -&gt;where(['firstName' =&gt; 'John'])
     -&gt;orderBy('lastName') 
-    -&gt;execute();
+    -&gt;getResult();
 
 // Order results by last name (descending) and first name (ascending).
 $users = $lqb-&gt;select()
@@ -389,7 +389,7 @@ $users = $lqb-&gt;select()
     -&gt;where(['state' =&gt; 'Wisconsin'])
     -&gt;orderBy('lastName', 'DESC')
     -&gt;addOrderBy('firstName', 'ASC')
-    -&gt;execute();
+    -&gt;getResult();
 </code></pre>
 
 <hr />
@@ -418,17 +418,16 @@ the <code>getLdapQuery()</code> method.</p>
 your results. The <code>LdapQuery</code> object has the filter, page size, base DN, scope, etc that you set in the builder and 
 takes care of converting the LDAP results array using a hydration process. It returns an easier to use set of objects. 
 Or you can have it return a simple set of arrays with the attributes and values.</p>
-<pre><code class="php">use LdapTools\Factory\HydratorFactory;
-
+<pre><code class="php">
 // By default the results will be a collection of LdapUser objects you can iterate over...
-$results = $lqb-&gt;getLdapQuery()-&gt;execute();
+$results = $lqb-&gt;getLdapQuery()-&gt;getResult();
 
 foreach ($results as $result) {
     echo $result-&gt;getEmailAddress();
 }
 
 // If you just want simple arrays returned you can specify that
-$results = $lqb-&gt;getLdapQuery()-&gt;execute(HydratorFactory::TO_ARRAY);
+$results = $lqb-&gt;getLdapQuery()-&gt;getArrayResult();
 
 foreach ($results as $result) {
     foreach ($result as $attribute =&gt; $value) {
@@ -626,7 +625,7 @@ $users = $query-&gt;select()
     -&gt;fromUsers()
     -&gt;where($query-&gt;filter()-&gt;isRecursivelyMemberOf('Employees'))
     -&gt;getLdapQuery()
-    -&gt;execute();
+    -&gt;getResult();
 
 // If you are not targeting a specific set of objects from the schema, then you must
 // pass 'false' as the second argument and specify a full DN. Otherwise this method
@@ -635,7 +634,7 @@ $ldapObjects = $query-&gt;select('description')
     -&gt;where(['cn' =&gt; 'foo'])
     -&gt;andWhere($query-&gt;filter()-&gt;isRecursivelyMemberOf('CN=Foo,DC=foo,DC=bar', false))
     -&gt;getLdapQuery()
-    -&gt;execute();
+    -&gt;getResult();
 </code></pre>
 
 <hr />
