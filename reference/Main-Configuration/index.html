@@ -65,6 +65,10 @@
                                 <a href="../Default-Schema-Attributes">Default Schema Attributes</a>
                             </li>
                         
+                            <li >
+                                <a href="../Events">Events</a>
+                            </li>
+                        
                             <li class="active">
                                 <a href=".">Main Configuration</a>
                             </li>
@@ -144,7 +148,7 @@
                 
                 
                 <li >
-                    <a rel="next" href="../Default-Schema-Attributes">
+                    <a rel="next" href="../Events">
                         <i class="fa fa-arrow-left"></i> Previous
                     </a>
                 </li>
@@ -291,7 +295,7 @@ To use the <code>doctrine</code> type you must install <a href="https://github.c
 <p><strong>Defaults</strong>: No options are passed by default.</p>
 <hr />
 <h4 id="attribute_converters">attribute_converters</h4>
-<p>An array of convert to class name mappings that will be registered in the <code>LdapManager</code> for use in the schemas.</p>
+<p>An array of converter to class name mappings that will be registered in the <code>LdapManager</code> for use in the schemas.</p>
 <pre><code class="yaml">general:
     attribute_converters:
         # This class must extend \LdapTools\AttributeConverter\AttributeConverterInterface !
@@ -360,6 +364,9 @@ the <code>TLS_REQCERT never</code> line. The <code>ldap.conf</code> file is in t
 <li>Windows: <code>C:\OpenLDAP\sysconf\ldap.conf</code> (If this directory structure does not exist, then create it...and the file)</li>
 <li>Linux: <code>/etc/ldap/ldap.conf</code></li>
 </ul>
+<p>However, be warned that using <code>TLS_REQCERT never</code> can be a bit of a security risk as it ignores invalid certificates.
+Consider copying your domain CA cert to <code>/etc/ssl/certs</code> then reference it in your <code>ldap.conf</code> with the <code>TLS_CACERT /etc/ssl/certs/ca.pem</code>
+option combined with <code>TLS_REQCERT hard</code>.</p>
 <p><strong>Default</strong>: <code>false</code></p>
 <hr />
 <h4 id="ldap_type">ldap_type</h4>
