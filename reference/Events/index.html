@@ -341,85 +341,89 @@ are located in the <code>LdapTools\Event</code> namespace.</p>
 <hr />
 <p>The LDAP object creation events functions slightly different than the rest. The event object has setters for the <code>LDAP_OBJECT_BEFORE_CREATE</code>
 event so you can modify the container/attributes/DN before they are sent to LDAP. For example:</p>
-<p>```php
- use LdapTools\Event\Event;
- use LdapTools\Event\LdapObjectCreationEvent;</p>
-<p>$ldap-&gt;getEventDispatcher()-&gt;addListener(Event::TYPE_LDAP_OBJECT_BEFORE_CREATE, function(LdapObjectCreationEvent $event) {
-     $attributes = $event-&gt;getData();
-     $container = $event-&gt;getContainer();
-     $dn = $event-&gt;getDn();</p>
-<pre><code> if (!isset($attributes['title'])) {
-     $attributes['title'] = "Pizza Maker";
-     $event-&gt;setAttributes($attributes);
- }
+<pre><code class="php">use LdapTools\Event\Event;
+use LdapTools\Event\LdapObjectCreationEvent;
 
- // Can also explicitly set the DN or container here too...
- // $event-&gt;setDn($dn);
- // $event-&gt;setContainer($container)
+$ldap-&gt;getEventDispatcher()-&gt;addListener(Event::TYPE_LDAP_OBJECT_BEFORE_CREATE, function(LdapObjectCreationEvent $event) {
+    $attributes = $event-&gt;getData();
+    $container = $event-&gt;getContainer();
+    $dn = $event-&gt;getDn();
+
+    if (!isset($attributes['title'])) {
+        $attributes['title'] = &quot;Pizza Maker&quot;;
+        $event-&gt;setAttributes($attributes);
+    }
+
+    // Can also explicitly set the DN or container here too...
+    // $event-&gt;setDn($dn);
+    // $event-&gt;setContainer($container)
+});
 </code></pre>
-<p>});
- ```</p>
+
 <h2 id="the-ldap-object-move-event">The LDAP Object Move Event</h2>
 <hr />
 <p>The LDAP object move event has setters for <code>LDAP_OBJECT_BEFORE_MOVE</code> so you can modify the container/OU before the 
 object is actually moved. You can also use the event's <code>getContainer()</code> method to check where the move was destined for.
 For example:</p>
-<p>```php
- use LdapTools\Event\Event;
- use LdapTools\Event\LdapObjectMoveEvent;</p>
-<p>$ldap-&gt;getEventDispatcher()-&gt;addListener(Event::TYPE_LDAP_OBJECT_BEFORE_MOVE, function(LdapObjectMoveEvent $event) {
-     $user = $event-&gt;getLdapObject();
-     $container = $event-&gt;getContainer(); // Check where the move is going to put them if you want</p>
-<pre><code> // Check the user object and change the location that the move will place them
- if ($user-&gt;firstName == 'Joe') {
-     $event-&gt;setContainer('ou=disabled,dc=example,dc=com');
- }
+<pre><code class="php">use LdapTools\Event\Event;
+use LdapTools\Event\LdapObjectMoveEvent;
+
+$ldap-&gt;getEventDispatcher()-&gt;addListener(Event::TYPE_LDAP_OBJECT_BEFORE_MOVE, function(LdapObjectMoveEvent $event) {
+    $user = $event-&gt;getLdapObject();
+    $container = $event-&gt;getContainer(); // Check where the move is going to put them if you want
+
+    // Check the user object and change the location that the move will place them
+    if ($user-&gt;firstName == 'Joe') {
+        $event-&gt;setContainer('ou=disabled,dc=example,dc=com');
+    }
+});
 </code></pre>
-<p>});
- ```</p>
+
 <h2 id="the-ldap-object-deletion-and-modification-events">The LDAP Object Deletion and Modification Events</h2>
 <hr />
 <p>Both the deletion and modification events let you retrieve the LDAP object being processed and add your own custom logic:</p>
-<p>```php
-  use LdapTools\Event\Event;
-  use LdapTools\Event\LdapObjectEvent;</p>
-<p>// Check some stuff before the changes are actually saved to LDAP...
-  $ldap-&gt;getEventDispatcher()-&gt;addListener(Event::TYPE_LDAP_OBJECT_BEFORE_MODIFY, function(LdapObjectEvent $event) {
-      $user = $event-&gt;getLdapObject();
-      // ...
-  });
-  ```</p>
+<pre><code class="php">use LdapTools\Event\Event;
+use LdapTools\Event\LdapObjectEvent;
+
+// Check some stuff before the changes are actually saved to LDAP...
+$ldap-&gt;getEventDispatcher()-&gt;addListener(Event::TYPE_LDAP_OBJECT_BEFORE_MODIFY, function(LdapObjectEvent $event) {
+    $user = $event-&gt;getLdapObject();
+    // ...
+});
+</code></pre>
+
 <p>The same <code>getLdapObject()</code> method used above is valid for deletion events as well.</p>
 <h2 id="the-ldap-object-schema-event">The LDAP Object Schema Event</h2>
 <hr />
 <p>When you hook into the LDAP Object Schema event you are given the ability to directly modify whatever schema object
 is being loaded before it is actually used. Using this you can directly modify many settings without creating your
 own schema file: attribute mappings, default attributes to select, default container for objects on creation, etc:</p>
-<p>```php
- use LdapTools\Event\Event;
- use LdapTools\Event\LdapObjectSchemaEvent;
- use LdapTools\Object\LdapObjectType;</p>
-<p>$ldap-&gt;getEventDispatcher()-&gt;addListener(Event::TYPE_LDAP_SCHEMA_LOAD, function(LdapObjectSchemaEvent $event) {
-     $schema = $event-&gt;getLdapObjectSchema();</p>
-<pre><code> // Only modify the 'user' schema type, ignore the others for this listener...
- if ($schema-&gt;getObjectType() !== LdapObjectType::USER) {
-     return;
- }
+<pre><code class="php">use LdapTools\Event\Event;
+use LdapTools\Event\LdapObjectSchemaEvent;
+use LdapTools\Object\LdapObjectType;
 
- // Have your own custom LDAP Object Repository class? Set it using the full class name.
- $schema-&gt;setRepository('\Acme\Demo\UserRepository');
+$ldap-&gt;getEventDispatcher()-&gt;addListener(Event::TYPE_LDAP_SCHEMA_LOAD, function(LdapObjectSchemaEvent $event) {
+    $schema = $event-&gt;getLdapObjectSchema();
 
- // Want to get some additional default attributes selected on queries?
- $select = $schema-&gt;getAttributesToSelect();
- $select[] = 'upn';
- $select[] = 'groups';
- $schema-&gt;setAttributesToSelect($select);
+    // Only modify the 'user' schema type, ignore the others for this listener...
+    if ($schema-&gt;getObjectType() !== LdapObjectType::USER) {
+        return;
+    }
 
- // Set these users to always go to a default OU when you create them...
- $schema-&gt;setDefaultContainer("OU=Employees,DC=example,DC=local");
+    // Have your own custom LDAP Object Repository class? Set it using the full class name.
+    $schema-&gt;setRepository('\Acme\Demo\UserRepository');
+
+    // Want to get some additional default attributes selected on queries?
+    $select = $schema-&gt;getAttributesToSelect();
+    $select[] = 'upn';
+    $select[] = 'groups';
+    $schema-&gt;setAttributesToSelect($select);
+
+    // Set these users to always go to a default OU when you create them...
+    $schema-&gt;setDefaultContainer(&quot;OU=Employees,DC=example,DC=local&quot;);
+});
 </code></pre>
-<p>});
- ```</p>
+
 </div>
             
         </div>
