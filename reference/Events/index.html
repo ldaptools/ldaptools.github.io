@@ -211,7 +211,7 @@ This is done by using a event dispatcher system (the <code>symfony/event-dispatc
 use LdapTools\Event\LdapObjectEvent;
 
 // Using the LdapManager instance add an event that will get fired before modification of a LDAP object.
-$ldap-&gt;getEventDispatcher()-&gt;addListener(Event::TYPE_LDAP_OBJECT_BEFORE_MODIFY, function(LdapObjectEvent $event) {
+$ldap-&gt;getEventDispatcher()-&gt;addListener(Event::LDAP_OBJECT_BEFORE_MODIFY, function(LdapObjectEvent $event) {
     if ($event-&gt;getLdapObject()-&gt;hasFirstName('Chad')) {
         $event-&gt;getLdapObject()-&gt;setFirstName('foo');
     }
@@ -228,15 +228,15 @@ name and values that correspond to the method in the class they should call.</p>
 <pre><code class="php">use LdapTools\Event\EventSubscriberInterface;
 use LdapTools\Event\Event;
 use LdapTools\Event\LdapObjectEvent;
-use LdapTools\LdapObjectType;
+use LdapTools\Object\LdapObjectType;
 
 class UserSubscriber implements EventSubscriberInterface
 {
     public function getSubscribedEvents()
     {
         return [
-            Event::TYPE_LDAP_OBJECT_BEFORE_DELETE =&gt; 'beforeDelete',
-            Event::TYPE_LDAP_OBJECT_BEFORE_MODIFY =&gt; 'beforeModify',
+            Event::LDAP_OBJECT_BEFORE_DELETE =&gt; 'beforeDelete',
+            Event::LDAP_OBJECT_BEFORE_MODIFY =&gt; 'beforeModify',
         ];
     }
 
@@ -344,7 +344,7 @@ event so you can modify the container/attributes/DN before they are sent to LDAP
 <pre><code class="php">use LdapTools\Event\Event;
 use LdapTools\Event\LdapObjectCreationEvent;
 
-$ldap-&gt;getEventDispatcher()-&gt;addListener(Event::TYPE_LDAP_OBJECT_BEFORE_CREATE, function(LdapObjectCreationEvent $event) {
+$ldap-&gt;getEventDispatcher()-&gt;addListener(Event::LDAP_OBJECT_BEFORE_CREATE, function(LdapObjectCreationEvent $event) {
     $attributes = $event-&gt;getData();
     $container = $event-&gt;getContainer();
     $dn = $event-&gt;getDn();
@@ -368,7 +368,7 @@ For example:</p>
 <pre><code class="php">use LdapTools\Event\Event;
 use LdapTools\Event\LdapObjectMoveEvent;
 
-$ldap-&gt;getEventDispatcher()-&gt;addListener(Event::TYPE_LDAP_OBJECT_BEFORE_MOVE, function(LdapObjectMoveEvent $event) {
+$ldap-&gt;getEventDispatcher()-&gt;addListener(Event::LDAP_OBJECT_BEFORE_MOVE, function(LdapObjectMoveEvent $event) {
     $user = $event-&gt;getLdapObject();
     $container = $event-&gt;getContainer(); // Check where the move is going to put them if you want
 
@@ -386,7 +386,7 @@ $ldap-&gt;getEventDispatcher()-&gt;addListener(Event::TYPE_LDAP_OBJECT_BEFORE_MO
 use LdapTools\Event\LdapObjectEvent;
 
 // Check some stuff before the changes are actually saved to LDAP...
-$ldap-&gt;getEventDispatcher()-&gt;addListener(Event::TYPE_LDAP_OBJECT_BEFORE_MODIFY, function(LdapObjectEvent $event) {
+$ldap-&gt;getEventDispatcher()-&gt;addListener(Event::LDAP_OBJECT_BEFORE_MODIFY, function(LdapObjectEvent $event) {
     $user = $event-&gt;getLdapObject();
     // ...
 });
@@ -402,7 +402,7 @@ own schema file: attribute mappings, default attributes to select, default conta
 use LdapTools\Event\LdapObjectSchemaEvent;
 use LdapTools\Object\LdapObjectType;
 
-$ldap-&gt;getEventDispatcher()-&gt;addListener(Event::TYPE_LDAP_SCHEMA_LOAD, function(LdapObjectSchemaEvent $event) {
+$ldap-&gt;getEventDispatcher()-&gt;addListener(Event::LDAP_SCHEMA_LOAD, function(LdapObjectSchemaEvent $event) {
     $schema = $event-&gt;getLdapObjectSchema();
 
     // Only modify the 'user' schema type, ignore the others for this listener...
