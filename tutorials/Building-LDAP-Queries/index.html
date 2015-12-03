@@ -70,6 +70,10 @@
                             </li>
                         
                             <li >
+                                <a href="../../reference/Logging">Logging</a>
+                            </li>
+                        
+                            <li >
                                 <a href="../../reference/Main-Configuration">Main Configuration</a>
                             </li>
                         
@@ -348,6 +352,10 @@ statement.</p>
 The shorthand <code>$lqb-&gt;filter()</code> methods is what does the heavy-lifting for creating the various operator objects. You
 should not need to call this method explicitly, but it is included if you need it.</p>
 <hr />
+<h4 id="setserverserver">setServer($server)</h4>
+<p>This lets you set the LDAP server that the query will run against when executed. After the query finishes executing the
+connection switches back to the LDAP server it was originally connected to.</p>
+<hr />
 <h4 id="setbasednbasedn">setBaseDn($baseDn)</h4>
 <p>This method sets the base DN (distinguished name) for the query. That means that any LDAP object at or below this point
 in the directory will be queried for. This will default to whatever you set in the domain configuration for the
@@ -405,6 +413,13 @@ statements. Call this when you want to order by multiple attributes.</p>
 <p>This methods sets the paging size for the query. It will default to whatever value you set in your configuration. The
 default when no value is explicitly set is 1000.</p>
 <pre><code class="php">$lqb-&gt;setPageSize(500);
+</code></pre>
+
+<hr />
+<h4 id="setusepagingusepaging">setUsePaging($usePaging)</h4>
+<p>This methods lets you set whether or not paging should be used for the query. This overrides whatever is set in the
+domain configuration. If this is not set, then whatever is set in the domain configuration is used.</p>
+<pre><code class="php">$lqb-&gt;setUsePaging(false);
 </code></pre>
 
 <hr />

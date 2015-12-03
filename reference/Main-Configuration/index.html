@@ -69,6 +69,10 @@
                                 <a href="../Events">Events</a>
                             </li>
                         
+                            <li >
+                                <a href="../Logging">Logging</a>
+                            </li>
+                        
                             <li class="active">
                                 <a href=".">Main Configuration</a>
                             </li>
@@ -148,7 +152,7 @@
                 
                 
                 <li >
-                    <a rel="next" href="../Events">
+                    <a rel="next" href="../Logging">
                         <i class="fa fa-arrow-left"></i> Previous
                     </a>
                 </li>
@@ -343,6 +347,10 @@ it is simply <code>%username%</code>. However, you could set it to an DN path, s
 are <code>order</code> (tried in the order they appear) or <code>random</code>. </p>
 <p><strong>Default</strong>: <code>order</code></p>
 <hr />
+<h4 id="use_paging">use_paging</h4>
+<p>Whether or not the connection should try to page results by default.</p>
+<p><strong>Default</strong>: <code>true</code></p>
+<hr />
 <h4 id="page_size">page_size</h4>
 <p>The default page size to use for paging operations.</p>
 <p><strong>Default</strong>: <code>1000</code></p>
@@ -386,6 +394,17 @@ defined by the <code>schema_folder</code> directive in the general section. </p>
 <p>The encoding to use for this domain. Usernames, passwords, and any values not explicitly assigned to an Attribute
 Converter will be encoded with this encoding choice.</p>
 <p><strong>Default</strong>: UTF-8</p>
+<hr />
+<h4 id="ldap_options">ldap_options</h4>
+<p>The <code>LDAP_OPT_*</code> constants and values to use when connecting to LDAP. This is expected to be an array:</p>
+<pre><code class="yaml">domains:
+    example:
+        ldap_options:
+            ldap_opt_protocol_version: 3
+            ldap_opt_referrals: 0
+</code></pre>
+
+<p><strong>Default</strong>: <code>[LDAP_OPT_PROTOCOL_VERSION =&gt; 3, LDAP_OPT_REFERRALS =&gt; 0]</code></p>
 </div>
             
         </div>

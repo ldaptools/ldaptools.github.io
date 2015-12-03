@@ -70,6 +70,10 @@
                             </li>
                         
                             <li >
+                                <a href="../Logging">Logging</a>
+                            </li>
+                        
+                            <li >
                                 <a href="../Main-Configuration">Main Configuration</a>
                             </li>
                         
@@ -153,7 +157,7 @@
                     </a>
                 </li>
                 <li >
-                    <a rel="prev" href="../Main-Configuration">
+                    <a rel="prev" href="../Logging">
                         Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -195,6 +199,10 @@
         
             <li><a href="#the-ldap-object-schema-event">The LDAP Object Schema Event</a></li>
         
+            <li><a href="#the-ldap-authentication-event">The LDAP Authentication Event</a></li>
+        
+            <li><a href="#using-a-customspecific-event-dispatcher">Using a Custom/Specific Event Dispatcher</a></li>
+        
     
     </ul>
 </div></div>
@@ -221,8 +229,8 @@ $ldap-&gt;getEventDispatcher()-&gt;addListener(Event::LDAP_OBJECT_BEFORE_MODIFY,
 <h2 id="adding-event-subscribers">Adding Event Subscribers</h2>
 <hr />
 <p>You can also add an event subscriber to respond to events. This allows you to encapsulate your listeners within the 
-context of a single class. All event subscribers must implement <code>LdapTools\Event\EventSubscriberInterface</code>, which is
-simple a single method called <code>getSubscribedEvents()</code> that should return an associated array containing keys of an event
+context of a single class. All event subscribers must implement <code>LdapTools\Event\EventSubscriberInterface</code>, which needs
+a single method called <code>getSubscribedEvents()</code> that should return an associated array containing keys of an event
 name and values that correspond to the method in the class they should call.</p>
 <p>For example, first define a class for your subscriber:</p>
 <pre><code class="php">use LdapTools\Event\EventSubscriberInterface;
@@ -335,6 +343,18 @@ are located in the <code>LdapTools\Event</code> namespace.</p>
 <td><code>LdapObjectSchemaEvent</code></td>
 <td>Triggered when a LDAP object type schema is parsed, loaded, and before it gets cached. This allows you to modify the schema without creating your own file.</td>
 </tr>
+<tr>
+<td>ldap.authentication.before</td>
+<td><code>LDAP_AUTHENTICATION_BEFORE</code></td>
+<td><code>LdapAuthenticationEvent</code></td>
+<td>Triggered before an LDAP authentication operation. Allows you to get the operation details before it is sent.</td>
+</tr>
+<tr>
+<td>ldap.authentication.after</td>
+<td><code>LDAP_AUTHENTICATION_AFTER</code></td>
+<td><code>LdapAuthenticationEvent</code></td>
+<td>Triggered after an LDAP authentication operation. Allows you to get the result and any error messages/codes.</td>
+</tr>
 </tbody>
 </table>
 <h2 id="the-ldap-object-creation-event">The LDAP Object Creation Event</h2>
@@ -424,6 +444,53 @@ $ldap-&gt;getEventDispatcher()-&gt;addListener(Event::LDAP_SCHEMA_LOAD, function
 });
 </code></pre>
 
+<h2 id="the-ldap-authentication-event">The LDAP Authentication Event</h2>
+<hr />
+<p>The LDAP authentication event allows you to retrieve the operation details using <code>getOperation()</code>. You can also retrieve
+the LDAP response to the authentication operation using the <code>getResponse()</code> method. That will only return a response in 
+the <code>ldap.authentication.after</code> event.</p>
+<pre><code class="php">use LdapTools\Event\Event;
+use LdapTools\Event\LdapAuthenticationEvent;
+
+$ldap-&gt;getEventDispatcher()-&gt;addListener(Event::LDAP_AUTHENTICATION_BEFORE, function(LdapAuthenticationEvent $event) {
+    $operation = $event-&gt;getOperation();
+
+    // The setters for both the username/password can be called as well to modify the operation...
+    echo $operation-&gt;getUsername(); // The username to be authenticated.
+    echo $operation-&gt;getPassword(); // The password for the username. 
+});
+
+$ldap-&gt;getEventDispatcher()-&gt;addListener(Event::LDAP_AUTHENTICATION_AFTER, function(LdapAuthenticationEvent $event) {
+    $operation = $event-&gt;getOperation();
+    $response = $event-&gt;getResponse();
+
+    if (!$response-&gt;isAuthenticated()) {
+        echo &quot;User '&quot;.$operation-&gt;getUsername().&quot;' failed to login:&quot;.$response-&gt;getErrorMessage();
+    }
+});
+</code></pre>
+
+<h2 id="using-a-customspecific-event-dispatcher">Using a Custom/Specific Event Dispatcher</h2>
+<hr />
+<p>To use a specific Event Dispatcher (which must implement <code>\LdapTools\Event\EventDispatcherInterface</code>) you must set it in
+the configuration before constructing the LdapManager class:</p>
+<pre><code class="php">use LdapTools\Event\SymfonyEventDispatcher;
+use LdapTools\LdapManager;
+use LdapTools\Configuration;
+
+# Load your overall config
+$config = new Configuration();
+
+# ... add/set domain configuration, load from YML, etc...
+
+# Add the event dispatcher to the config
+$dispatcher = new SymfonyEventDispatcher();
+$config-&gt;setEventDispatcher($dispatcher);
+
+$ldap = new LdapManager($config);
+</code></pre>
+
+<p>If one is not explicitly defined it will instantiate a default event dispatcher (<code>\LdapTools\Event\SymfonyEventDispatcher</code>).</p>
 </div>
             
         </div>

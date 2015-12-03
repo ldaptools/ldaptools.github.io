@@ -70,6 +70,10 @@
                             </li>
                         
                             <li >
+                                <a href="../../reference/Logging">Logging</a>
+                            </li>
+                        
+                            <li >
                                 <a href="../../reference/Main-Configuration">Main Configuration</a>
                             </li>
                         
@@ -300,6 +304,10 @@ parameter value. See the full explanation of parameters near the start of this d
 <h4 id="createtype">create($type)</h4>
 <p>This allows you to manually specify a LDAP object type from the schema that you would like to create. This is the method
 that all the other shorthand <code>create*</code> methods actually call. </p>
+<hr />
+<h4 id="setserverserver">setServer($server)</h4>
+<p>This lets you set the LDAP server that the LDAP object will be initially created on. This switches the connections LDAP
+server during execution and then switches back to the LDAP server you were originally connected to afterwards.</p>
 <hr />
 <h4 id="execute">execute()</h4>
 <p>Takes all of your set attributes, parameters, OU location, etc and adds the object to LDAP. If an issue is encountered

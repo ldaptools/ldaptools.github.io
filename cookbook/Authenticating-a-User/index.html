@@ -70,6 +70,10 @@
                             </li>
                         
                             <li >
+                                <a href="../../reference/Logging">Logging</a>
+                            </li>
+                        
+                            <li >
                                 <a href="../../reference/Main-Configuration">Main Configuration</a>
                             </li>
                         
@@ -201,8 +205,20 @@ if ($ldapManager-&gt;authenticate($username, $password)) {
 }
 </code></pre>
 
-<p>This method actually uses the already existing <code>authenticate()</code> method of the <code>LdapConnection</code> class in the current
-context and is included as a quick shortcut for not having to do <code>$ldapManager-&gt;getConnection()-&gt;authenticate($username, $password)</code>.</p>
+<p>This method creates an authentication operation object and executes it against the current connection. You could also
+do the following:</p>
+<pre><code class="php">use LdapTools\Operation\AuthenticationOperation;
+
+$operation = (new AuthenticationOperation())-&gt;setUsername($username)-&gt;setPassword($password);
+
+// With your LdapManager class already instantiated...
+$response = $ldapManager-&gt;getConnection()-&gt;execute($operation);
+
+if (!$response-&gt;isAuthenticated()) {
+    echo &quot;Error validating password for '&quot;.$operation-&gt;getUsername().&quot;': &quot;.$response-&gt;getErrorMessage();
+}
+</code></pre>
+
 <h2 id="valid-username-formats">Valid Username Formats</h2>
 <p>The <code>authenticate()</code> method username argument can be the same value types as the username you defined in your config. For
 Active Directory, this means you can authenticate a user using either a UPN, a text SID, a text GUID, a
