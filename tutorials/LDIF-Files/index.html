@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="Chad Sikorra">
+        <link rel="canonical" href="http://www.phpldaptools.com/tutorials/LDIF-Files/">
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+
+        <title>LDIF Files - LdapTools</title>
+
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../..">LdapTools</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cookbook <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            <li >
+                                <a href="../../cookbook/Authenticating-a-User">Authenticating a User</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../../cookbook/Creating-a-Custom-Repository">Creating a Custom Repository</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../../cookbook/Modifying-GPO-Links-on-OUs">Modifying GPO Links on OUs</a>
+                            </li>
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            <li >
+                                <a href="../AD-User-Modification">AD User Modification</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../Building-LDAP-Queries">Building LDAP Queries</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../Creating-AD-Password-Settings-Objects">Creating AD Password Settings Objects</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../Creating-LDAP-Objects">Creating LDAP Objects</a>
+                            </li>
+                        
+                            <li class="active">
+                                <a href=".">LDIF Files</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../Modifying-LDAP-Objects">Modifying LDAP Objects</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../Using-the-LDAP-Manager">Using the LDAP Manager</a>
+                            </li>
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reference <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            <li >
+                                <a href="../../reference/Attribute-Converters">Attribute Converters</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../../reference/Default-Schema-Attributes">Default Schema Attributes</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../../reference/Events">Events</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../../reference/Logging">Logging</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../../reference/Main-Configuration">Main Configuration</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../../reference/Schema-Configuration">Schema Configuration</a>
+                            </li>
+                        
+                        </ul>
+                    </li>
+                
+                
+                </ul>
+            
+
+            
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                
+                
+                <li >
+                    <a rel="next" href="../Creating-LDAP-Objects">
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </li>
+                <li >
+                    <a rel="prev" href="../Modifying-LDAP-Objects">
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </li>
+                
+                
+                <li>
+                    <a href="https://github.com/ldaptools/ldaptools/">
+                        
+                            <i class="fa fa-github"></i>
+                        
+                        GitHub
+                    </a>
+                </li>
+                
+            </ul>
+            
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#ldif-files">LDIF Files</a></li>
+        
+            <li><a href="#ldif-parsing">LDIF Parsing</a></li>
+        
+            <li><a href="#ldif-creation">LDIF Creation</a></li>
+        
+    
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="ldif-files">LDIF Files</h1>
+<hr />
+<p>LdapTools provides an easy method to both parse and create LDIF files. The parser is able to take a LDIF string and
+return an object that allows you to get all the entries it contains. From the object you can get all the LDAP operations
+represented by those entries and enter them into LDAP. You also have the ability to build a LDIF file in an 
+object-oriented way and then output the result to a LDIF string.</p>
+<h2 id="ldif-parsing">LDIF Parsing</h2>
+<p>To parse a LDIF file you can pass the contents of it to the parser then do what to need with the LDIF object returned:</p>
+<pre><code class="php">use LdapTools\Ldif\LdifParser;
+use LdapTools\Exception\LdifParserException;
+
+$parser = new LdifParser();
+
+try {
+    $ldif = $parser-&gt;parse(file_get_contents('/path/to/ldif.txt'));
+} catch (LdifParserException $e) {
+    echo &quot;Error Parsing LDIF: &quot;.$e-&gt;getMessage();
+}
+
+// Assuming $ldap is your LdapManager instance, execute the LDIF entries into LDAP...
+foreach ($ldif-&gt;toOperations() as $operation) {
+    $ldap-&gt;getConnection()-&gt;execute($operation);
+}
+</code></pre>
+
+<h3 id="ldif-url-loaders">LDIF URL Loaders</h3>
+<p>In a LDIF file you can specify the data of an attributes value from a remote source using a URL format such as:</p>
+<pre><code class="ldif">description:&lt; file:///some/path/to/data.txt
+</code></pre>
+
+<p>The valid default URL types recognized by the parser are: <code>file</code>, <code>http</code>, and <code>https</code>. You can implement your own URL
+loader by creating a class that implements <code>LdapTools\Ldif\UrlLoader\UrlLoaderInterface</code>. The only needed method to be
+implemented is <code>load($url)</code>. You can then add the URL loader to the parser using the <code>setUrlLoader($type, $loader)</code>
+method.</p>
+<pre><code class="php">use LdapTools\Ldif\LdifParser;
+
+$parser = new LdifParser();
+
+// Add a custom URL loader. The $type is the string at the beginning of the URL, such as 'file' or 'http'.
+// The $loader is your constructed class that implements 'LdapTools\Ldif\UrlLoader\UrlLoaderInterface'.
+$parser-&gt;setUrlLoader($type, $loader);
+
+// Remove a URL loader by type if you don't want it to be supported...
+$parser-&gt;removeUrlLoader($type);
+
+// Check if a URL loader for a specific type exists...
+if ($parser-&gt;hasUrlLoader($type)) {
+   // do something...
+}
+</code></pre>
+
+<h2 id="ldif-creation">LDIF Creation</h2>
+<p>You can easily construct LDIF files by using a few classes. The easiest way to construct a LDIF file is in the context
+of your LDAP manager object:</p>
+<pre><code class="php">// Assuming $ldap is your LdapManager instance. 
+// The 'add' and 'modify' LDIF entries are schema aware when you constructed using your LdapManager...
+$ldif = $ldap-&gt;createLdif();
+
+$ldif-&gt;addEntry(
+    $ldif-&gt;entry()-&gt;add()-&gt;setAttributes(['username' =&gt; 'Jimmy', 'password' =&gt; '12345'])-&gt;setLocation('ou=employees,dc=example,dc=local'),
+    $ldif-&gt;entry()-&gt;delete('cn=Some User,dc=foo,dc=bar'),
+    $ldif-&gt;entry()-&gt;move('cn=Frank,dc=foo,dc=bar', 'ou=Employees,dc=foo,dc=bar')
+);
+
+// Output the LDIF object as a string to a file.
+file_put_contents('/path/to/ldif.txt', $ldif-&gt;toString());
+</code></pre>
+
+<p>However, you can also build LDIF files by just constructing the class and passing whatever you want:</p>
+<pre><code class="php">use LdapTools\Ldif\Ldif;
+
+$ldif = new Ldif();
+
+$ldif-&gt;addEntry(
+    $ldif-&gt;entry()-&gt;add('cn=Some Group,dc=foo,dc=bar', [ 'sAMAccountName' =&gt; 'Some Group', 'objectClass' =&gt; 'group']),
+    $ldif-&gt;entry()-&gt;delete('cn=Some User,dc=foo,dc=bar'),
+    $ldif-&gt;entry()-&gt;move('cn=Frank,dc=foo,dc=bar', 'ou=Employees,dc=foo,dc=bar')
+);
+
+// Output the LDIF object as a string to a file.
+file_put_contents('/path/to/ldif.txt', $ldif-&gt;toString());
+</code></pre>
+
+<p>The above is the general method for creating a LDIF file. But there are a lot of the methods and options available.
+Below is a summary of some of the objects and methods involved and how to use them.</p>
+<hr />
+<h3 id="the-ldif-object">The Ldif Object</h3>
+<p>The LDIF object is used to represent the LDIF file in its entirety. When you parse a LDIF file via the parser it returns
+this object. Likewise, you can construct a LDIF object to get the LDIF string representation from it.</p>
+<pre><code class="php">use LdapTools\Ldif\Ldif;
+
+// Construct the LDIF object...
+$ldif = new Ldif();
+
+// By default the LDIF version is set to '1' to follow the RFC. You can remove it by setting it to null.
+$ldif-&gt;setVersion(null);
+
+// Add a few comments to appear at the top of the LDIF...
+$ldif-&gt;addComment('This is just a test LDIF file', 'Created on '.date(&quot;m.d.y&quot;));
+
+// Create a new entry for the LDIF by use the helper 'entry()' method.
+// This creates an entry that will add a new object to LDAP.
+$entry = $ldif-&gt;entry()-&gt;add('cn=Some User,dc=example,dc=local')-&gt;addAttribute('sn', 'Sikorra');
+
+// Add the created entry to the LDIF. This method is variadic, so you can add as many entries at a time as you like.
+$ldif-&gt;addEntry($add)
+
+// Output the LDIF to a string and do whatever you need with it...
+$ldifData = $ldif-&gt;toString();
+echo $ldifData;
+</code></pre>
+
+<h3 id="the-ldif-delete-entry-type">The LDIF Delete Entry Type</h3>
+<p>The delete entry type is a 'delete' changetype in LDIF. It is used to delete an object from LDAP. All you need to
+do is pass it the full DN of the object you'd like to delete.</p>
+<pre><code class="php">use LdapTools\Ldif\Entry\LdifDeleteEntry;
+
+$dn = 'cn=foo,dc=example,dc=local';
+
+// Either construct it on your own...
+$delete = new LdifEntryDelete($dn);
+
+// Or construct it with the helper method on the LDIF object...
+$delete = $ldif-&gt;entry()-&gt;delete($dn);
+</code></pre>
+
+<h3 id="the-ldif-add-entry-type">The LDIF Add Entry Type</h3>
+<p>The add entry type is an 'add' changetype in LDIF. It is used to add a new object to LDAP. It needs the full DN
+and all the attributes.</p>
+<pre><code class="php">use LdapTools\Ldif\Entry\LdifEntryAdd;
+
+$dn = 'cn=foo,dc=example,dc=local';
+$attributes = [
+    'objectclass' =&gt; ['top', 'person', 'organizationalPerson'],
+    'cn' =&gt; 'Barbara Jensen',
+    'sn' =&gt; 'Jensen',
+    'uid' =&gt; 'bjensen',
+    'telephonenumber' =&gt; '+1 408 555 1212',
+    'description' =&gt; &quot;Peon&quot;,
+    'title' =&gt; 'Awesome Stuff',
+];
+
+// Construct the entry on your own...
+$add = new LdifEntryAdd($dn, $attributes);
+
+// Or construct it with the helper method on the LDIF object...
+$add = $ldif-&gt;entry()-&gt;add($dn)-&gt;setAttributes($attributes);
+
+// Construct the entry from the helper method and use the methods on the add entry type to add individual attributes...
+$add = $ldif-&gt;entry()-&gt;add($dn)
+    -&gt;addAttribute('objectClass', ['top', 'person', 'organizationalPerson'])
+    -&gt;addAttribute('sn', 'Jensen')
+    -&gt;addAttribute('description', 'Peon');
+</code></pre>
+
+<h3 id="the-ldif-modify-entry-type">The LDIF Modify Entry Type</h3>
+<p>The modify entry type is a 'modify' changetype in LDIF. You can use this to modify an already existing object in LDAP.</p>
+<pre><code class="php">use LdapTools\Ldif\Entry\LdifEntryModify;
+
+$dn = 'cn=foo,dc=example,dc=local';
+
+// Construct it manually...
+$modify = new LdifEntryModify($dn);
+
+$modify-&gt;replace('description', 'Works at building 2') // Complete replace the contents of an attribute.
+    -&gt;reset('title')                                   // Reset the attribute, which removes an value it has.
+    -&gt;add('telephonenumber', '555-5555')               // Add a new value to an attribute.
+    -&gt;delete('faxnumber', '222-2222');                 // Delete a specific attribute value. The value must exist though.
+
+// Use the helper method on the LDIF object...
+$modify = $ldif-&gt;entry()-&gt;modify($dn)
+    -&gt;delete('faxnumber', '222-2222')
+    -&gt;replace('sn', 'Johnson');
+
+</code></pre>
+
+<h3 id="the-ldif-mod-dn-entry-type">The LDIF Mod DN Entry Type</h3>
+<p>The Mod DN entry type is a 'moddn' changetype in LDIF. This allows you to rename, move, or add to the DN of an object in
+LDAP.</p>
+<pre><code class="php">use LdapTools\Ldif\Entry\LdifEntryModDn;
+
+$dn = 'cn=foo,dc=example,dc=local';
+
+// Construct it manually...
+$moddn = new LdifEntryModDn($dn);
+
+// Move it to a new location. Specify the full DN of the new location:
+$moddn-&gt;setNewLocation('ou=employees,dc=example,dc=local');
+
+// Tell it that the old RDN from the previous location should be removed:
+$moddn-&gt;setDeleteOldRdn(true);
+
+// Set a new name (RDN) for the object (Needs to be in 'attribute=value' format!):
+$moddn-&gt;setNewName('cn=bar');
+
+// Constructing the entry using the helper method on the LDIF object...
+$moddn = $ldif-&gt;entry()-&gt;moddn($dn)
+    -&gt;setNewLocation('ou=employees,dc=example,dc=local')
+    -&gt;setDeleteOldRdn(true)
+    -&gt;setNewName('cn=bar');
+</code></pre>
+
+<h3 id="the-ldif-mod-rdn-type">The LDIF Mod RDN Type</h3>
+<p>The Mod RDN type is implemented to adhere to RFC 2849. There is no functional difference between the 'modrdn' and 'moddn'
+changetypes. The class for 'modrdn' simply extends the class for the 'moddn' type. The only difference being that when
+it is output as a LDIF string the changetype will be 'modrdn':</p>
+<pre><code class="php">use LdapTools\Ldif\Entry\LdifEntryModRdn;
+
+$modrdn = new LdifEntryModRdn('cn=foo,dc=example,dc=local');
+$modrdn-&gt;newLocation($someOU);
+
+// Outputs a 'changetype' of 'modrdn'...
+echo $modrdn-&gt;toString();
+</code></pre>
+
+<h3 id="helper-methods-to-create-ldif-entries">Helper Methods to Create LDIF Entries</h3>
+<p>An easy way to construct the LDIF entries is to use the 'entry()' method of the LDIF object. This takes care of some of
+the manual object construction so you don't have to remember class names and produces a more fluent object-oriented
+method to build up the LDIF object.</p>
+<pre><code class="php">use LdapTools\Ldif\Ldif;
+
+$ldif = new Ldif();
+
+// An entry to delete a LDAP object...
+$ldif-&gt;addEntry($ldif-&gt;entry()-&gt;delete('cn=user,dc=example,dc=local'));
+
+// An entry to add a new object to LDAP...
+$ldif-&gt;addEntry($ldif-&gt;entry()-&gt;add('cn=Josh,ou=employees,dc=example,dc=local')-&gt;setAttributes([
+    'objectclass' =&gt; ['top', 'person', 'organizationalPerson'],
+    'cn' =&gt; 'Josh Jensen',
+    'sn' =&gt; 'Jensen',
+    'uid' =&gt; 'jjensen',
+]));
+
+// Modify an existing LDAP object...
+$modify = $ldif-&gt;entry()-&gt;modify('cn=foo,dc=example,dc=local')
+    -&gt;addAttribute('phonenumber', '555-5555')
+    -&gt;replace('title', 'worker');
+$ldif-&gt;addEntry($modify);
+
+// Rename an object in LDAP...
+$ldif-&gt;addEntry($ldif-&gt;entry()-&gt;rename('cn=josh,dc=example,dc=local', 'cn=jill'));
+
+// Move an object in LDAP...
+$ldif-&gt;addEntry($ldif-&gt;entry()-&gt;move('cn=jill,dc=example,dc=local', 'ou=employees,dc=example,dc=local'));
+
+// Modify the DN of an LDAP object...
+$ldif-&gt;addEntry($ldif-&gt;entry()-&gt;moddn('cn=jill,ou=employees,dc=example,dc=local')-&gt;setNewRdn('cn=jill'));
+</code></pre>
+
+</div>
+            
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+            <p>Copyright &copy; 2015, Chad Sikorra.</p>
+            
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+
+        
+
+        <script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/prettify-1.0.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script>
+        <script src="../../js/base.js"></script>
+    </body>
+</html>

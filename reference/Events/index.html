@@ -53,49 +53,12 @@
                 <ul class="nav navbar-nav">
                 
                 
-                    <li class="dropdown active">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reference <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                        
-                            <li >
-                                <a href="../Attribute-Converters">Attribute Converters</a>
-                            </li>
-                        
-                            <li >
-                                <a href="../Default-Schema-Attributes">Default Schema Attributes</a>
-                            </li>
-                        
-                            <li class="active">
-                                <a href=".">Events</a>
-                            </li>
-                        
-                            <li >
-                                <a href="../Logging">Logging</a>
-                            </li>
-                        
-                            <li >
-                                <a href="../Main-Configuration">Main Configuration</a>
-                            </li>
-                        
-                            <li >
-                                <a href="../Schema-Configuration">Schema Configuration</a>
-                            </li>
-                        
-                        </ul>
-                    </li>
-                
-                
-                
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cookbook <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
                             <li >
                                 <a href="../../cookbook/Authenticating-a-User">Authenticating a User</a>
-                            </li>
-                        
-                            <li >
-                                <a href="../../cookbook/Common-LDAP-Queries">Common LDAP Queries</a>
                             </li>
                         
                             <li >
@@ -132,11 +95,48 @@
                             </li>
                         
                             <li >
+                                <a href="../../tutorials/LDIF-Files">LDIF Files</a>
+                            </li>
+                        
+                            <li >
                                 <a href="../../tutorials/Modifying-LDAP-Objects">Modifying LDAP Objects</a>
                             </li>
                         
                             <li >
                                 <a href="../../tutorials/Using-the-LDAP-Manager">Using the LDAP Manager</a>
+                            </li>
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reference <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            <li >
+                                <a href="../Attribute-Converters">Attribute Converters</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../Default-Schema-Attributes">Default Schema Attributes</a>
+                            </li>
+                        
+                            <li class="active">
+                                <a href=".">Events</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../Logging">Logging</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../Main-Configuration">Main Configuration</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../Schema-Configuration">Schema Configuration</a>
                             </li>
                         
                         </ul>
@@ -200,6 +200,8 @@
             <li><a href="#the-ldap-object-schema-event">The LDAP Object Schema Event</a></li>
         
             <li><a href="#the-ldap-authentication-event">The LDAP Authentication Event</a></li>
+        
+            <li><a href="#the-ldap-operation-event">The LDAP Operation Event</a></li>
         
             <li><a href="#using-a-customspecific-event-dispatcher">Using a Custom/Specific Event Dispatcher</a></li>
         
@@ -355,6 +357,18 @@ are located in the <code>LdapTools\Event</code> namespace.</p>
 <td><code>LdapAuthenticationEvent</code></td>
 <td>Triggered after an LDAP authentication operation. Allows you to get the result and any error messages/codes.</td>
 </tr>
+<tr>
+<td>ldap.operation.execute.before</td>
+<td><code>LDAP_OPERATION_EXECUTE_BEFORE</code></td>
+<td><code>LdapOperationEvent</code></td>
+<td>Triggered before any LDAP operation is executed. Allows getting the operation and connection prior to execution.</td>
+</tr>
+<tr>
+<td>ldap.operation.execute.after</td>
+<td><code>LDAP_OPERATION_EXECUTE_AFTER</code></td>
+<td><code>LdapOperationEvent</code></td>
+<td>Triggered after any LDAP operation is executed. Allows getting the operation and connection after execution.</td>
+</tr>
 </tbody>
 </table>
 <h2 id="the-ldap-object-creation-event">The LDAP Object Creation Event</h2>
@@ -470,6 +484,26 @@ $ldap-&gt;getEventDispatcher()-&gt;addListener(Event::LDAP_AUTHENTICATION_AFTER,
 });
 </code></pre>
 
+<h2 id="the-ldap-operation-event">The LDAP Operation Event</h2>
+<hr />
+<p>The LDAP operation event lets you get the operation object with <code>getOperation()</code> and the LDAP connection object by
+calling <code>getConnection</code>. This allows you to take custom action against any LDAP operation before and after it is 
+executed (add, delete, modify, query, etc). You can also modify parts of the operation object before it is actually 
+executed.</p>
+<pre><code class="php">use LdapTools\Event\Event;
+use LdapTools\Event\LdapOperationEvent;
+use LdapTools\Operation\DeleteOperation;
+
+$ldap-&gt;getEventDispatcher()-&gt;addListener(Event::LDAP_OPERATION_EXECUTE_BEFORE, function(LdapOperationEvent $event) {
+    $operation = $event-&gt;getOperation();
+    $connection = $event-&gt;getConnection();
+
+    if ($operation instanceof DeleteOperation) {
+        // ...
+    }
+});
+</code></pre>
+
 <h2 id="using-a-customspecific-event-dispatcher">Using a Custom/Specific Event Dispatcher</h2>
 <hr />
 <p>To use a specific Event Dispatcher (which must implement <code>\LdapTools\Event\EventDispatcherInterface</code>) you must set it in
@@ -505,7 +539,7 @@ $ldap = new LdapManager($config);
 
         
 
-        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="../../js/jquery-1.10.2.min.js"></script>
         <script src="../../js/bootstrap-3.0.3.min.js"></script>
         <script src="../../js/prettify-1.0.min.js"></script>
         <script src="../../js/highlight.pack.js"></script>
