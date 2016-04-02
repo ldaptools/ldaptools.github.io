@@ -62,6 +62,10 @@
                             </li>
                         
                             <li >
+                                <a href="../../cookbook/Common-LDAP-Queries">Common LDAP Queries</a>
+                            </li>
+                        
+                            <li >
                                 <a href="../../cookbook/Creating-a-Custom-Repository">Creating a Custom Repository</a>
                             </li>
                         
@@ -119,6 +123,10 @@
                                 <a href="../Attribute-Converters">Attribute Converters</a>
                             </li>
                         
+                            <li >
+                                <a href="../Default-Schema-Attributes-New">Default Schema Attributes New</a>
+                            </li>
+                        
                             <li class="active">
                                 <a href=".">Default Schema Attributes</a>
                             </li>
@@ -152,7 +160,7 @@
                 
                 
                 <li >
-                    <a rel="next" href="../Attribute-Converters">
+                    <a rel="next" href="../Default-Schema-Attributes-New">
                         <i class="fa fa-arrow-left"></i> Previous
                     </a>
                 </li>
@@ -187,9 +195,13 @@
         
             <li><a href="#active-directory-schema">Active Directory Schema</a></li>
         
+            <li><a href="#exchange-schema">Exchange Schema</a></li>
+        
             <li><a href="#openldap-schema">OpenLDAP Schema</a></li>
         
             <li><a href="#the-active-directory-schema">The Active Directory Schema</a></li>
+        
+            <li><a href="#the-exchange-schema">The Exchange Schema</a></li>
         
             <li><a href="#the-openldap-schema">The OpenLDAP Schema</a></li>
         
@@ -210,6 +222,17 @@ used when generating queries and returning data from LDAP.</p>
 <li><a href="#ad-contact-types">Contacts</a></li>
 <li><a href="#ad-ou-types">OUs</a></li>
 <li><a href="#ad-password-settings-objects-types">Password Settings Objects</a></li>
+</ul>
+<h4 id="exchange-schema">Exchange Schema</h4>
+<ul>
+<li><a href="#exchange-server-types">Servers</a></li>
+<li><a href="#exchange-database-types">Databases</a></li>
+<li><a href="#exchange-retention-policy-types">Retention Policies</a></li>
+<li><a href="#exchange-activesync-policy-types">ActiveSync Policies</a></li>
+<li><a href="#exchange-rbac-policy-types">RBAC Policies</a></li>
+<li><a href="#exchange-transport-rule-types">Transport Rules</a></li>
+<li><a href="#exchange-dag-types">DAG</a></li>
+<li><a href="#exchange-owa-types">OWA</a></li>
 </ul>
 <h4 id="openldap-schema">OpenLDAP Schema</h4>
 <ul>
@@ -938,6 +961,11 @@ used when generating queries and returning data from LDAP.</p>
 <td>array</td>
 </tr>
 <tr>
+<td>gpoInheritanceBlocked</td>
+<td>gpOptions</td>
+<td>bool</td>
+</tr>
+<tr>
 <td>guid</td>
 <td>objectGuid</td>
 <td>string</td>
@@ -1078,6 +1106,342 @@ the type name <code>PSO</code>.</p>
 </tr>
 </tbody>
 </table>
+<h3 id="the-exchange-schema">The Exchange Schema</h3>
+<hr />
+<h4 id="exchange-server-types">Exchange Server Types</h4>
+<p>These are Exchange Servers <code>(&amp;(objectClass=msExchExchangeServer)(serverRole=*))</code>).</p>
+<table>
+<thead>
+<tr>
+<th>LdapTools Name</th>
+<th>LDAP Attribute</th>
+<th>Value Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>cn</td>
+<td>string</td>
+</tr>
+<tr>
+<td>created</td>
+<td>whenCreated</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>guid</td>
+<td>objectGuid</td>
+<td>string</td>
+</tr>
+<tr>
+<td>modified</td>
+<td>whenModified</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>roles</td>
+<td>msExchCurrentServerRoles</td>
+<td>array</td>
+</tr>
+<tr>
+<td>sid</td>
+<td>objectSid</td>
+<td>string</td>
+</tr>
+<tr>
+<td>version</td>
+<td>serialNumber</td>
+<td>string</td>
+</tr>
+</tbody>
+</table>
+<h4 id="exchange-database-types">Exchange Database Types</h4>
+<p>These are Exchange Databases (<code>objectClass=msExchMDB</code>).</p>
+<table>
+<thead>
+<tr>
+<th>LdapTools Name</th>
+<th>LDAP Attribute</th>
+<th>Value Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>cn</td>
+<td>string</td>
+</tr>
+<tr>
+<td>created</td>
+<td>whenCreated</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>guid</td>
+<td>objectGuid</td>
+<td>string</td>
+</tr>
+<tr>
+<td>isBeingRestored</td>
+<td>msexchdatabasebeingrestored</td>
+<td>bool</td>
+</tr>
+<tr>
+<td>modified</td>
+<td>whenModified</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>mountOnStartup</td>
+<td>msexchedboffline</td>
+<td>bool</td>
+</tr>
+<tr>
+<td>sid</td>
+<td>objectSid</td>
+<td>string</td>
+</tr>
+</tbody>
+</table>
+<h4 id="exchange-retention-policy-types">Exchange Retention Policy Types</h4>
+<p>These are Exchange Retention policies (<code>objectClass=msExchRecipientPolicy</code>).</p>
+<table>
+<thead>
+<tr>
+<th>LdapTools Name</th>
+<th>LDAP Attribute</th>
+<th>Value Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>cn</td>
+<td>string</td>
+</tr>
+<tr>
+<td>created</td>
+<td>whenCreated</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>guid</td>
+<td>objectGuid</td>
+<td>string</td>
+</tr>
+<tr>
+<td>modified</td>
+<td>whenModified</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>sid</td>
+<td>objectSid</td>
+<td>string</td>
+</tr>
+</tbody>
+</table>
+<h4 id="exchange-activesync-policy-types">Exchange ActiveSync Policy Types</h4>
+<p>These are Exchange ActiveSync policies (<code>objectClass=msExchMobileMailboxPolicy</code>).</p>
+<table>
+<thead>
+<tr>
+<th>LdapTools Name</th>
+<th>LDAP Attribute</th>
+<th>Value Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>cn</td>
+<td>string</td>
+</tr>
+<tr>
+<td>created</td>
+<td>whenCreated</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>guid</td>
+<td>objectGuid</td>
+<td>string</td>
+</tr>
+<tr>
+<td>modified</td>
+<td>whenModified</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>numberOfPreviousPasswordsDisallowed</td>
+<td>msExchMobileDeviceNumberOfPreviousPasswordsDisallowed</td>
+<td>int</td>
+</tr>
+<tr>
+<td>sid</td>
+<td>objectSid</td>
+<td>string</td>
+</tr>
+</tbody>
+</table>
+<h4 id="exchange-rbac-policy-type">Exchange RBAC Policy Type</h4>
+<p>These are Exchange RBAC policies (<code>objectClass=msExchRBACPolicy</code>).</p>
+<table>
+<thead>
+<tr>
+<th>LdapTools Name</th>
+<th>LDAP Attribute</th>
+<th>Value Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>cn</td>
+<td>string</td>
+</tr>
+<tr>
+<td>created</td>
+<td>whenCreated</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>guid</td>
+<td>objectGuid</td>
+<td>string</td>
+</tr>
+<tr>
+<td>modified</td>
+<td>whenModified</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>sid</td>
+<td>objectSid</td>
+<td>string</td>
+</tr>
+</tbody>
+</table>
+<h4 id="exchange-transport-rule-types">Exchange Transport Rule Types</h4>
+<p>These are Exchange Databases (<code>objectClass=msExchTransportRule</code>).</p>
+<table>
+<thead>
+<tr>
+<th>LdapTools Name</th>
+<th>LDAP Attribute</th>
+<th>Value Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>cn</td>
+<td>string</td>
+</tr>
+<tr>
+<td>created</td>
+<td>whenCreated</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>guid</td>
+<td>objectGuid</td>
+<td>string</td>
+</tr>
+<tr>
+<td>modified</td>
+<td>whenModified</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>sid</td>
+<td>objectSid</td>
+<td>string</td>
+</tr>
+</tbody>
+</table>
+<h4 id="exchange-dag-types">Exchange DAG Types</h4>
+<p>This represents an DAG (<code>objectClass=msExchMDBAvailabilityGroup</code>).</p>
+<table>
+<thead>
+<tr>
+<th>LdapTools Name</th>
+<th>LDAP Attribute</th>
+<th>Value Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>cn</td>
+<td>string</td>
+</tr>
+<tr>
+<td>created</td>
+<td>whenCreated</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>guid</td>
+<td>objectGuid</td>
+<td>string</td>
+</tr>
+<tr>
+<td>modified</td>
+<td>whenModified</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>sid</td>
+<td>objectSid</td>
+<td>string</td>
+</tr>
+</tbody>
+</table>
+<h4 id="exchange-owa-types">Exchange OWA Types</h4>
+<p>These are the Exchange OWA instances (<code>objectClass=msExchOWAVirtualDirectory</code>).</p>
+<table>
+<thead>
+<tr>
+<th>LdapTools Name</th>
+<th>LDAP Attribute</th>
+<th>Value Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>cn</td>
+<td>string</td>
+</tr>
+<tr>
+<td>created</td>
+<td>whenCreated</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>guid</td>
+<td>objectGuid</td>
+<td>string</td>
+</tr>
+<tr>
+<td>modified</td>
+<td>whenModified</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>sid</td>
+<td>objectSid</td>
+<td>string</td>
+</tr>
+<tr>
+<td>url</td>
+<td>msExchInternalHostname</td>
+<td>string</td>
+</tr>
+</tbody>
+</table>
 <h3 id="the-openldap-schema">The OpenLDAP Schema</h3>
 <hr />
 <h4 id="openldap-user-types">OpenLDAP User Types</h4>
@@ -1145,6 +1509,11 @@ the type name <code>PSO</code>.</p>
 <td>firstName</td>
 <td>givenName</td>
 <td>string</td>
+</tr>
+<tr>
+<td>groups</td>
+<td>memberOf</td>
+<td>array</td>
 </tr>
 <tr>
 <td>homeDirectory</td>

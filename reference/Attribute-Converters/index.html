@@ -62,6 +62,10 @@
                             </li>
                         
                             <li >
+                                <a href="../../cookbook/Common-LDAP-Queries">Common LDAP Queries</a>
+                            </li>
+                        
+                            <li >
                                 <a href="../../cookbook/Creating-a-Custom-Repository">Creating a Custom Repository</a>
                             </li>
                         
@@ -120,6 +124,10 @@
                             </li>
                         
                             <li >
+                                <a href="../Default-Schema-Attributes-New">Default Schema Attributes New</a>
+                            </li>
+                        
+                            <li >
                                 <a href="../Default-Schema-Attributes">Default Schema Attributes</a>
                             </li>
                         
@@ -157,7 +165,7 @@
                     </a>
                 </li>
                 <li >
-                    <a rel="prev" href="../Default-Schema-Attributes">
+                    <a rel="prev" href="../Default-Schema-Attributes-New">
                         Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -356,10 +364,37 @@ process and the converter may use the connection to make LDAP calls to resolve d
 <h4 id="functional_level"><em>functional_level</em></h4>
 <ul>
 <li>
-<p><code>fromLdap</code>: Takes an Active Directory functional level as an int and converts it to a human readable form.</p>
+<p><code>toLdap</code>: This should not be used. You should only read the value from LDAP.</p>
 </li>
 <li>
-<p><code>toLdap</code>: This should not be used. You should only read the value from LDAP.</p>
+<p><code>fromLdap</code>: Takes an Active Directory functional level as an int and converts it to a human readable form.</p>
+</li>
+</ul>
+<h4 id="gpoptions"><em>gpoptions</em></h4>
+<ul>
+<li>
+<p><code>toLdap</code>: Takes a bool and converts it to a string int to represent whether inheritance is blocked on an OU. </p>
+</li>
+<li>
+<p><code>fromLdap</code>: Takes a gpOptions value and converts it to a bool for whether GPO inheritance is set to be blocked.</p>
+</li>
+</ul>
+<h4 id="exchange_roles"><em>exchange_roles</em></h4>
+<ul>
+<li>
+<p><code>toLdap</code>: This should not be used. It currently does not modify the value going back to LDAP.</p>
+</li>
+<li>
+<p><code>fromLdap</code>: Takes an integer and and determines what roles it contains and converts that to an array of role names.</p>
+</li>
+</ul>
+<h4 id="exchange_version"><em>exchange_version</em></h4>
+<ul>
+<li>
+<p><code>toLdap</code>: This should not be used. It currently does not modify the value going back to LDAP.</p>
+</li>
+<li>
+<p><code>fromLdap</code>: Takes a build string stored in the serialNumber attribute and parses it to a readable Exchange version.</p>
 </li>
 </ul>
 </div>

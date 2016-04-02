@@ -62,6 +62,10 @@
                             </li>
                         
                             <li >
+                                <a href="../../cookbook/Common-LDAP-Queries">Common LDAP Queries</a>
+                            </li>
+                        
+                            <li >
                                 <a href="../../cookbook/Creating-a-Custom-Repository">Creating a Custom Repository</a>
                             </li>
                         
@@ -117,6 +121,10 @@
                         
                             <li >
                                 <a href="../Attribute-Converters">Attribute Converters</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../Default-Schema-Attributes-New">Default Schema Attributes New</a>
                             </li>
                         
                             <li >
@@ -197,8 +205,8 @@
 <h1 id="logging">Logging</h1>
 <hr />
 <p>Logging is available for the following LDAP operations performed by the connection class: add, modify, delete, move, and
-rename. To enable logging you must pass a class to the constructor of the LdapManager or LdapConnection upon instantiation.
-The only requirement for the class is that it implements <code>\LdapTools\Log\LdapLoggerInterface</code>.</p>
+rename. To enable logging you must pass a logger to the <code>setLogger($logger)</code> method of the main <code>\LdapTools\Configuration</code>
+class. The only requirement for the class is that it implements <code>\LdapTools\Log\LdapLoggerInterface</code>.</p>
 <h2 id="enabling-logging-for-the-ldapmanager">Enabling Logging for the LdapManager</h2>
 <hr />
 <p>To enable logging for all connections in the LdapManager you can pass a class implementing <code>\LdapTools\Log\LdapLoggerInterface</code>

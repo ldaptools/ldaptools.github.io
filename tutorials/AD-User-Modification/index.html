@@ -62,6 +62,10 @@
                             </li>
                         
                             <li >
+                                <a href="../../cookbook/Common-LDAP-Queries">Common LDAP Queries</a>
+                            </li>
+                        
+                            <li >
                                 <a href="../../cookbook/Creating-a-Custom-Repository">Creating a Custom Repository</a>
                             </li>
                         
@@ -117,6 +121,10 @@
                         
                             <li >
                                 <a href="../../reference/Attribute-Converters">Attribute Converters</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../../reference/Default-Schema-Attributes-New">Default Schema Attributes New</a>
                             </li>
                         
                             <li >
@@ -186,6 +194,8 @@
         <li class="main active"><a href="#ad-user-modification">AD User Modification</a></li>
         
             <li><a href="#ad-user-account-properties">AD User Account Properties</a></li>
+        
+            <li><a href="#group-membership">Group Membership</a></li>
         
             <li><a href="#user-log-on-to-workstations-list">User Log On To Workstations List</a></li>
         
@@ -264,6 +274,42 @@ try {
 </tr>
 </tbody>
 </table>
+<h2 id="group-membership">Group Membership</h2>
+<p>Group membership can be modified directly using the <code>groups</code> attribute on a user. You can reference a group using its
+name, SID, GUID, DN, or a <code>LdapObject</code>.</p>
+<pre><code class="php">// First get the user object via a query.
+$user = $ldapManager-&gt;buildLdapQuery()
+    -&gt;select('groups')
+    -&gt;fromUsers()
+    -&gt;where(['username' =&gt; 'Chad'])
+    -&gt;getLdapQuery()
+    -&gt;getSingleResult();
+
+// Add a few groups by name, with the last one being by GUID
+$user-&gt;addGroups('Employees', 'VPN Users', '270db4d0-249d-46a7-9cc5-eb695d9af9ac');
+
+// Remove a group by a SID
+$user-&gt;removeGroups('S-1-5-21-1004336348-1177238915-682003330-512');
+
+// Reset the current groups. This will remove any groups they are currently a member of
+$user-&gt;resetGroups();
+
+// Add a group from the result of a separate LDAP query...
+$group = $ldapManager-&gt;buildLdapQuery()
+    -&gt;fromGroups()
+    -&gt;where(['name' =&gt; 'IT Stuff'])
+    -&gt;getLdapQuery()
+    -&gt;getSingleResult();
+$user-&gt;addGroups($group);
+
+// Save the changes back to LDAP...
+try {
+    $ldapManager-&gt;persist($user);
+} catch (\Exception $e) {
+    echo &quot;Error modifying groups: &quot;.$e-&gt;getMessage();
+}
+</code></pre>
+
 <h2 id="user-log-on-to-workstations-list">User Log On To Workstations List</h2>
 <p>To easily modify the workstations that an account can log into, you can use the <code>logonWorkstations</code> attribute. This
 attribute functions like an array and maps to to the "Log on To..." section of an account.</p>

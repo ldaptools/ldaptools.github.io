@@ -62,6 +62,10 @@
                             </li>
                         
                             <li >
+                                <a href="../../cookbook/Common-LDAP-Queries">Common LDAP Queries</a>
+                            </li>
+                        
+                            <li >
                                 <a href="../../cookbook/Creating-a-Custom-Repository">Creating a Custom Repository</a>
                             </li>
                         
@@ -117,6 +121,10 @@
                         
                             <li >
                                 <a href="../../reference/Attribute-Converters">Attribute Converters</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../../reference/Default-Schema-Attributes-New">Default Schema Attributes New</a>
                             </li>
                         
                             <li >
@@ -206,7 +214,7 @@ use LdapTools\LdapManager;
 $config = (new Configuration())-&gt;load('/path/to/my/ldap.yml');
 $ldap = new LdapManager($config);
 
-// Create a basic PSO that.
+// Create a basic PSO.
 $ldap-&gt;createLdapObject()
     -&gt;create('PSO')
     -&gt;with([

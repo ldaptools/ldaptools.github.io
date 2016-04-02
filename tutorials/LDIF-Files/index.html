@@ -62,6 +62,10 @@
                             </li>
                         
                             <li >
+                                <a href="../../cookbook/Common-LDAP-Queries">Common LDAP Queries</a>
+                            </li>
+                        
+                            <li >
                                 <a href="../../cookbook/Creating-a-Custom-Repository">Creating a Custom Repository</a>
                             </li>
                         
@@ -117,6 +121,10 @@
                         
                             <li >
                                 <a href="../../reference/Attribute-Converters">Attribute Converters</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../../reference/Default-Schema-Attributes-New">Default Schema Attributes New</a>
                             </li>
                         
                             <li >
@@ -201,7 +209,7 @@ return an object that allows you to get all the entries it contains. From the ob
 represented by those entries and enter them into LDAP. You also have the ability to build a LDIF file in an 
 object-oriented way and then output the result to a LDIF string.</p>
 <h2 id="ldif-parsing">LDIF Parsing</h2>
-<p>To parse a LDIF file you can pass the contents of it to the parser then do what to need with the LDIF object returned:</p>
+<p>To parse a LDIF file you can pass the contents of it to the parser then do what you need with the LDIF object returned:</p>
 <pre><code class="php">use LdapTools\Ldif\LdifParser;
 use LdapTools\Exception\LdifParserException;
 
@@ -248,12 +256,19 @@ if ($parser-&gt;hasUrlLoader($type)) {
 <h2 id="ldif-creation">LDIF Creation</h2>
 <p>You can easily construct LDIF files by using a few classes. The easiest way to construct a LDIF file is in the context
 of your LDAP manager object:</p>
-<pre><code class="php">// Assuming $ldap is your LdapManager instance. 
+<pre><code class="php">use LdapTools\Object\LdapObjectType;
+
+// Assuming $ldap is your LdapManager instance. 
 // The 'add' and 'modify' LDIF entries are schema aware when you constructed using your LdapManager...
 $ldif = $ldap-&gt;createLdif();
 
+$userEntry = $ldif-&gt;entry()-&gt;add()
+    -&gt;setType(LdapObjectType::USER)
+    -&gt;setAttributes(['username' =&gt; 'Jimmy', 'password' =&gt; '12345'])
+    -&gt;setLocation('ou=employees,dc=example,dc=local');
+
 $ldif-&gt;addEntry(
-    $ldif-&gt;entry()-&gt;add()-&gt;setAttributes(['username' =&gt; 'Jimmy', 'password' =&gt; '12345'])-&gt;setLocation('ou=employees,dc=example,dc=local'),
+    $userEntry,
     $ldif-&gt;entry()-&gt;delete('cn=Some User,dc=foo,dc=bar'),
     $ldif-&gt;entry()-&gt;move('cn=Frank,dc=foo,dc=bar', 'ou=Employees,dc=foo,dc=bar')
 );
@@ -442,6 +457,32 @@ $ldif-&gt;addEntry($ldif-&gt;entry()-&gt;move('cn=jill,dc=example,dc=local', 'ou
 
 // Modify the DN of an LDAP object...
 $ldif-&gt;addEntry($ldif-&gt;entry()-&gt;moddn('cn=jill,ou=employees,dc=example,dc=local')-&gt;setNewRdn('cn=jill'));
+</code></pre>
+
+<h3 id="ldif-line-endings">LDIF Line Endings</h3>
+<p>By default when you call <code>toString()</code> on an LDIF object all of the line endings will be in Windows format (CRLF). If you
+want to use Unix/Linux format (LF) you can use the <code>setLineEnding()</code> method:</p>
+<pre><code class="php">use LdapTools\Ldif\Ldif;
+
+$ldif = $ldap-&gt;createLdif();
+
+$ldif-&gt;setLineEnding(Ldif::LINE_ENDING['UNIX']);
+</code></pre>
+
+<p>This is mostly useful for compatibility purposes. Some utilities consuming the LDIF file may be expecting a certain line
+ending in order to work correctly.</p>
+<h3 id="line-folding-and-max-line-length">Line Folding and Max Line Length</h3>
+<p>By default when you call <code>toString()</code> on an LDIF object it will not fold any lines regardless of how long they are. If
+you would like for the long lines to be folded and continued on the next line after a certain length (to improve the
+readability of the file) you can use the <code>setLineFolding(true)</code> and <code>setMaxLineLength($length)</code> methods:</p>
+<pre><code class="php">use LdapTools\Ldif\Ldif;
+
+$ldif = $ldap-&gt;createLdif();
+
+# Long line (including comments) will be broken into smaller chunks now...
+$ldif-&gt;setLineFolding(true);
+# Unless this is explicitly set, the max line length is 76 by default.
+$ldif-&gt;setMaxLineLength(100);
 </code></pre>
 
 </div>

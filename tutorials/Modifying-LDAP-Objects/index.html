@@ -62,6 +62,10 @@
                             </li>
                         
                             <li >
+                                <a href="../../cookbook/Common-LDAP-Queries">Common LDAP Queries</a>
+                            </li>
+                        
+                            <li >
                                 <a href="../../cookbook/Creating-a-Custom-Repository">Creating a Custom Repository</a>
                             </li>
                         
@@ -117,6 +121,10 @@
                         
                             <li >
                                 <a href="../../reference/Attribute-Converters">Attribute Converters</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../../reference/Default-Schema-Attributes-New">Default Schema Attributes New</a>
                             </li>
                         
                             <li >
@@ -201,6 +209,10 @@
 <p>Modifying an existing LDAP object is as easy as searching for it, making your changes to the object via either the 
 setters/properties then sending the object back to the <code>LdapManager</code> class with the <code>persist()</code> method. All the changes
 you make to the object are tracked and when you call <code>persist()</code> it will only update the attributes you actually changed.</p>
+<p>Please keep in mind that this is not an active record design. The <code>LdapObject</code> instance is only aware of properties
+you explicitly selected as part of the LDAP query. So if you want to check if an attribute exists, or has a specific value,
+then make sure to actually select the attribute when you query LDAP. If you selected the attribute as part of the query,
+but the <code>has($attribute)</code> method returns false, then the attribute is not set.</p>
 <p>A simple example:</p>
 <pre><code class="php">use LdapTools\Object\LdapObjectType;
 
@@ -261,8 +273,8 @@ $user-&gt;firstName = 'Fred';
 $user-&gt;lastName = 'Fuchs';
 
 // You can also call isset on a property to determine if it exists on the object...
-if (isset($user.phoneNumber)) {
-    echo &quot;Phone: &quot;.$user.phoneNumber.PHP_EOL; 
+if (isset($user&gt;phoneNumber)) {
+    echo &quot;Phone: &quot;.$user-&gt;phoneNumber.PHP_EOL; 
 }
 </code></pre>
 

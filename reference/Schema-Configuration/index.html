@@ -62,6 +62,10 @@
                             </li>
                         
                             <li >
+                                <a href="../../cookbook/Common-LDAP-Queries">Common LDAP Queries</a>
+                            </li>
+                        
+                            <li >
                                 <a href="../../cookbook/Creating-a-Custom-Repository">Creating a Custom Repository</a>
                             </li>
                         
@@ -117,6 +121,10 @@
                         
                             <li >
                                 <a href="../Attribute-Converters">Attribute Converters</a>
+                            </li>
+                        
+                            <li >
+                                <a href="../Default-Schema-Attributes-New">Default Schema Attributes New</a>
                             </li>
                         
                             <li >
@@ -231,11 +239,59 @@ objects:
         repository: '\My\Custom\Repository'
 </code></pre>
 
+<h4 id="include">include</h4>
+<hr />
+<p>By using this option you can specify additional schema files to include within the current schema file. This way you can
+logically separate your schema files and include them as needed. Note that the schema needs to exist within the folder
+path you defined for your schema in the configuration.</p>
+<pre><code class="yaml"># Includes a schema named 'custom'. This needs to exist within the schema folder you defined in your config settings.
+include: custom
+objects:
+    # Include any additional schema object definitions ...
+</code></pre>
+
+<h4 id="include_default">include_default</h4>
+<hr />
+<p>By using this option you can specify additional schema files to include within the current schema file that exist within
+the default schema folder. The only valid schema names for this are those that are included within this libraries default
+schema folder.</p>
+<pre><code class="yaml">include_default: exchange
+objects:
+    # Include any additional schema object definitions ...
+</code></pre>
+
 <h3 id="schema-object-configuration-options">Schema Object Configuration Options</h3>
 <hr />
 <h4 id="type-required">type <strong><em>(Required)</em></strong></h4>
 <p>The name for the type is how you will refer to this LDAP schema object within the class. This is a required field. 
 Default LDAP object types that the class has defined are: <code>user</code>, <code>group</code>, <code>computer</code>, <code>contact</code>.</p>
+<hr />
+<h4 id="filter">filter</h4>
+<p>This is an instance of <code>\LdapTools\Query\Operator\BaseOperator</code>. This operator is used to construct the filter used to
+query LDAP for the object type. You can omit the <code>class</code> and <code>category</code> directives and only define a filter. If you
+also define a <code>class</code> and <code>category</code> they are added to this filter when the schema object is built.</p>
+<p>A simple filter example. This would select all objects with an objectClass equal to user that start with the name Admin.</p>
+<pre><code class="yaml">    filter:
+        eq: [ objectClass, user ]
+        starts_with: [ name, Admin ]
+</code></pre>
+
+<p>A more complex example. All objects with an objectClass of user and an objectCategory person, and of those only objects
+with an email address present whose department name begins with IT.</p>
+<pre><code class="yaml">    filter:
+        - and:
+            - eq: [ objectClass, user ]
+            - eq: [ objectCategory, person ]
+        - and:
+            - present: emailAddress
+            - starts_with: [ department, IT ]
+</code></pre>
+
+<p>This allows you to construct a query as complex as you need in an array representation. All of the methods used to
+construct the filter above (<code>and</code>, <code>eq</code>, <code>present</code>, <code>starts_with</code>) are methods of the filter shortcuts from the
+LdapQueryBuilder class. The only difference being that instead of camel-case the method names should be formatted with
+underscores.</p>
+<p>For a complete list of methods available see the <a href="../../tutorials/Building-LDAP-Queries#filter-method-shortcuts">filter shortcuts documentation</a>.</p>
 <hr />
 <h4 id="class">class</h4>
 <p>This is the <code>objectClass</code> value for the LDAP object you're defining. It can be any valid LDAP objectClass value (<code>user</code>,
@@ -326,6 +382,14 @@ thrown. This will only happen if they are not specified on creation and not cont
 <p>This should be a string in DN format that represents the OU/container where new objects for this LDAP type should be
 placed by default when created.</p>
 <pre><code class="yaml">    default_container: 'OU=Accounting,OU=Employees,DC=example,DC=local'
+</code></pre>
+
+<hr />
+<h4 id="base_dn">base_dn</h4>
+<p>This should be a string in DN format that represents the OU/container where the base of a LDAP query for this LDAP type
+should start. It also accepts parameter names for the defaultNamingContext and the configurationNamingContext.</p>
+<pre><code class="yaml">    # All LDAP objects under this path will be queried for the type.
+    base_dn: 'OU=OU=Employees,DC=example,DC=local'
 </code></pre>
 
 <hr />

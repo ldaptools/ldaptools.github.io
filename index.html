@@ -62,6 +62,10 @@
                             </li>
                         
                             <li >
+                                <a href="cookbook/Common-LDAP-Queries/">Common LDAP Queries</a>
+                            </li>
+                        
+                            <li >
                                 <a href="cookbook/Creating-a-Custom-Repository/">Creating a Custom Repository</a>
                             </li>
                         
@@ -117,6 +121,10 @@
                         
                             <li >
                                 <a href="reference/Attribute-Converters/">Attribute Converters</a>
+                            </li>
+                        
+                            <li >
+                                <a href="reference/Default-Schema-Attributes-New/">Default Schema Attributes New</a>
                             </li>
                         
                             <li >
@@ -241,7 +249,8 @@ $ldap = new LdapManager($config);
 
 <h2 id="searching-ldap">Searching LDAP</h2>
 <p>With the <code>LdapManager</code> up and going you can now easily build LDAP queries without having to remember all the special 
-syntax for LDAP filters. All values are also automatically escaped.</p>
+syntax for LDAP filters. All values are also automatically escaped. Check the <a href="tutorials/Building-LDAP-Queries/">tutorial</a> for all
+available methods and the <a href="cookbook/Common-LDAP-Queries/">cookbook</a> for more query examples.</p>
 <pre><code class="php">// Get an instance of the query...
 $query = $ldap-&gt;buildLdapQuery();
 
