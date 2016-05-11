@@ -124,10 +124,6 @@
                             </li>
                         
                             <li >
-                                <a href="../../reference/Default-Schema-Attributes-New">Default Schema Attributes New</a>
-                            </li>
-                        
-                            <li >
                                 <a href="../../reference/Default-Schema-Attributes">Default Schema Attributes</a>
                             </li>
                         
@@ -204,18 +200,18 @@
 
 <h1 id="modifying-gpo-links-on-ous">Modifying GPO Links on OUs</h1>
 <hr />
-<p>When working with Active Directory OUs you may want to add, remove, or display GPOs that are linked to a specific OU.
-This can be accomplished through the use of the <code>gpoLinks</code> attribute for the OU type. This attribute can be leveraged on
-OU creation or modification to easily set what GPOs should be linked at that OU level. The attribute value functions as
-an array of GPO names that are linked to the OU.</p>
+<p>When working with Active Directory OUs you may want to add, remove, or display GPOs that are linked to them. This can be
+accomplished through the use of the <code>gpoLinks</code> attribute for the OU type. This attribute can be leveraged on OU creation
+or modification to easily set what GPOs should be linked at that OU level. The attribute value functions as an array of 
+GPO names that are linked to the OU.</p>
 <h2 id="creating-an-ou-with-a-linked-gpo">Creating an OU With a Linked GPO</h2>
 <p>For example, assume you would like to create an OU named "Employees" that should have 2 GPOs linked to it named 
 "Employee Policy" and "Require Screensaver":</p>
 <pre><code class="php">
-$ldapObject = $ldapManager-&gt;createLdapObject();
+$ldapObject = $ldap-&gt;createLdapObject();
 
 try {
-    $object-&gt;createOU()
+    $ldapObject-&gt;createOU()
         -&gt;in('dc=example,dc=local')
         -&gt;with(['name' =&gt; 'Employees', 'gpoLinks' =&gt; ['Employee Policy', 'Require Screensaver']])
         -&gt;execute();
@@ -230,7 +226,7 @@ try {
 
 //...
 
-$repository = $ldapManager-&gt;getRepository(LdapObjectType::OU);
+$repository = $ldap-&gt;getRepository(LdapObjectType::OU);
 
 // gpoLinks are not retrieved by default, so make sure to select them.
 $repository-&gt;setAttributes(['name', 'gpoLinks']);
@@ -246,8 +242,8 @@ $ou-&gt;addGpoLinks('Restricted Access');
 
 // Now actually save the changes back to LDAP
 try {
-    $ldapManager-&gt;persist($ou);
-} catch (\Exception $e) {
+    $ldap-&gt;persist($ou);
+} catch (LdapConnectionException $e) {
     echo &quot;Failed to modify OU - &quot;.$e-&gt;getMessage();
 }
 </code></pre>

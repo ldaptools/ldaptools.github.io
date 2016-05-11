@@ -124,10 +124,6 @@
                             </li>
                         
                             <li >
-                                <a href="../Default-Schema-Attributes-New">Default Schema Attributes New</a>
-                            </li>
-                        
-                            <li >
                                 <a href="../Default-Schema-Attributes">Default Schema Attributes</a>
                             </li>
                         
@@ -165,7 +161,7 @@
                     </a>
                 </li>
                 <li >
-                    <a rel="prev" href="../Default-Schema-Attributes-New">
+                    <a rel="prev" href="../Default-Schema-Attributes">
                         Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -395,6 +391,15 @@ process and the converter may use the connection to make LDAP calls to resolve d
 </li>
 <li>
 <p><code>fromLdap</code>: Takes a build string stored in the serialNumber attribute and parses it to a readable Exchange version.</p>
+</li>
+</ul>
+<h4 id="ldap_type"><em>ldap_type</em></h4>
+<ul>
+<li>
+<p><code>toLdap</code>: This should not be used. It is currently unsupported.</p>
+</li>
+<li>
+<p><code>fromLdap</code>: This returns the LDAP Object Type string represented by the <code>LdapTools\Object\LdapObjectType</code> constants.</p>
 </li>
 </ul>
 </div>

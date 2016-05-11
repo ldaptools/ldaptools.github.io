@@ -124,10 +124,6 @@
                             </li>
                         
                             <li >
-                                <a href="../../reference/Default-Schema-Attributes-New">Default Schema Attributes New</a>
-                            </li>
-                        
-                            <li >
                                 <a href="../../reference/Default-Schema-Attributes">Default Schema Attributes</a>
                             </li>
                         
@@ -295,7 +291,7 @@ file_put_contents('/path/to/ldif.txt', $ldif-&gt;toString());
 <p>The above is the general method for creating a LDIF file. But there are a lot of the methods and options available.
 Below is a summary of some of the objects and methods involved and how to use them.</p>
 <hr />
-<h3 id="the-ldif-object">The Ldif Object</h3>
+<h3 id="the-ldif-object">The LDIF Object</h3>
 <p>The LDIF object is used to represent the LDIF file in its entirety. When you parse a LDIF file via the parser it returns
 this object. Likewise, you can construct a LDIF object to get the LDIF string representation from it.</p>
 <pre><code class="php">use LdapTools\Ldif\Ldif;
@@ -309,12 +305,12 @@ $ldif-&gt;setVersion(null);
 // Add a few comments to appear at the top of the LDIF...
 $ldif-&gt;addComment('This is just a test LDIF file', 'Created on '.date(&quot;m.d.y&quot;));
 
-// Create a new entry for the LDIF by use the helper 'entry()' method.
+// Create a new entry for the LDIF by using the helper 'entry()' method.
 // This creates an entry that will add a new object to LDAP.
 $entry = $ldif-&gt;entry()-&gt;add('cn=Some User,dc=example,dc=local')-&gt;addAttribute('sn', 'Sikorra');
 
-// Add the created entry to the LDIF. This method is variadic, so you can add as many entries at a time as you like.
-$ldif-&gt;addEntry($add)
+// Add the created entry to the LDIF. This method is variadic, so add as many entries at a time as you like.
+$ldif-&gt;addEntry($entry);
 
 // Output the LDIF to a string and do whatever you need with it...
 $ldifData = $ldif-&gt;toString();
@@ -373,10 +369,10 @@ $dn = 'cn=foo,dc=example,dc=local';
 // Construct it manually...
 $modify = new LdifEntryModify($dn);
 
-$modify-&gt;replace('description', 'Works at building 2') // Complete replace the contents of an attribute.
-    -&gt;reset('title')                                   // Reset the attribute, which removes an value it has.
+$modify-&gt;replace('description', 'Works at building 2') // Replace the contents of an attribute.
+    -&gt;reset('title')                                   // Reset the attribute, which removes any value it has.
     -&gt;add('telephonenumber', '555-5555')               // Add a new value to an attribute.
-    -&gt;delete('faxnumber', '222-2222');                 // Delete a specific attribute value. The value must exist though.
+    -&gt;delete('faxnumber', '222-2222');                 // Delete a specific attribute value. The value must exist.
 
 // Use the helper method on the LDIF object...
 $modify = $ldif-&gt;entry()-&gt;modify($dn)

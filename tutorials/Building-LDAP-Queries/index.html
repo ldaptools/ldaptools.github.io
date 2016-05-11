@@ -124,10 +124,6 @@
                             </li>
                         
                             <li >
-                                <a href="../../reference/Default-Schema-Attributes-New">Default Schema Attributes New</a>
-                            </li>
-                        
-                            <li >
                                 <a href="../../reference/Default-Schema-Attributes">Default Schema Attributes</a>
                             </li>
                         
@@ -199,6 +195,8 @@
         
             <li><a href="#ldapquerybuilder-methods">LdapQueryBuilder Methods</a></li>
         
+            <li><a href="#using-aliases">Using Aliases</a></li>
+        
             <li><a href="#ldapquery-methods-to-retrieve-ldap-results">LdapQuery Methods to Retrieve LDAP Results</a></li>
         
             <li><a href="#filter-method-shortcuts">Filter Method Shortcuts</a></li>
@@ -218,6 +216,7 @@ takes care of escaping all values passed to it when generating the filter.</p>
 <ul>
 <li><a href="#ldapquerybuilder-methods">LdapQueryBuilder Methods</a></li>
 <li><a href="#filter-method-shortcuts">Filter Method Shortcuts</a></li>
+<li><a href="#using-aliases-in-queries">Using Aliases</a></li>
 <li><a href="#ldapquery-methods-to-retrieve-ldap-results">Retrieving Query Results</a></li>
 </ul>
 <h2 id="generating-ldap-filters-without-ldapmanager">Generating LDAP Filters Without LdapManager</h2>
@@ -244,9 +243,8 @@ information it can do a lot of the heavy lifting to allow it to easily generate 
 <pre><code class="php">$lqb = $ldapManager-&gt;buildLdapQuery();
 
 // When no attributes are specifically selected, it will pull a default set defined in the schema.
-$users = $lqb-&gt;select()
-    -&gt;fromUsers()
-    -&gt;Where(['state' =&gt; 'Wisconsin'])
+$users = $lqb-&gt;fromUsers()
+    -&gt;where(['state' =&gt; 'Wisconsin'])
     -&gt;getLdapQuery()
     -&gt;getResult();
 
@@ -292,7 +290,7 @@ $lqb-&gt;select(['givenName', 'l', 'objectSid', 'sid']);
 </code></pre>
 
 <hr />
-<h4 id="fromldaptype">from($ldapType)</h4>
+<h4 id="fromldaptype-alias-null">from($ldapType, $alias = null)</h4>
 <p>The <code>from</code> method requires an argument for the LDAP type. This type must be defined in your LDAP schema. Common types
 that are in the schema by default include: <code>user</code>, <code>group</code>, <code>contact</code>, <code>computer</code>, <code>ou</code>. These types are defined as constants
 in the <code>\LdapTools\Object\LdapObjectType</code> class. Using this method makes the query aware of the attribute name mapping
@@ -304,25 +302,36 @@ $lqb-&gt;from(LdapObjectType::USER);
 
 // Search for computers
 $lqb-&gt;from(LdapObjectType::COMPUTER);
+
+// Search for users and assign an alias to it
+$lqb-&gt;from(LdapObjectType::USER, 'u');
+</code></pre>
+
+<p>You can also call the <code>from()</code> method dynamically for schema types you have defined:</p>
+<pre><code class="php">// Selects from the 'ExchangeServer' schema type.
+$lqb-&gt;fromExchangeServer();
+
+// Selects from the 'container' schema type, and assigns it an alias of 'c'.
+$lqb-&gt;fromContainer('c');
 </code></pre>
 
 <hr />
-<h4 id="fromusers">fromUsers()</h4>
-<p>A convenience shortcut of the <code>from</code> method to select from LDAP <code>user</code> types.</p>
+<h4 id="fromusersalias-null">fromUsers($alias = null)</h4>
+<p>A convenience shortcut of the <code>from</code> method to select from LDAP <code>user</code> types. Optionally pass a string alias name.</p>
 <pre><code class="php">// Search for users
 $lqb-&gt;fromUsers();
 </code></pre>
 
 <hr />
-<h4 id="fromgroups">fromGroups()</h4>
-<p>A convenience shortcut of the <code>from</code> method to select from LDAP <code>group</code> types.</p>
+<h4 id="fromgroupsalias-null">fromGroups($alias = null)</h4>
+<p>A convenience shortcut of the <code>from</code> method to select from LDAP <code>group</code> types. Optionally pass a string alias name.</p>
 <pre><code class="php">// Search for groups
 $lqb-&gt;fromGroups();
 </code></pre>
 
 <hr />
-<h4 id="fromous">fromOUs()</h4>
-<p>A convenience shortcut of the <code>from</code> method to select from LDAP <code>ou</code> types.</p>
+<h4 id="fromousalias-null">fromOUs($alias = null)</h4>
+<p>A convenience shortcut of the <code>from</code> method to select from LDAP <code>ou</code> types. Optionally pass a string alias name.</p>
 <pre><code class="php">// Search for OUs
 $lqb-&gt;fromOUs();
 </code></pre>
@@ -351,19 +360,35 @@ $lqb-&gt;where(
 <h4 id="andwherestatements">andWhere(...$statements)</h4>
 <p>This method is the same as the <code>where</code> method. It encapsulates its arguments into a logical 'AND' statement. Statements
 passed will be added to the same logical 'AND' statement that the <code>where</code> method created.</p>
+<pre><code class="php">// This adds to the existing and statement...
+$lqb-&gt;andWhere(['lastName' =&gt; 'Smith']);
+</code></pre>
+
 <hr />
 <h4 id="orwherestatements">orWhere(...$statements)</h4>
 <p>This method is the same as the <code>where</code> method, but it will instead encapsulate any passed arguments into a logical 'OR'
 statement.</p>
+<pre><code class="php">// This creates a separate OR statement...
+$lqb-&gt;orWhere(['department' =&gt; 'IT', 'department' =&gt; 'Marketing']);
+</code></pre>
+
 <hr />
 <h4 id="addstatements">add(...$statements)</h4>
 <p>This is a low-level method that will take any object that is an instance of a <code>BaseOperator</code> and add it to the query.
 The shorthand <code>$lqb-&gt;filter()</code> methods is what does the heavy-lifting for creating the various operator objects. You
 should not need to call this method explicitly, but it is included if you need it.</p>
+<pre><code class="php">// Add some operators directly to the query
+$lqb-&gt;add($lqb-&gt;filter()-&gt;startsWith('name', 'srv'), $lqb-&gt;filter()-&gt;notPresent('description'));
+</code></pre>
+
 <hr />
 <h4 id="setserverserver">setServer($server)</h4>
 <p>This lets you set the LDAP server that the query will run against when executed. After the query finishes executing the
 connection switches back to the LDAP server it was originally connected to.</p>
+<pre><code class="php">// Query a specific LDAP server
+$lqb-&gt;setServer('dc3.example.local');
+</code></pre>
+
 <hr />
 <h4 id="setbasednbasedn">setBaseDn($baseDn)</h4>
 <p>This method sets the base DN (distinguished name) for the query. That means that any LDAP object at or below this point
@@ -395,22 +420,22 @@ $rootDse = $lqb-&gt;where($lqb-&gt;filter()-&gt;present('objectClass'))
 </code></pre>
 
 <hr />
+<h4 id="setscopescope">setScope($scope)</h4>
+<p>Explicitly set the scope for the query using the <code>QueryOperation::SCOPE</code> constant. The available options are:
+<code>QueryOperation::SCOPE['SUBTREE']</code>, <code>QueryOperation::SCOPE['ONELEVEL']</code>, <code>QueryOperation::SCOPE['BASE']</code></p>
+<pre><code class="php">use LdapTools\Operation\QueryOperation;
+
+$lqb-&gt;setScope(QueryOperation::SCOPE['ONELEVEL']);
+</code></pre>
+
+<hr />
 <h4 id="orderbyattribute-direction-asc">orderBy($attribute, $direction = 'ASC')</h4>
 <p>This method sets the attribute to order the results by in either ascending (default) or descending order. Calling this 
 overwrites any already set orderBy statements. To stack multiple order statements call <code>addOrderBy($attribute)</code>.</p>
 <pre><code class="php">// Order results by last name (ascending).
-$users = $lqb-&gt;select()
-    -&gt;fromUsers()
+$users = $lqb-&gt;fromUsers()
     -&gt;where(['firstName' =&gt; 'John'])
     -&gt;orderBy('lastName') 
-    -&gt;getResult();
-
-// Order results by last name (descending) and first name (ascending).
-$users = $lqb-&gt;select()
-    -&gt;fromUsers()
-    -&gt;where(['state' =&gt; 'Wisconsin'])
-    -&gt;orderBy('lastName', 'DESC')
-    -&gt;addOrderBy('firstName', 'ASC')
     -&gt;getResult();
 </code></pre>
 
@@ -418,6 +443,20 @@ $users = $lqb-&gt;select()
 <h4 id="addorderbyattribute-direction-asc">addOrderBy($attribute, $direction = 'ASC')</h4>
 <p>This method works the same as <code>orderBy($attribute)</code>, only calling this one will not overwrite already declared order-by 
 statements. Call this when you want to order by multiple attributes.</p>
+<pre><code class="php">// Order results by last name (descending) and first name (ascending).
+$users = $lqb-&gt;fromUsers()
+    -&gt;where(['state' =&gt; 'Wisconsin'])
+    -&gt;orderBy('lastName', 'DESC')
+    -&gt;addOrderBy('firstName', 'ASC')
+    -&gt;getResult();
+</code></pre>
+
+<hr />
+<h4 id="setsizelimitsize">setSizeLimit($size)</h4>
+<p>This methods sets the size limit for the amount of results returned from LDAP for the query.</p>
+<pre><code class="php">$lqb-&gt;setSizeLimit(10);
+</code></pre>
+
 <hr />
 <h4 id="setpagesizesize">setPageSize($size)</h4>
 <p>This methods sets the paging size for the query. It will default to whatever value you set in your configuration. The
@@ -438,6 +477,46 @@ domain configuration. If this is not set, then whatever is set in the domain con
 <pre><code class="php">$filter = $lqb-&gt;toLdapFilter();
 </code></pre>
 
+<h2 id="using-aliases">Using Aliases</h2>
+<p>When you want to search for multiple object types you can assign them specific aliases to refer to them in your filter.
+This makes it easy to get all the results you need with a single query:</p>
+<pre><code class="php">use LdapTools\Object\LdapObjectType;
+
+$query = $ldap-&gt;buildLdapQuery();
+
+// Get all users with a department that starts with IT and groups that contain 'admin' in their description.
+// The resulting objects are ordered by their name (for both users and groups).
+$results = $query
+    -&gt;fromUsers('u')
+    -&gt;fromGroups('g')
+    -&gt;where($query-&gt;filter()-&gt;startsWith('u.department', 'IT'))
+    -&gt;andWhere($query-&gt;filter()-&gt;contains('g.description', 'admin'))
+    -&gt;sortBy('name')
+    -&gt;getLdapQuery()
+    -&gt;getResult();
+
+foreach ($results as $result) {
+    if ($user-&gt;isType(LdapObjectType::USER)) {
+        echo &quot;User: &quot;.$result-&gt;getName();
+    } else {
+        echo &quot;Group: &quot;.$result-&gt;getName();
+    }
+}
+
+// Select all OUs and Containers at the root of the domain. Order them by name with OUs first, then containers.
+$results = $ldap-&gt;buildLdapQuery()
+    -&gt;from(LdapObjectType::OU, 'u')
+    -&gt;from(LdapObjectType::CONTAINER, 'c')
+    -&gt;addOrderBy('u.name', 'ASC')
+    -&gt;addOrderBy('c.name', 'ASC')
+    -&gt;setScopeOneLevel()
+    -&gt;getLdapQuery()
+    -&gt;getResult();
+</code></pre>
+
+<p>You can reference an alias in the query builder anywhere that you would reference a specific attribute (select,
+orderBy, where/andWhere/or/orWhere statements, etc). The only rule that applies for alias names is that they can only
+be alphanumeric (but can also contain underscores).</p>
 <h2 id="ldapquery-methods-to-retrieve-ldap-results">LdapQuery Methods to Retrieve LDAP Results</h2>
 <hr />
 <p>There are a few ways to retrieve LDAP results after you have a query built. How you retrieve the results depends upon
@@ -483,11 +562,10 @@ collection of objects. This is identical to calling <code>getResult(HydratorFact
 <hr />
 <p>This <code>LdapQuery</code> method will retrieve a single result from LDAP. So instead of a collection of objects or arrays you
 will be given a single result you can immediately begin to work with.</p>
-<pre><code class="php">$lqb = $ldapManager-&gt;buildLdapQuery();
+<pre><code class="php">$lqb = $ldap-&gt;buildLdapQuery();
 
-// Retrieve a single LdapObject from a query...a.
-$user = $lqb-&gt;select()
-    -&gt;fromUsers()
+// Retrieve a single LdapObject from a query...
+$user = $lqb-&gt;fromUsers()
     -&gt;Where(['username' =&gt; 'chad'])
     -&gt;getLdapQuery()
     -&gt;getSingleResult();
@@ -504,11 +582,25 @@ values.</p>
 <p>The behavior of this method is very similar to <code>getSingleResult()</code>, but if no results are found for the query it will
 return <code>null</code> instead of throwing an exception. However, it will still throw an exception in the case that more than one
 result is returned from LDAP.</p>
+<pre><code class="php">$lqb = $ldap-&gt;buildLdapQuery();
+
+// Retrieve a single LdapObject from a query, or a null result if it doesn't exist...
+$user = $lqb-&gt;fromUsers()
+    -&gt;Where(['username' =&gt; 'john'])
+    -&gt;getLdapQuery()
+    -&gt;getOneOrNullResult();
+
+// Could be null, so check first...
+if ($user) {
+    echo &quot;DN : &quot;.$user-&gt;getDn();
+}
+</code></pre>
+
 <h4 id="getsinglescalarresult">getSingleScalarResult()</h4>
 <hr />
 <p>Using this method you can get the value of a single attribute from the query. If the LDAP object or attribute does not
 exist then it will throw an exception.</p>
-<pre><code class="php">$lqb = $ldapManager-&gt;buildLdapQuery();
+<pre><code class="php">$lqb = $ldap-&gt;buildLdapQuery();
 
 // Retrieve the GUID string of a specific AD user...
 $guid = $lqb-&gt;select('guid')
@@ -525,6 +617,21 @@ echo &quot;GUID : &quot;.$guid;
 <p>The behavior of this method is very similar to <code>getSingleScalarResult()</code>, but if the attribute is not found/set
 for the LDAP object it will return <code>null</code> instead of throwing an exception. However, it will still throw an exception
 in the case that more than one result is returned from LDAP or if the LDAP object does not exist.</p>
+<pre><code class="php">$lqb = $ldap-&gt;buildLdapQuery();
+
+// Retrieve the title of a specific AD user...
+$title = $lqb-&gt;select('title')
+    -&gt;fromUsers()
+    -&gt;Where(['username' =&gt; 'chad'])
+    -&gt;getLdapQuery()
+    -&gt;getSingleScalarOrNullResult();
+
+// Check if the attribute actually had a value first
+$title = $title ?: 'Unknown';
+
+echo $title;
+</code></pre>
+
 <h2 id="filter-method-shortcuts">Filter Method Shortcuts</h2>
 <hr />
 <p>The <code>filter()</code> method of the <code>LdapQueryBuilder</code> returns a helper class that provides many shortcut methods for creating
@@ -552,83 +659,133 @@ list and description of available methods is below.</p>
 <hr />
 <h4 id="aeqattribute-value">aeq($attribute, $value)</h4>
 <p>Creates an "approximately-equal-to" comparison between the attribute and the value. The results are dependent on the
-LDAP specific implementation of this operator. But it will typically function like a "sounds like" comparison: 
+LDAP specific implementation of this operator. But it will typically function as a "sounds like" comparison: 
 <code>(attribute~=value)</code></p>
+<pre><code class="php">$lqb-&gt;filter()-&gt;aeq('firstName', 'Sue');
+</code></pre>
+
 <hr />
 <h4 id="eqattribute-value">eq($attribute, $value)</h4>
 <p>Creates an "equal-to" comparison between the attribute and the value: <code>(attribute=value)</code></p>
+<pre><code class="php">$lqb-&gt;filter()-&gt;eq('lastName', 'Sikorra');
+</code></pre>
+
 <hr />
 <h4 id="neqattribute-value">neq($attribute, $value)</h4>
 <p>Creates a "not-equal-to" comparison between the attribute and the value. This is equivalent to wrapping a
  <code>eq($attribute, $value)</code> within a 'NOT' statement: <code>(!(attribute=value))</code></p>
+<pre><code class="php">$lqb-&gt;filter()-&gt;neq('department', 'Purchasing');
+</code></pre>
+
 <hr />
 <h4 id="ltattribute-value">lt($attribute, $value)</h4>
 <p>Creates a "less-than" comparison between the attribute and the value. Since an actual '&lt;' operator does not exist in 
 LDAP, this is a combination of a greater-than-or-equal-to operator along with a check if the attribute is set/present.
 This is encapsulated within a logical 'AND' operator: <code>(&amp;(!(attribute&gt;=value))(attribute=*))</code></p>
+<pre><code class="php">$lqb-&gt;filter()-&gt;lt('badPasswordCount', 2);
+</code></pre>
+
 <hr />
 <h4 id="leqattribute-value">leq($attribute, $value)</h4>
 <p>Creates a "less-than-or-equal-to" comparison between the attribute and the value: <code>(attribute&lt;=value)</code></p>
+<pre><code class="php">$lqb-&gt;filter()-&gt;leq('badPasswordCount', 1);
+</code></pre>
+
 <hr />
 <h4 id="gtattribute-value">gt($attribute, $value)</h4>
 <p>Creates a "greater-than" comparison between the attribute and the value. Since an actual '&gt;' operator does not exist in 
 LDAP, this is a combination of a less-than-or-equal-to operator along with a check if the attribute is set/present.
 This is encapsulated within a logical 'AND' operator: <code>(&amp;(!(attribute&lt;=value))(attribute=*))</code></p>
+<pre><code class="php">$lqb-&gt;filter()-&gt;gt('created', new \DateTime('01-20-2013'));
+</code></pre>
+
 <hr />
 <h4 id="geqattribute-value">geq($attribute, $value)</h4>
 <p>Creates a "greater-than-or-equal-to" comparison between the attribute and the value: <code>(attribute&gt;=value)</code></p>
+<pre><code class="php">$lqb-&gt;filter()-&gt;geq('badPasswordCount', 3);
+</code></pre>
+
 <hr />
 <h4 id="bitwiseandattribute-value">bitwiseAnd($attribute, $value)</h4>
 <p>Creates a bitwise 'AND' comparison between the attribute and the value: <code>(attribute:1.2.840.113556.1.4.803:=value)</code></p>
+<pre><code class="php">use LdapTools\Query\UserAccountControlFlags;
+
+$lqb-&gt;filter()-&gt;bitwiseAnd('userAccountControl', UserAccountControlFlags::DISABLED);
+</code></pre>
+
 <hr />
 <h4 id="bitwiseorattribute-value">bitwiseOr($attribute, $value)</h4>
 <p>Creates a bitwise 'OR' comparison between the attribute and the value: <code>(attribute:1.2.840.113556.1.4.804:=value)</code></p>
+<pre><code class="php">use LdapTools\Query\GroupTypeFlags;
+
+$lqb-&gt;filter()-&gt;bitwiseOr('groupType', GroupTypeFlags::UNIVERSAL_GROUP);
+</code></pre>
+
 <hr />
 <h4 id="startswithattribute-value">startsWith($attribute, $value)</h4>
 <p>Creates a "equal-to" comparison with a wildcard after the value: <code>(attribute=value*)</code></p>
+<pre><code class="php">$lqb-&gt;filter()-&gt;startsWith('department', 'IT');
+</code></pre>
+
 <hr />
 <h4 id="endswithattribute-value">endsWith($attribute, $value)</h4>
 <p>Creates a "equal-to" comparison with a wildcard before the value: <code>(attribute=*value)</code></p>
+<pre><code class="php">$lqb-&gt;filter()-&gt;endsWith('description', 'service');
+</code></pre>
+
 <hr />
 <h4 id="containsattribute-value">contains($attribute, $value)</h4>
 <p>Creates a "equal-to" comparison with a wildcards at each end of the value: <code>(attribute=*value*)</code></p>
+<pre><code class="php">$lqb-&gt;filter()-&gt;contains('name', 'admin');
+</code></pre>
+
 <hr />
 <h4 id="likeattribute-value">like($attribute, $value)</h4>
 <p>Creates a "equal-to" comparison that will not escape any wildcards you use in the value: <code>(attribute=v*a*l*u*e)</code>.</p>
+<pre><code class="php">$lqb-&gt;filter()-&gt;like('description', '*Some*thing*');
+</code></pre>
+
 <hr />
 <h4 id="presentattribute">present($attribute)</h4>
 <p>Creates a "equal-to" comparison with a single wildcard as the value. Returns any entry with this attribute populated: 
 <code>(attribute=*)</code></p>
+<pre><code class="php">$lqb-&gt;filter()-&gt;present('mail');
+</code></pre>
+
 <hr />
 <h4 id="notpresentattribute">notPresent($attribute)</h4>
 <p>Creates a negated form of the <code>present($attribute)</code> method. Returns any entry that does not contain the attribute: 
 <code>(!(attribute=*))</code></p>
+<pre><code class="php">$lqb-&gt;filter()-&gt;notPresent('department');
+</code></pre>
+
 <hr />
 <h4 id="bandstatements">bAnd(...$statements)</h4>
 <p>Creates a logical 'AND' statement against all other operators passed to it: <code>(&amp;((attribute=value)(attribute=value)))</code></p>
+<pre><code class="php">$lqb-&gt;filter()-&gt;bAnd(
+    $lqb-&gt;filter()-&gt;eq('department', 'IT'), 
+    $lqb-&gt;filter()-&gt;startsWith('firstName', 'Tim')
+);
+</code></pre>
+
 <hr />
 <h4 id="borstatements">bOr(...$statements)</h4>
 <p>Creates a logical 'OR' statement against all other operators passed to it: <code>(|((attribute=value)(attribute=value)))</code></p>
+<pre><code class="php">$lqb-&gt;filter()-&gt;bOr(
+    $lqb-&gt;filter()-&gt;eq('department', 'IT'), 
+    $lqb-&gt;filter()-&gt;eq('department', 'Purchasing')
+);
+</code></pre>
+
 <hr />
 <h4 id="bnotstatements">bNot($statements)</h4>
 <p>Creates a logical 'NOT' statement against whatever other statement you pass it it: <code>(!(attribute=value))</code></p>
+<pre><code class="php">$lqb-&gt;filter()-&gt;bNot($lqb-&gt;filter()-&gt;eq('department', 'IT'));
+</code></pre>
+
 <h2 id="active-directory-filter-method-shortcuts">Active Directory Filter Method Shortcuts</h2>
 <p>If you're using a <code>LdapConnection</code> that has a LDAP type set as <code>ad</code>, then when you call <code>filter()</code> you will also have
 additional filter method shortcuts that are specific to Active Directory:</p>
-<hr />
-<h4 id="accountisdisabled">accountIsDisabled()</h4>
-<p>Checks for disabled accounts. Creates a bitwise 'AND' comparison against the <code>userAccountControl</code> attribute.</p>
-<hr />
-<h4 id="accountislocked">accountIsLocked()</h4>
-<p>Check for locked accounts. Creates a "greater-than-or-equal-to" comparison against the <code>lockoutTime</code> attribute.</p>
-<hr />
-<h4 id="passwordmustchange">passwordMustChange()</h4>
-<p>Checks for accounts that must change their password on the next login. Creates an "equal-to" comparison against the
-<code>pwdLastSet</code> attribute.</p>
-<hr />
-<h4 id="passwordneverexpires">passwordNeverExpires()</h4>
-<p>Checks for accounts that have passwords that are set to never expire. Creates a bitwise 'AND' comparison against the 
-<code>userAccountControl</code> attribute.</p>
 <hr />
 <h4 id="hasmemberrecursivelymember-attribute-members">hasMemberRecursively($member, $attribute = 'members')</h4>
 <hr />
@@ -643,6 +800,16 @@ additional filter method shortcuts that are specific to Active Directory:</p>
 <p>This creates a matching rule comparison using the OID <code>IN_CHAIN</code> against the groups <code>members</code> attribute by default. If
 you have a custom attribute, or some other attribute you would like to run it against, you must pass it as the second
 argument.</p>
+<pre><code class="php">$username = 'chad';
+
+// Query by a username to get all of their groups recursively...
+$groups = $ldap-&gt;buildLdapQuery()
+    -&gt;fromGroups()
+    -&gt;where($query-&gt;filter()-&gt;hasMemberRecursively($username))
+    -&gt;getLdapQuery()
+    -&gt;getResult();
+</code></pre>
+
 <hr />
 <h4 id="isrecursivelymemberofgroup">isRecursivelyMemberOf($group)</h4>
 <p>Recursively checks an object's group membership for a group. The <code>$group</code> parameter can be any of the following:</p>
@@ -654,12 +821,8 @@ argument.</p>
 <li>A <code>LdapObject</code> as the result of another query.</li>
 </ul>
 <p>This creates a matching rule comparison using the OID <code>IN_CHAIN</code> against the users <code>groups</code> attribute.</p>
-<pre><code class="php">use LdapTools\Object\LdapObjectType;
-
-// ...
-
-// Query by a group name...
-$query = $ldapManager-&gt;buildLdapQuery();
+<pre><code class="php">// Query by a group name...
+$query = $ldap-&gt;buildLdapQuery();
 $users = $query-&gt;select()
     -&gt;fromUsers()
     -&gt;where($query-&gt;filter()-&gt;isRecursivelyMemberOf('Employees'))
@@ -669,7 +832,8 @@ $users = $query-&gt;select()
 // If you are not targeting a specific set of objects from the schema, then you must
 // pass 'false' as the second argument and specify a full DN. Otherwise this method
 // will attempt to use the 'groups' attribute from the schema by default.
-$ldapObjects = $query-&gt;select('description')
+$ldapObjects = $ldap-&gt;buildLdapQuery()
+    -&gt;select('description')
     -&gt;where(['cn' =&gt; 'foo'])
     -&gt;andWhere($query-&gt;filter()-&gt;isRecursivelyMemberOf('CN=Foo,DC=foo,DC=bar', false))
     -&gt;getLdapQuery()
@@ -680,34 +844,6 @@ $ldapObjects = $query-&gt;select('description')
 <h4 id="mailenabled">mailEnabled()</h4>
 <hr />
 <p>Performs a simple check to determine whether an LDAP object is mail-enabled (ie. can receive email from Exchange).</p>
-<hr />
-<h4 id="groupisdomainlocal">groupIsDomainLocal()</h4>
-<hr />
-<p>Performs a bitwiseAnd check to determine whether a group is domain local in scope.</p>
-<hr />
-<h4 id="groupisglobal">groupIsGlobal()</h4>
-<hr />
-<p>Performs a bitwiseAnd check to determine whether a group is global in scope.</p>
-<hr />
-<h4 id="groupisuniversal">groupIsUniversal()</h4>
-<hr />
-<p>Performs a bitwiseAnd check to determine whether a group is universal in scope.</p>
-<hr />
-<h4 id="groupissecurityenabled">groupIsSecurityEnabled()</h4>
-<hr />
-<p>Performs a bitwiseAnd check to determine whether a group is security enabled.</p>
-<hr />
-<h4 id="groupisuniversal_1">groupIsUniversal()</h4>
-<hr />
-<p>Performs negation of the security enabled bitwiseAnd check to determine whether a group is a distribution type.</p>
-<hr />
-<h4 id="accountexpires">accountExpires()</h4>
-<hr />
-<p>Performs a check to determine if the account is set to expire at a certain date.</p>
-<hr />
-<h4 id="accountneverexpires">accountNeverExpires()</h4>
-<hr />
-<p>Performs a check to determine if the account is set to never expire.</p>
 </div>
             
         </div>

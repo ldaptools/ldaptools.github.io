@@ -124,10 +124,6 @@
                             </li>
                         
                             <li >
-                                <a href="../../reference/Default-Schema-Attributes-New">Default Schema Attributes New</a>
-                            </li>
-                        
-                            <li >
                                 <a href="../../reference/Default-Schema-Attributes">Default Schema Attributes</a>
                             </li>
                         
@@ -208,7 +204,7 @@
 Manager and provides shortcuts and helpers for creating Users, Groups, Contacts, and Computers using the default schema.
 It also supports setting parameters within attribute values to avoid repetition.</p>
 <p>To get an instance of the object creator class and create some objects:</p>
-<pre><code class="php">$ldapObject = $ldapManager-&gt;createLdapObject();
+<pre><code class="php">$ldapObject = $ldap-&gt;createLdapObject();
 
 // Creating a user account (enabled by default)
 $ldapObject-&gt;createUser()
@@ -247,7 +243,9 @@ $ldapObject-&gt;createOU()
 to be created. Part of the reason for this is that the schema is leveraging parameters to fill in values for the rest of
 the required attributes. You can use parameters to fill in attribute values based off other attributes, or any value you
 want. For instance:</p>
-<pre><code class="php">$object-&gt;createContact()
+<pre><code class="php">$ldapObject = $ldap-&gt;createLdapObject();
+
+$ldapObject-&gt;createContact()
     -&gt;in('%OUPath%,%_defaultnamingcontext_%')
     -&gt;with([
         'name' =&gt; '%firstname% %lastname%',
@@ -261,10 +259,9 @@ want. For instance:</p>
 </code></pre>
 
 <p>This contains several parameters. All parameters start and end with a percentage symbol. The <code>%firstname%</code> and <code>%lastname%</code>
- parameters will populate their value with their corresponding attribute name. However, <code>%somedomain%</code> and <code>%OUPath%</code> do
- not correspond to a known attribute, so the parameter must be defined. It will be filled in with <code>foo.bar</code> and
-<code>OU=Sales,OU=Departments</code>, respectively. With the OU/container value, the parameter must be explicitly specified it cannot
-currently be the value of one of the object's attributes.</p>
+parameters will populate their value with their corresponding attribute name. However, <code>%somedomain%</code> and <code>%OUPath%</code> do
+not correspond to a known attribute, so the parameter must be defined. It will be filled in with <code>foo.bar</code> and
+<code>OU=Sales,OU=Departments</code>, respectively.</p>
 <p>There is also a special parameter for <code>%_domainname_%</code> and <code>%_defaultnamingcontext_%</code> when creating LDAP objects. The 
 <code>%_domainname_%</code> will resolve to the fully qualified domain name of the connection in the current context (ie. 
 <code>example.com</code>). The <code>%_defaultnamingcontext_%</code> will resolve the the base distinguished name of the domain (ie. 
@@ -277,22 +274,24 @@ currently be the value of one of the object's attributes.</p>
 distinguished name form (ie. <code>ou=users,dc=mydomain,dc=com</code>).</p>
 <p>You can also specify a default location all objects of a certain type by defining the <code>default_container</code> directive in 
 your schema (see <a href="../../reference/Schema-Configuration">the schema configuration reference</a>). If you define that can omit this method.
-You can also place parameters in this value that will be resolved upon creation (ie. <code>%EmployeeOU%,DC=example,DC=com</code>).
-If you use a parameter in this value it must be explicitly specified. The parameter cannot currently be the value of one
-of the object's attributes.</p>
+You can also place parameters in this value that will be resolved upon creation (ie. <code>OU=%department%,%EmployeeOU%,DC=example,DC=com</code>).
+You can use LDAP object attributes for parameters in this string as well.</p>
 <hr />
 <h4 id="withattributes">with($attributes)</h4>
 <p>This specifies the attributes and values you would like for the object to have once created in LDAP. All attribute values are
-converted and renamed to their proper LDAP form based on your schema.</p>
+converted and renamed to their proper LDAP form based on your schema. To check the name mappings and expected value types
+see the <a href="../../reference/Default-Schema-Attributes">default schema attributes</a> documentation.</p>
 <hr />
 <h4 id="setdncontainer">setDn($container)</h4>
-<p>This method allows you to explicitly state the distinguished name for the object you are creating. Typically you should
+<p>This method allows you to explicitly set the distinguished name for the object you are creating. Typically you should
 not have to call this. The DN is determined automatically based off the <code>name</code> attribute in your schema, and the
 location you specified with the <code>in($container)</code> method.</p>
 <hr />
 <h4 id="setparametername-value">setParameter($name, $value)</h4>
 <p>This allows you to set any parameter you want that you can later use within an attribute value to have it resolve to the
-parameter value. See the full explanation of parameters near the start of this document.</p>
+parameter value. See the full explanation of parameters near the start of this document. If you simply want to use the
+value of a separate attribute name then there is no reason to set it here, as all attribute names you define values in
+are also available as parameters automatically.</p>
 <hr />
 <h4 id="createuser">createUser()</h4>
 <p>This specifies that the resulting object should be a user LDAP object type.</p>
@@ -301,7 +300,7 @@ parameter value. See the full explanation of parameters near the start of this d
 <p>This specifies that the resulting object should be a group LDAP object type.</p>
 <hr />
 <h4 id="createou">createOU()</h4>
-<p>This specifies that the resulting object should be a OU LDAP object type.</p>
+<p>This specifies that the resulting object should be an OU LDAP object type.</p>
 <hr />
 <h4 id="createcomputer">createComputer()</h4>
 <p>This specifies that the resulting object should be a computer LDAP object type.</p>
@@ -326,11 +325,11 @@ while adding to LDAP it will throw an exception...</p>
 
 $ldapObject = $ldapManager-&gt;createLdapObject();
 
-// Creating a user account (enabled by default)
+// Creating a user account (enabled by default) with a few group memberships
 try {
     $object-&gt;createUser()
         -&gt;in('cn=Users,dc=example,dc=local')
-        -&gt;with(['username' =&gt; 'jsmith', 'password' =&gt; '12345'])
+        -&gt;with(['username' =&gt; 'jsmith', 'password' =&gt; '12345', 'groups' =&gt; ['Employees', 'IT Staff', 'VPN Users']])
         -&gt;execute();
 } catch (LdapConnectionException $e) {
     echo &quot;Failed to add user!&quot;.PHP_EOL;

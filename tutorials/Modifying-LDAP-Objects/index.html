@@ -124,10 +124,6 @@
                             </li>
                         
                             <li >
-                                <a href="../../reference/Default-Schema-Attributes-New">Default Schema Attributes New</a>
-                            </li>
-                        
-                            <li >
                                 <a href="../../reference/Default-Schema-Attributes">Default Schema Attributes</a>
                             </li>
                         
@@ -218,7 +214,7 @@ but the <code>has($attribute)</code> method returns false, then the attribute is
 
 //...
 
-$repository = $ldapManager-&gt;getRepository(LdapObjectType::USER);
+$repository = $ldap-&gt;getRepository(LdapObjectType::USER);
 
 $user = $repository-&gt;findOneByUsername('chad');
 
@@ -247,7 +243,7 @@ if ($user-&gt;hasState('WI')) {
 
 // Now actually save the changes back to LDAP
 try {
-    $ldapManager-&gt;persist($user);
+    $ldap-&gt;persist($user);
 } catch (\Exception $e) {
     echo &quot;Error updating user! &quot;.$e-&gt;getMessage();
 }
@@ -287,12 +283,14 @@ scenes.</p>
 <h4 id="setattribute-value">set($attribute, $value)</h4>
 <p>Replaces any value that might exist in the attribute with the value you specify.</p>
 <hr />
-<h4 id="addattribute-value">add($attribute, $value)</h4>
-<p>Adds a value to an attribute in addition to what it already may have. It will keep the existing value intact.</p>
+<h4 id="addattribute-value">add($attribute, ...$value)</h4>
+<p>Adds a value to an attribute in addition to what it already may have. It will keep the existing value intact. This
+method is also variadic, so you can pass as many values you want as arguments to this function.</p>
 <hr />
-<h4 id="removeattribute-value">remove($attribute, $value)</h4>
+<h4 id="removeattribute-value">remove($attribute, ...$value)</h4>
 <p>Remove a specific value from an attribute. Be careful with this. If the value does not actually exist within the
-attribute then an exception will be thrown during persist. It's best to wrap persist in a try/catch block.</p>
+attribute then an exception will be thrown during persist. It's best to wrap persist in a try/catch block. This
+method is also variadic, so you can pass as many values you want as arguments to this function.</p>
 <hr />
 <h4 id="resetattribute">reset($attribute)</h4>
 <p>Resets an attribute by removing any values it may contain.</p>

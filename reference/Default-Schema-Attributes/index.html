@@ -123,10 +123,6 @@
                                 <a href="../Attribute-Converters">Attribute Converters</a>
                             </li>
                         
-                            <li >
-                                <a href="../Default-Schema-Attributes-New">Default Schema Attributes New</a>
-                            </li>
-                        
                             <li class="active">
                                 <a href=".">Default Schema Attributes</a>
                             </li>
@@ -160,7 +156,7 @@
                 
                 
                 <li >
-                    <a rel="next" href="../Default-Schema-Attributes-New">
+                    <a rel="next" href="../Attribute-Converters">
                         <i class="fa fa-arrow-left"></i> Previous
                     </a>
                 </li>
@@ -220,6 +216,7 @@ used when generating queries and returning data from LDAP.</p>
 <li><a href="#ad-group-types">Groups</a></li>
 <li><a href="#ad-computer-types">Computers</a></li>
 <li><a href="#ad-contact-types">Contacts</a></li>
+<li><a href="#ad-container-types">Containers</a></li>
 <li><a href="#ad-ou-types">OUs</a></li>
 <li><a href="#ad-password-settings-objects-types">Password Settings Objects</a></li>
 </ul>
@@ -243,7 +240,11 @@ used when generating queries and returning data from LDAP.</p>
 <h3 id="the-active-directory-schema">The Active Directory Schema</h3>
 <hr />
 <h4 id="ad-user-types">AD User Types</h4>
-<p>These are typical LDAP user objects (<code>objectClass=user</code> and <code>objectCategory=person</code>).</p>
+<p>These are typical LDAP user objects.</p>
+<ul>
+<li><strong>Type</strong>: <code>LdapObjectType::USER</code></li>
+<li><strong>Filter</strong>: <code>(&amp;(objectClass=user)(objectCategory=person))</code></li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -327,6 +328,11 @@ used when generating queries and returning data from LDAP.</p>
 <td>employeeNumber</td>
 <td>employeeNumber</td>
 <td>int</td>
+</tr>
+<tr>
+<td>enabled</td>
+<td>userAccountControl</td>
+<td>bool</td>
 </tr>
 <tr>
 <td>exchangeAlias</td>
@@ -432,6 +438,16 @@ used when generating queries and returning data from LDAP.</p>
 <td>lastName</td>
 <td>sn</td>
 <td>string</td>
+</tr>
+<tr>
+<td>locked</td>
+<td>lockoutTime</td>
+<td>bool</td>
+</tr>
+<tr>
+<td>lockedDate</td>
+<td>lockoutTime</td>
+<td>`\DateTime</td>
 </tr>
 <tr>
 <td>logonWorkstations</td>
@@ -601,7 +617,11 @@ used when generating queries and returning data from LDAP.</p>
 </tbody>
 </table>
 <h4 id="ad-group-types">AD Group Types</h4>
-<p>These are typical LDAP group objects (<code>objectClass=group</code>).</p>
+<p>These are typical LDAP group objects.</p>
+<ul>
+<li><strong>Type</strong>: <code>LdapObjectType::GROUP</code></li>
+<li><strong>Filter</strong>: <code>(objectClass=group)</code></li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -722,7 +742,7 @@ used when generating queries and returning data from LDAP.</p>
 <td>string</td>
 </tr>
 <tr>
-<td>typeSecurity</td>
+<td>typeBuiltin</td>
 <td>groupType</td>
 <td>bool</td>
 </tr>
@@ -731,10 +751,19 @@ used when generating queries and returning data from LDAP.</p>
 <td>groupType</td>
 <td>bool</td>
 </tr>
+<tr>
+<td>typeSecurity</td>
+<td>groupType</td>
+<td>bool</td>
+</tr>
 </tbody>
 </table>
 <h4 id="ad-computer-types">AD Computer Types</h4>
-<p>These are typical LDAP computer objects (<code>objectCategory=computer</code>).</p>
+<p>These are typical LDAP computer objects.</p>
+<ul>
+<li><strong>Type</strong>: <code>LdapObjectType::COMPUTER</code></li>
+<li><strong>Filter</strong>: <code>(objectCategory=computer)</code></li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -760,6 +789,11 @@ used when generating queries and returning data from LDAP.</p>
 <td>string</td>
 </tr>
 <tr>
+<td>disabled</td>
+<td>userAccountControl</td>
+<td>bool</td>
+</tr>
+<tr>
 <td>displayName</td>
 <td>displayName</td>
 <td>string</td>
@@ -773,6 +807,11 @@ used when generating queries and returning data from LDAP.</p>
 <td>dnsHostName</td>
 <td>dNSHostName</td>
 <td>string</td>
+</tr>
+<tr>
+<td>enabled</td>
+<td>userAccountControl</td>
+<td>bool</td>
 </tr>
 <tr>
 <td>groups</td>
@@ -819,10 +858,24 @@ used when generating queries and returning data from LDAP.</p>
 <td>objectSid</td>
 <td>string</td>
 </tr>
+<tr>
+<td>trustedForAllDelegation</td>
+<td>userAccountControl</td>
+<td>bool</td>
+</tr>
+<tr>
+<td>trustedForAnyAuthDelegation</td>
+<td>userAccountControl</td>
+<td>bool</td>
+</tr>
 </tbody>
 </table>
 <h4 id="ad-contact-types">AD Contact Types</h4>
-<p>These are typical LDAP contact objects (<code>objectCategory=contact</code>).</p>
+<p>These are typical LDAP contact objects.</p>
+<ul>
+<li><strong>Type</strong>: <code>LdapObjectType::CONTACT</code></li>
+<li><strong>Filter</strong>: <code>(objectCategory=contact)</code></li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -920,7 +973,11 @@ used when generating queries and returning data from LDAP.</p>
 </tbody>
 </table>
 <h4 id="ad-ou-types">AD OU Types</h4>
-<p>These are typical LDAP OU objects (<code>objectCategory=organizationalUnit</code>).</p>
+<p>These are typical LDAP OU objects.</p>
+<ul>
+<li><strong>Type</strong>: <code>LdapObjectType::OU</code></li>
+<li><strong>Filter</strong>: <code>(objectCategory=organizationalUnit)</code></li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -1002,9 +1059,59 @@ used when generating queries and returning data from LDAP.</p>
 </tr>
 </tbody>
 </table>
+<h4 id="ad-container-types">AD Container Types</h4>
+<p>These are typical LDAP Container objects.</p>
+<ul>
+<li><strong>Type</strong>: <code>LdapObjectType::CONTAINER</code></li>
+<li><strong>Filter</strong>: <code>(objectCategory=container)</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>LdapTools Name</th>
+<th>LDAP Attribute</th>
+<th>Value Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>created</td>
+<td>whenCreated</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>description</td>
+<td>description</td>
+<td>string</td>
+</tr>
+<tr>
+<td>dn</td>
+<td>dn</td>
+<td>string</td>
+</tr>
+<tr>
+<td>guid</td>
+<td>objectGuid</td>
+<td>string</td>
+</tr>
+<tr>
+<td>modified</td>
+<td>whenModified</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>name</td>
+<td>ou</td>
+<td>string</td>
+</tr>
+</tbody>
+</table>
 <h4 id="ad-password-settings-objects-types">AD Password Settings Objects Types</h4>
-<p>These are Password Settings Objects, also known as PSOs, (<code>objectClass=msDS-PasswordSettings</code>). They can be used with 
+<p>These are Password Settings Objects, also known as PSOs. They can be used with 
 the type name <code>PSO</code>.</p>
+<ul>
+<li><strong>Filter</strong>: <code>(objectClass=msDS-PasswordSettings)</code></li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -1106,10 +1213,101 @@ the type name <code>PSO</code>.</p>
 </tr>
 </tbody>
 </table>
+<h4 id="ad-deleted-objects-types">AD Deleted Objects Types</h4>
+<p>These are deleted objects that reside in the AD Recycle Bin.</p>
+<ul>
+<li><strong>Type</strong>: <code>LdapObjectType::DELETED</code></li>
+<li><strong>Filter</strong>: <code>(&amp;(isDeleted=TRUE)(lastKnownParent=*))</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>LdapTools Name</th>
+<th>LDAP Attribute</th>
+<th>Value Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>created</td>
+<td>whenCreated</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>description</td>
+<td>description</td>
+<td>string</td>
+</tr>
+<tr>
+<td>dn</td>
+<td>distinguishedName</td>
+<td>string</td>
+</tr>
+<tr>
+<td>firstName</td>
+<td>givenName</td>
+<td>string</td>
+</tr>
+<tr>
+<td>guid</td>
+<td>objectGuid</td>
+<td>string</td>
+</tr>
+<tr>
+<td>isDeleted</td>
+<td>isDeleted</td>
+<td>bool</td>
+</tr>
+<tr>
+<td>lastName</td>
+<td>sn</td>
+<td>string</td>
+</tr>
+<tr>
+<td>lastKnownLocation</td>
+<td>lastKnownParent</td>
+<td>string</td>
+</tr>
+<tr>
+<td>lastKnownName</td>
+<td>lastKnownRdn</td>
+<td>string</td>
+</tr>
+<tr>
+<td>modified</td>
+<td>whenChanged</td>
+<td><code>\DateTime</code></td>
+</tr>
+<tr>
+<td>name</td>
+<td>cn</td>
+<td>string</td>
+</tr>
+<tr>
+<td>schemaType</td>
+<td>objectClass</td>
+<td>string</td>
+</tr>
+<tr>
+<td>sid</td>
+<td>objectSid</td>
+<td>string</td>
+</tr>
+<tr>
+<td>upn</td>
+<td>userPrincipalName</td>
+<td>string</td>
+</tr>
+</tbody>
+</table>
 <h3 id="the-exchange-schema">The Exchange Schema</h3>
 <hr />
 <h4 id="exchange-server-types">Exchange Server Types</h4>
-<p>These are Exchange Servers <code>(&amp;(objectClass=msExchExchangeServer)(serverRole=*))</code>).</p>
+<p>These are Exchange Servers.</p>
+<ul>
+<li><strong>Type</strong>: <code>LdapObjectType::EXCHANGE_SERVER</code></li>
+<li><strong>Filter</strong>: <code>(&amp;(objectClass=msExchExchangeServer)(serverRole=*))</code></li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -1157,7 +1355,11 @@ the type name <code>PSO</code>.</p>
 </tbody>
 </table>
 <h4 id="exchange-database-types">Exchange Database Types</h4>
-<p>These are Exchange Databases (<code>objectClass=msExchMDB</code>).</p>
+<p>These are Exchange Databases.</p>
+<ul>
+<li><strong>Type</strong>: <code>LdapObjectType::EXCHANGE_SERVER</code></li>
+<li><strong>Filter</strong>: <code>(objectClass=msExchMDB)</code></li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -1205,7 +1407,11 @@ the type name <code>PSO</code>.</p>
 </tbody>
 </table>
 <h4 id="exchange-retention-policy-types">Exchange Retention Policy Types</h4>
-<p>These are Exchange Retention policies (<code>objectClass=msExchRecipientPolicy</code>).</p>
+<p>These are Exchange Retention policies.</p>
+<ul>
+<li><strong>Type</strong>: <code>LdapObjectType::EXCHANGE_RETENTION_POLICY</code></li>
+<li><strong>Filter</strong>: <code>(objectClass=msExchRecipientPolicy)</code></li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -1243,7 +1449,11 @@ the type name <code>PSO</code>.</p>
 </tbody>
 </table>
 <h4 id="exchange-activesync-policy-types">Exchange ActiveSync Policy Types</h4>
-<p>These are Exchange ActiveSync policies (<code>objectClass=msExchMobileMailboxPolicy</code>).</p>
+<p>These are Exchange ActiveSync policies.</p>
+<ul>
+<li><strong>Type</strong>: <code>LdapObjectType::EXCHANGE_ACTIVESYNC_POLICY</code></li>
+<li><strong>Filter</strong>: <code>(objectClass=msExchMobileMailboxPolicy)</code></li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -1286,7 +1496,11 @@ the type name <code>PSO</code>.</p>
 </tbody>
 </table>
 <h4 id="exchange-rbac-policy-type">Exchange RBAC Policy Type</h4>
-<p>These are Exchange RBAC policies (<code>objectClass=msExchRBACPolicy</code>).</p>
+<p>These are Exchange RBAC policies.</p>
+<ul>
+<li><strong>Type</strong>: <code>LdapObjectType::EXCHANGE_RBAC_POLICY</code></li>
+<li><strong>Filter</strong>: <code>(objectClass=msExchRBACPolicy)</code></li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -1324,7 +1538,11 @@ the type name <code>PSO</code>.</p>
 </tbody>
 </table>
 <h4 id="exchange-transport-rule-types">Exchange Transport Rule Types</h4>
-<p>These are Exchange Databases (<code>objectClass=msExchTransportRule</code>).</p>
+<p>These are Exchange Transport Rules.</p>
+<ul>
+<li><strong>Type</strong>: <code>LdapObjectType::EXCHANGE_TRANSPORT_RULE</code></li>
+<li><strong>Filter</strong>: <code>(objectClass=msExchTransportRule)</code></li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -1362,7 +1580,11 @@ the type name <code>PSO</code>.</p>
 </tbody>
 </table>
 <h4 id="exchange-dag-types">Exchange DAG Types</h4>
-<p>This represents an DAG (<code>objectClass=msExchMDBAvailabilityGroup</code>).</p>
+<p>This represents an Exchange DAG.</p>
+<ul>
+<li><strong>Type</strong>: <code>LdapObjectType::EXCHANGE_DAG</code></li>
+<li><strong>Filter</strong>: <code>(objectClass=msExchMDBAvailabilityGroup)</code></li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -1400,7 +1622,11 @@ the type name <code>PSO</code>.</p>
 </tbody>
 </table>
 <h4 id="exchange-owa-types">Exchange OWA Types</h4>
-<p>These are the Exchange OWA instances (<code>objectClass=msExchOWAVirtualDirectory</code>).</p>
+<p>These are the Exchange OWA instances.</p>
+<ul>
+<li><strong>Type</strong>: <code>LdapObjectType::EXCHANGE_DAG</code></li>
+<li><strong>Filter</strong>: <code>(objectClass=msExchOWAVirtualDirectory)</code></li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -1445,7 +1671,11 @@ the type name <code>PSO</code>.</p>
 <h3 id="the-openldap-schema">The OpenLDAP Schema</h3>
 <hr />
 <h4 id="openldap-user-types">OpenLDAP User Types</h4>
-<p>These are typical LDAP user objects (<code>objectClass=inetOrgPerson</code>).</p>
+<p>These are typical LDAP user objects.</p>
+<ul>
+<li><strong>Type</strong>: <code>LdapObjectType::USER</code></li>
+<li><strong>Filter</strong>: <code>(objectClass=inetOrgPerson)</code></li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -1598,7 +1828,11 @@ the type name <code>PSO</code>.</p>
 </tbody>
 </table>
 <h4 id="openldap-group-types">OpenLDAP Group Types</h4>
-<p>These are typical LDAP group objects (<code>objectClass=groupOfUniqueNames</code>).</p>
+<p>These are typical LDAP group objects.</p>
+<ul>
+<li><strong>Type</strong>: <code>LdapObjectType::GROUP</code></li>
+<li><strong>Filter</strong>: <code>(objectClass=groupOfUniqueNames)</code></li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -1646,7 +1880,11 @@ the type name <code>PSO</code>.</p>
 </tbody>
 </table>
 <h4 id="openldap-ou-types">OpenLDAP OU Types</h4>
-<p>These are typical LDAP OU objects (<code>objectClass=organizationalUnit</code>).</p>
+<p>These are typical LDAP OU objects.</p>
+<ul>
+<li><strong>Type</strong>: <code>LdapObjectType::OU</code></li>
+<li><strong>Filter</strong>: <code>(objectClass=organizationalUnit)</code></li>
+</ul>
 <table>
 <thead>
 <tr>

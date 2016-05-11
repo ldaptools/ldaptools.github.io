@@ -124,10 +124,6 @@
                             </li>
                         
                             <li >
-                                <a href="../../reference/Default-Schema-Attributes-New">Default Schema Attributes New</a>
-                            </li>
-                        
-                            <li >
                                 <a href="../../reference/Default-Schema-Attributes">Default Schema Attributes</a>
                             </li>
                         
@@ -207,6 +203,8 @@
         
             <li><a href="#moving-ldap-objects">Moving LDAP Objects</a></li>
         
+            <li><a href="#restoring-ldap-objects">Restoring LDAP Objects</a></li>
+        
     
     </ul>
 </div></div>
@@ -240,9 +238,9 @@ $users = $query-&gt;select(['username', 'city', 'state', 'guid'])
 <hr />
 <p>A repository object lets you easily query specific attributes for a LDAP object type to retrieve either a single result
 or many results. You can also define your own custom repository for a LDAP type to encapsulate an reuse your queries.</p>
-<pre><code class="php">use LdapTools\Object\LdapObjectTypes;
+<pre><code class="php">use LdapTools\Object\LdapObjectType;
 
-$repository = $ldapManager-&gt;getRepository(LdapObjectTypes::USER);
+$repository = $ldap-&gt;getRepository(LdapObjectType::USER);
 
 // Retrieve the user that has a specific GUID.
 $user = $repository-&gt;findOneByGuid('29d46992-a5c4-4dc2-ac51-ac432db2a078');
@@ -259,13 +257,13 @@ $users = $repository-&gt;findByCity('Seattle');
 <p>If you have multiple domains defined in your configuration, you can easily switch the contexts of your calls in the
 <code>LdapManager</code> by using <code>switchDomain</code>:</p>
 <pre><code class="php">// Now calls to 'getRepository', 'buildLdapQuery', etc will return objects that execute in the context of this domain.
-$query = $ldapManager-&gt;switchDomain('example.local')-&gt;buildLdapQuery();
+$query = $ldap-&gt;switchDomain('example.local')-&gt;buildLdapQuery();
 
 // Will return 'example.local'
-$ldapManager-&gt;getDomainContext();
+$ldap-&gt;getDomainContext();
 
 // Switch back to the other domain...
-$ldapManager-&gt;switchDomain('foo.bar');
+$ldap-&gt;switchDomain('foo.bar');
 </code></pre>
 
 <h3 id="getting-the-ldapconnection">Getting The LdapConnection</h3>
@@ -302,9 +300,9 @@ var_dump($rootDse-&gt;getDefaultNamingContext());
 <hr />
 <p>Using the <code>LdapManager</code> class you can save changes to LDAP users you have searched for back to LDAP using the
 <code>persist($ldapObject)</code> method.</p>
-<pre><code class="php">use LdapTools\Object\LdapObjectTypes;
+<pre><code class="php">use LdapTools\Object\LdapObjectType;
 
-$repository = $ldapManager-&gt;getRepository(LdapObjectTypes::USER);
+$repository = $ldap-&gt;getRepository(LdapObjectType::USER);
 
 // Retrieve the user that has a specific GUID.
 $user = $repository-&gt;findOneByGuid('29d46992-a5c4-4dc2-ac51-ac432db2a078');
@@ -314,7 +312,7 @@ $user-&gt;setCity('Milwaukee');
 
 // Save the changes back to LDAP using the persist method...
 try {
-    $ldapManager-&gt;persist($user);
+    $ldap-&gt;persist($user);
 } catch (\Exception $e) {
     echo &quot;Error saving object to LDAP: &quot;.$e-&gt;getMessage();
 }
@@ -325,32 +323,32 @@ try {
 <p>Using the <code>LdapManager</code> class you can also remove an object from LDAP using the <code>delete($ldapObject)</code> method. To 
 recursively delete a LDAP object (including anything beneath it) pass <code>true</code> to the second parameter. </p>
 <p>A simple deletion:</p>
-<pre><code class="php">use LdapTools\Object\LdapObjectTypes;
+<pre><code class="php">use LdapTools\Object\LdapObjectType;
 
-$repository = $ldapManager-&gt;getRepository(LdapObjectTypes::USER);
+$repository = $ldap-&gt;getRepository(LdapObjectType::USER);
 
 // Retrieve the user that has a specific GUID.
 $user = $repository-&gt;findOneByGuid('29d46992-a5c4-4dc2-ac51-ac432db2a078');
 
 // Delete the object from LDAP...
 try {
-    $ldapManager-&gt;delete($user);
+    $ldap-&gt;delete($user);
 } catch (\Exception $e) {
     echo &quot;Error deleting object from LDAP: &quot;.$e-&gt;getMessage();
 }
 </code></pre>
 
 <p>Recursively deleting an OU and anything beneath it:</p>
-<pre><code class="php">use LdapTools\Object\LdapObjectTypes;
+<pre><code class="php">use LdapTools\Object\LdapObjectType;
 
-$repository = $ldapManager-&gt;getRepository(LdapObjectTypes::OU);
+$repository = $ldap-&gt;getRepository(LdapObjectType::OU);
 
 // Retrieve the user that has a specific GUID.
 $ou = $repository-&gt;findOneByName('Consultants');
 
 // Delete the OU, along with anything beneath it...
 try {
-    $ldapManager-&gt;delete($ou, true);
+    $ldap-&gt;delete($ou, true);
 } catch (\Exception $e) {
     echo &quot;Error deleting OU: &quot;.$e-&gt;getMessage();
 }
@@ -361,18 +359,38 @@ try {
 <p>Using the <code>LdapManager</code> class you can move an object from one location to another in LDAP. The method for doing this is 
 to call <code>move($ldapObject, $container)</code>. All this requires is you pass the existing LdapObject and then the new location
 of the OU/container in standard DN form:</p>
-<pre><code class="php">use LdapTools\Object\LdapObjectTypes;
+<pre><code class="php">use LdapTools\Object\LdapObjectType;
 
-$repository = $ldapManager-&gt;getRepository(LdapObjectTypes::USER);
+$repository = $ldap-&gt;getRepository(LdapObjectType::USER);
 
 // Retrieve the user that has a specific GUID.
 $user = $repository-&gt;findOneByGuid('29d46992-a5c4-4dc2-ac51-ac432db2a078');
 
 // Move the object to a new OU...
 try {
-    $ldapManager-&gt;move($user, 'ou=Employees,dc=example,dc=local');
+    $ldap-&gt;move($user, 'ou=Employees,dc=example,dc=local');
 } catch (\Exception $e) {
     echo &quot;Error moving object: &quot;.$e-&gt;getMessage();
+}
+</code></pre>
+
+<h3 id="restoring-ldap-objects">Restoring LDAP Objects</h3>
+<hr />
+<p>Using the <code>LdapManager</code> class you can restore a deleted LDAP object. The method for doing this is <code>restore($ldapObject)</code>
+However, this is currently only supported when you are using Active Directory. This requires that you first search for
+the LDAP object you want to restore using the <code>LdapObjectType::DELETED</code> type then passing it to the restore method:</p>
+<pre><code class="php">use LdapTools\Object\LdapObjectType;
+
+$repository = $ldap-&gt;getRepository(LdapObjectType::DELETED);
+
+// Retrieve the deleted LDAP object by its original GUID
+$ldapObject = $repository-&gt;findOneByGuid('29d46992-a5c4-4dc2-ac51-ac432db2a078');
+
+// Restore the LDAP object to its original location
+try {
+    $ldap-&gt;restore($ldapObject);
+} catch (\Exception $e) {
+    echo &quot;Unable to restore LDAP object: &quot;.$e-&gt;getMessage();
 }
 </code></pre>
 

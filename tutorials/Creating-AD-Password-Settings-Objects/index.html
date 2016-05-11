@@ -124,10 +124,6 @@
                             </li>
                         
                             <li >
-                                <a href="../../reference/Default-Schema-Attributes-New">Default Schema Attributes New</a>
-                            </li>
-                        
-                            <li >
                                 <a href="../../reference/Default-Schema-Attributes">Default Schema Attributes</a>
                             </li>
                         
@@ -245,7 +241,7 @@ $ldap-&gt;createLdapObject()
         'minimumPasswordLength' =&gt; 12,
         'passwordComplexity' =&gt; true,
         'passwordHistoryLength' =&gt; 10,
-        'appliesTo' =&gt; 'Network Administrators'     // This can be the name of a security group.
+        'appliesTo' =&gt; 'Network Administrators'     // This can be the name, SID, or GUID of a security group
     ])
     -&gt;execute();
 </code></pre>

@@ -124,10 +124,6 @@
                             </li>
                         
                             <li >
-                                <a href="../Default-Schema-Attributes-New">Default Schema Attributes New</a>
-                            </li>
-                        
-                            <li >
                                 <a href="../Default-Schema-Attributes">Default Schema Attributes</a>
                             </li>
                         
@@ -204,6 +200,8 @@
             <li><a href="#the-ldap-object-move-event">The LDAP Object Move Event</a></li>
         
             <li><a href="#the-ldap-object-deletion-and-modification-events">The LDAP Object Deletion and Modification Events</a></li>
+        
+            <li><a href="#the-ldap-object-restore-event">The LDAP Object Restore Event</a></li>
         
             <li><a href="#the-ldap-object-schema-event">The LDAP Object Schema Event</a></li>
         
@@ -348,6 +346,18 @@ are located in the <code>LdapTools\Event</code> namespace.</p>
 <td>Triggered after an object is moved in LDAP. Only triggered when using the <code>move()</code> method of the <code>LdapManager</code>.</td>
 </tr>
 <tr>
+<td>ldap.object.before_restore</td>
+<td><code>LDAP_OBJECT_BEFORE_RESTORE</code></td>
+<td><code>LdapObjectRestoreEvent</code></td>
+<td>Triggered before an object is restored in LDAP. Only triggered when using the <code>restore()</code> method of the <code>LdapManager</code>.</td>
+</tr>
+<tr>
+<td>ldap.object.after_restore</td>
+<td><code>LDAP_OBJECT_AFTER_RESTORE</code></td>
+<td><code>LdapObjectRestoreEvent</code></td>
+<td>Triggered after an object is restored in LDAP. Only triggered when using the <code>restore()</code> method of the <code>LdapManager</code>.</td>
+</tr>
+<tr>
 <td>ldap.schema.load</td>
 <td><code>LDAP_SCHEMA_LOAD</code></td>
 <td><code>LdapObjectSchemaEvent</code></td>
@@ -435,6 +445,26 @@ $ldap-&gt;getEventDispatcher()-&gt;addListener(Event::LDAP_OBJECT_BEFORE_MODIFY,
 </code></pre>
 
 <p>The same <code>getLdapObject()</code> method used above is valid for deletion events as well.</p>
+<h2 id="the-ldap-object-restore-event">The LDAP Object Restore Event</h2>
+<hr />
+<p>The LDAP object restore event has setters for <code>LDAP_OBJECT_BEFORE_RESTORE</code> so you can modify the container/OU before the 
+object is actually restored. You can also use the event's <code>getContainer()</code> method to check where the restored object is
+set to go. However, it may be null if no location was explicitly defined. You can also use the <code>getLdapObject()</code> method
+of the event to check the LDAP object for a <code>lastKnownLocation</code> value. For example:</p>
+<pre><code class="php">use LdapTools\Event\Event;
+use LdapTools\Event\LdapObjectRestoreEvent;
+
+$ldap-&gt;getEventDispatcher()-&gt;addListener(Event::LDAP_OBJECT_BEFORE_RESTORE, function(LdapObjectRestoreEvent $event) {
+    $ldapObject = $event-&gt;getLdapObject();
+    $container = $event-&gt;getContainer();
+
+    if (!$container &amp;&amp; $ldapObject-&gt;has('lastKnownLocation')) {
+        echo &quot;Location: &quot;.$ldapObject-&gt;get('lastKnownLocation');
+        // Do some other stuff...
+    }
+});
+</code></pre>
+
 <h2 id="the-ldap-object-schema-event">The LDAP Object Schema Event</h2>
 <hr />
 <p>When you hook into the LDAP Object Schema event you are given the ability to directly modify whatever schema object
