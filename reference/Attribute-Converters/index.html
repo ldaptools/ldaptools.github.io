@@ -374,10 +374,10 @@ process and the converter may use the connection to make LDAP calls to resolve d
 <h4 id="gpo_link"><em>gpo_link</em></h4>
 <ul>
 <li>
-<p><code>toLdap</code>: Takes an array of GPO names, retrieves their DNs, and returns a valid string for the gPLink attribute.</p>
+<p><code>toLdap</code>: Takes an array of <code>\LdapTools\Utilities\GPOLink</code> objects to resolve GPOs by name/GUID/DN/LdapObject, and returns a valid string for the gPLink attribute.</p>
 </li>
 <li>
-<p><code>fromLdap</code>: Takes a gPLink attribute string, splits it into the distinct GPOs, and returns an array of GPO names.</p>
+<p><code>fromLdap</code>: Takes a gPLink attribute string, splits it into the distinct GPOs, and returns an array of <code>\LdapTools\Utilities\GPOLink</code> objects.</p>
 </li>
 </ul>
 <h4 id="value_to_dn"><em>value_to_dn</em></h4>

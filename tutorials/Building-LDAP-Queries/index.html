@@ -476,7 +476,19 @@ overwrites any already set orderBy statements. To stack multiple order statement
 <pre><code class="php">// Order results by last name (ascending).
 $users = $lqb-&gt;fromUsers()
     -&gt;where(['firstName' =&gt; 'John'])
-    -&gt;orderBy('lastName') 
+    -&gt;orderBy('lastName')
+    -&gt;getLdapQuery()
+    -&gt;getResult();
+</code></pre>
+
+<p>By default the results are ordered in a case-insensitive manner. The order results using a case-sensitive manner use the
+<code>setIsCaseSensitiveSort()</code> method of the <code>LdapQuery</code> class:</p>
+<pre><code class="php">// Order results in a case-sensitive manner.
+$users = $lqb-&gt;fromUsers()
+    -&gt;where(['firstName' =&gt; 'John'])
+    -&gt;orderBy('lastName')
+    -&gt;getLdapQuery()
+    -&gt;setIsCaseSensitiveSort(true)
     -&gt;getResult();
 </code></pre>
 

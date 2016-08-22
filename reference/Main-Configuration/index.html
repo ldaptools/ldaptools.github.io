@@ -462,7 +462,17 @@ LDAP server settings before changing this value.</p>
         idle_reconnect: 0
 </code></pre>
 
-<p><strong>Default</strong>: <code>600</code> (10 minutes)</p></div>
+<p><strong>Default</strong>: <code>600</code> (10 minutes)</p>
+<hr />
+<h4 id="connect_timeout">connect_timeout</h4>
+<p>The elapsed time (in seconds) to attempt the initial connection to the LDAP server. If a connection cannot be established
+within this time the server will be considered unreachable/down.</p>
+<pre><code class="yaml">domains:
+    example:
+        connect_timeout: 5
+</code></pre>
+
+<p><strong>Default</strong>: <code>1</code></p></div>
             
         </div>
 

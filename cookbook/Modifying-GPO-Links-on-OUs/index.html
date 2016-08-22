@@ -234,6 +234,10 @@
         
             <li><a href="#modifying-gpos-on-an-existing-ou">Modifying GPOs on an Existing OU</a></li>
         
+            <li><a href="#searching-for-ous-with-specific-gpo-links">Searching for OUs with Specific GPO Links</a></li>
+        
+            <li><a href="#using-gpolink-objects">Using GPOLink Objects</a></li>
+        
     
     </ul>
 </div></div>
@@ -244,17 +248,23 @@
 <p>When working with Active Directory OUs you may want to add, remove, or display GPOs that are linked to them. This can be
 accomplished through the use of the <code>gpoLinks</code> attribute for the OU type. This attribute can be leveraged on OU creation
 or modification to easily set what GPOs should be linked at that OU level. The attribute value functions as an array of 
-GPO names that are linked to the OU.</p>
+<code>\LdapTools\Utilities\GPOLink</code> objects that full describe the GPO that is linked, and whether or not the GPO is enforced
+and/or enabled. The order of the array of <code>GPOLink</code> objects returned represents the link order in AD starting from order
+1 onwards.</p>
 <h2 id="creating-an-ou-with-a-linked-gpo">Creating an OU With a Linked GPO</h2>
 <p>For example, assume you would like to create an OU named "Employees" that should have 2 GPOs linked to it named 
 "Employee Policy" and "Require Screensaver":</p>
-<pre><code class="php">
+<pre><code class="php">use LdapTools\Utilities\GPOLink;
+
 $ldapObject = $ldap-&gt;createLdapObject();
 
 try {
     $ldapObject-&gt;createOU()
         -&gt;in('dc=example,dc=local')
-        -&gt;with(['name' =&gt; 'Employees', 'gpoLinks' =&gt; ['Employee Policy', 'Require Screensaver']])
+        -&gt;with(['name' =&gt; 'Employees', 'gpoLinks' =&gt; [
+            new GPOLink('Employee Policy'), 
+            new GPOLink('Require Screensaver')
+         ]])
         -&gt;execute();
 } catch (LdapConnectionException $e) {
     echo &quot;Failed to create OU - &quot;.$e-&gt;getMessage();
@@ -264,6 +274,7 @@ try {
 <h2 id="modifying-gpos-on-an-existing-ou">Modifying GPOs on an Existing OU</h2>
 <p>Assume you have an existing OU and would like to remove or add a GPO link from it:</p>
 <pre><code class="php">use LdapTools\Object\LdapObjectType;
+use LdapTools\Utilities\GPOLink;
 
 //...
 
@@ -274,12 +285,15 @@ $repository-&gt;setAttributes(['name', 'gpoLinks']);
 $ou = $repository-&gt;findOneByName('My Special OU');
 
 // Check for, and then remove, the name of an existing GPO if it is linked...
-if ($ou-&gt;hasGpoLinks('Require Screensaver')) {
-    $ou-&gt;removeGpoLinks('Require Screensaver');
+foreach ($ou-&gt;getGpoLinks() as $gpoLink) {
+    if ($gpoLink-&gt;getGpo()-&gt;getName() == 'Require Screensaver') {
+        $ou-&gt;removeGpoLinks($gpoLink);
+    }
 }
 
-// Add a new GPO link to the OU...
-$ou-&gt;addGpoLinks('Restricted Access');
+// Add a new GPO link to the OU that is set to be enforced...
+$link = (new GPOLink('Restricted Access'))-&gt;setIsEnforced(true);
+$ou-&gt;addGpoLinks($link);
 
 // Now actually save the changes back to LDAP
 try {
@@ -287,6 +301,112 @@ try {
 } catch (LdapConnectionException $e) {
     echo &quot;Failed to modify OU - &quot;.$e-&gt;getMessage();
 }
+</code></pre>
+
+<h2 id="searching-for-ous-with-specific-gpo-links">Searching for OUs with Specific GPO Links</h2>
+<p>You can also use GPOLink objects in queries to check if a link exists on an OU. You can even get as granular as setting
+whether the GPOLink is enforced/enabled or not.</p>
+<pre><code>use LdapTools\Utilities\GPOLink;
+
+$query = $ldap-&gt;buildLdapQuery()-&gt;fromOU();
+
+// Find OUs with a link for a GPO named &quot;Some GPO&quot;...
+$result = $query-&gt;select('name')
+    -&gt;where($query-&gt;filter()-&gt;contains('gpoLinks', new GPOLink('Some GPO')))
+    -&gt;getLdapQuery()
+    -&gt;getResult();
+
+foreach ($result as $ou) {
+    echo &quot;OU: &quot;.$ou-&gt;name;
+}
+</code></pre>
+
+<h2 id="using-gpolink-objects">Using GPOLink Objects</h2>
+<p>The <code>\LdapTools\Utilities\GPOLink</code> class is used to represent a GPO linked to an OU. It has several helper methods for 
+getting all of the details regarding the link.</p>
+<p>A GPOLink can be constructed use a name, GUID, DN, or LdapObject:</p>
+<pre><code>use LdapTools\Utilities\GPOLink;
+
+// Create a link for a GPO named &quot;Server Baseline&quot;...
+$link1 = new GPOLink('Server Baseline&quot;);
+
+// Create a link for a specific string GUID that represents a GPO...
+$link2 = new GPOLink('968c00d8-f755-4e34-b7e6-586fd60ff5de');
+
+// Query for a GPO then create the link based off the result...
+$gpo = $ldap-&gt;buildLdapQuery()-&gt;where([
+        'objectClass' =&gt; 'groupPolicyContainer',
+        'displayName' =&gt; 'Server Exceptions',
+    ])
+    -&gt;getLdapQuery()
+    -&gt;getSingleResult();
+$link3 = new GPOLink($gpo);
+
+// Set the second link to be disabled...
+$link2-&gt;setIsEnabled(false);
+
+// Set the first link to be enforced...
+$link1-&gt;setIsEnforced(true);
+
+// Query for an OU to apply the GPO links to...
+$ou = $ldap-&gt;buildLdapQuery()-&gt;fromOU()-&gt;where(['name' =&gt; 'Servers'])
+    -&gt;getLdapQuery()
+    -&gt;getSingleResult();
+
+// The order in which you add the links is the order they end up in for processing...
+$ou-&gt;set('gpoLinks', $link1, link2, $link3);
+$ldap-&gt;persist($ou);
+</code></pre>
+
+<p>When searching for OUs you can inspect their GPO links to determine information about them:</p>
+<pre><code>// Query for the GPO links for an OU...
+$ou = $ldap-&gt;buildLdapQuery()
+    -&gt;fromOU()
+    -&gt;select('gpoLinks')
+    -&gt;where(['name' =&gt; 'Servers'])
+    -&gt;getLdapQuery()
+    -&gt;getSingleResult();
+
+foreach ($ou-&gt;get('gpoLinks') as $gpoLink) {
+    // The GPO will be the LdapObject representation of the linked GPO... 
+    $gpo = $gpoLink-&gt;getGpo();
+
+    echo &quot;GPO Name: &quot;.$gpo-&gt;get('name');
+    echo &quot;GPO GUID: &quot;.$gpo-&gt;get('guid');
+    echo &quot;GPO DN: &quot;.$gpo-&gt;get('dn');
+
+    // You can check specifically if the link is being enforced...
+    if ($gpoLink-&gt;getIsEnforced()) {
+        echo &quot;The link &quot;.$gpo-&gt;get('name').&quot; is being enforced.&quot;;
+    }
+
+    // You can check specifically if the link is actually enabled/disabled...
+    if (!$gpoLink-&gt;getIsEnabled()) {
+        echo &quot;The link &quot;.$gpo-&gt;get('name').&quot; is currently disabled.&quot;;
+    }
+}
+</code></pre>
+
+<p>In the above example, if during the loop you want to modify any of the GPOLink objects you should set all of the GPO
+links back to the OU and then persist it back to LDAP:</p>
+<pre><code>// Query for the GPO links for an OU...
+$ou = $ldap-&gt;buildLdapQuery()
+    -&gt;fromOU()
+    -&gt;select('gpoLinks')
+    -&gt;where(['name' =&gt; 'Servers'])
+    -&gt;getLdapQuery()
+    -&gt;getSingleResult();
+
+// Lets enable any disabled links...
+foreach ($ou-&gt;get('gpoLinks') as $gpoLink) {
+    if (!$gpoLink-&gt;getIsEnabled()) {
+        $gpoLink-&gt;setIsEnabled(true);
+    }
+}
+
+// Replace the existing ones with the changes...
+$ou-&gt;set('gpoLinks', $ou-&gt;get('gpoLinks'));
+$ldap-&gt;persist($ou);
 </code></pre></div>
             
         </div>
