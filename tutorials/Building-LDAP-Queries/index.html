@@ -83,6 +83,12 @@
                         
                             
 <li >
+    <a href="../../cookbook/Getting-Your-LDAP-SSL-Certificate/">Getting Your LDAP SSL Certificate</a>
+</li>
+
+                        
+                            
+<li >
     <a href="../../cookbook/Modifying-GPO-Links-on-OUs/">Modifying GPO Links on OUs</a>
 </li>
 
@@ -95,6 +101,12 @@
                     <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../AD-Permissions/">AD Permissions</a>
+</li>
+
                         
                             
 <li >
@@ -257,7 +269,7 @@ takes care of escaping all values passed to it when generating the filter.</p>
 <ul>
 <li><a href="#ldapquerybuilder-methods">LdapQueryBuilder Methods</a></li>
 <li><a href="#filter-method-shortcuts">Filter Method Shortcuts</a></li>
-<li><a href="#using-aliases-in-queries">Using Aliases</a></li>
+<li><a href="#using-aliases">Using Aliases</a></li>
 <li><a href="#ldapquery-methods-to-retrieve-ldap-results">Retrieving Query Results</a></li>
 </ul>
 <h2 id="generating-ldap-filters-without-ldapmanager">Generating LDAP Filters Without LdapManager</h2>
@@ -549,7 +561,7 @@ $results = $query
     -&gt;getResult();
 
 foreach ($results as $result) {
-    if ($user-&gt;isType(LdapObjectType::USER)) {
+    if ($result-&gt;isType(LdapObjectType::USER)) {
         echo &quot;User: &quot;.$result-&gt;getName();
     } else {
         echo &quot;Group: &quot;.$result-&gt;getName();

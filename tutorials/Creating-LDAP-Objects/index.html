@@ -83,6 +83,12 @@
                         
                             
 <li >
+    <a href="../../cookbook/Getting-Your-LDAP-SSL-Certificate/">Getting Your LDAP SSL Certificate</a>
+</li>
+
+                        
+                            
+<li >
     <a href="../../cookbook/Modifying-GPO-Links-on-OUs/">Modifying GPO Links on OUs</a>
 </li>
 
@@ -95,6 +101,12 @@
                     <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../AD-Permissions/">AD Permissions</a>
+</li>
+
                         
                             
 <li >
@@ -241,11 +253,23 @@
 
 <h1 id="creating-ldap-objects">Creating LDAP Objects</h1>
 <hr />
+<ul>
+<li><a href="#using-parameters-in-attribute-values">Using Parameters</a></li>
+<li><a href="#ldapobjectcreator-methods">Creator Methods</a></li>
+</ul>
 <p>The <code>LdapObjectCreator</code> class provides an easy method for creating LDAP objects. It can accessed directly from the LDAP
 Manager and provides shortcuts and helpers for creating Users, Groups, Contacts, and Computers using the default schema.
 It also supports setting parameters within attribute values to avoid repetition.</p>
 <p>To get an instance of the object creator class and create some objects:</p>
-<pre><code class="php">$ldapObject = $ldap-&gt;createLdapObject();
+<pre><code class="php">use LdapTools\Object\LdapObjectType;
+
+// Optionally pass an object type directly when getting the creator instance...
+$ldap-&gt;createLdapObject(LdapObjectType::USER)
+    -&gt;with(['username' =&gt; 'foo', 'password' =&gt; 'bar'])
+    -&gt;in('dc=example,dc=local')
+    -&gt;execute();
+
+$ldapObject = $ldap-&gt;createLdapObject();
 
 // Creating a user account (enabled by default)
 $ldapObject-&gt;createUser()
@@ -276,6 +300,13 @@ $ldapObject-&gt;createOU()
     -&gt;in('dc=example,dc=local')
     -&gt;with(['name' =&gt; 'Employees'])
     -&gt;execute();
+
+// Create an object by passing the schema type name to the create method...
+$ldapObject-&gt;create('user')
+    -&gt;in('dc=example,dc=local')
+    -&gt;with(['username' =&gt; 'Foo', 'password' =&gt; 'correct-horse-battery-staple'])
+    -&gt;execute();
+
 </code></pre>
 
 <h2 id="using-parameters-in-attribute-values">Using Parameters in Attribute Values</h2>

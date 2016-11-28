@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="Chad Sikorra">
+        <link rel="canonical" href="http://www.phpldaptools.com/tutorials/AD-Permissions/">
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+
+	<title>AD Permissions - LdapTools</title>
+
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../..">LdapTools</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li >
+                        <a href="../..">Home</a>
+                    </li>
+                
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cookbook <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../../cookbook/Authenticating-a-User/">Authenticating a User</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../cookbook/Common-LDAP-Queries/">Common LDAP Queries</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../cookbook/Creating-a-Custom-Repository/">Creating a Custom Repository</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../cookbook/Getting-Your-LDAP-SSL-Certificate/">Getting Your LDAP SSL Certificate</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../cookbook/Modifying-GPO-Links-on-OUs/">Modifying GPO Links on OUs</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li class="active">
+    <a href="./">AD Permissions</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../AD-User-Modification/">AD User Modification</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../Building-LDAP-Queries/">Building LDAP Queries</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../Creating-AD-Password-Settings-Objects/">Creating AD Password Settings Objects</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../Creating-LDAP-Objects/">Creating LDAP Objects</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../LDIF-Files/">LDIF Files</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../Modifying-LDAP-Objects/">Modifying LDAP Objects</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../Using-the-LDAP-Manager/">Using the LDAP Manager</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reference <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../../reference/Attribute-Converters/">Attribute Converters</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../reference/Default-Schema-Attributes/">Default Schema Attributes</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../reference/Events/">Events</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../reference/Logging/">Logging</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../reference/Main-Configuration/">Main Configuration</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../reference/Schema-Configuration/">Schema Configuration</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                </ul>
+            
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                
+                    <li >
+                        <a rel="next" href="../../cookbook/Modifying-GPO-Links-on-OUs/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../AD-User-Modification/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a href="https://github.com/ldaptools/ldaptools/">
+                            
+                                <i class="fa fa-github"></i>
+                            
+                            GitHub
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#active-directory-permissions">Active Directory Permissions</a></li>
+        
+            <li><a href="#querying-and-viewing-permissions">Querying and Viewing Permissions</a></li>
+        
+            <li><a href="#modifying-existing-permissions">Modifying Existing Permissions</a></li>
+        
+            <li><a href="#security-descriptor-methods">Security Descriptor Methods</a></li>
+        
+            <li><a href="#dacl-and-sacl-methods">DACL and SACL Methods</a></li>
+        
+            <li><a href="#ace-methods">Ace Methods</a></li>
+        
+            <li><a href="#parsing-sddl">Parsing SDDL</a></li>
+        
+    
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="active-directory-permissions">Active Directory Permissions</h1>
+<hr />
+<ul>
+<li><a href="#querying-and-viewing-permissions">Querying and Viewing Permissions</a></li>
+<li><a href="#modifying-existing-permissions">Modifying Existing Permissions</a></li>
+<li><a href="#security-descriptor-methods">Security Descriptor Methods</a></li>
+<li><a href="#dacl-and-sacl-methods">DACL and SACL Methods</a></li>
+<li><a href="#ace-methods">ACE Methods</a></li>
+<li><a href="#parsing-sddl">Parsing SDDL</a></li>
+</ul>
+<p>Active Directory permissions are stored in each object in the directory in an attribute called <code>ntSecurityDescriptor</code>.
+The format of that value is a binary blob. However, if you decode that value it reveals all the Access Control Entries
+(ACEs) that make up the Discretionary Access Control List (DACL).</p>
+<p>This library provides several helper classes for parsing all of the ACEs assigned to an LDAP object. Not only do you
+have the ability to view all of the ACEs, but you can also add/remove/modify ACEs and send the changes back to LDAP to 
+change AD permissions for an object.</p>
+<h2 id="querying-and-viewing-permissions">Querying and Viewing Permissions</h2>
+<p>When you query for permissions there are a few rules to keep in mind:</p>
+<ul>
+<li>You must send a LDAP control with the SD Flags value to retrieve permissions as a non-admin account.</li>
+<li>When you query for permissions you need to disable paging, otherwise it will not return any results.</li>
+</ul>
+<p>So to query and retrieve the permissions for a specific account, do something like the following:</p>
+<pre><code class="php">use LdapTools\Connection\LdapControl;
+use LdapTools\Connection\LdapControlType;
+use LdapTools\Security\SecurityDescriptor;
+use LdapTools\Security\Ace\AceRights;
+use LdapTools\Security\SID;
+
+// ...
+
+// This tells the DC that when we request/process the 'ntSecurityDescriptor' we will exclude the SACL.
+// Without this the attribute will not be returned from AD (unless you're using a domain admin account)
+$sdControl = new LdapControl(LdapControlType::SD_FLAGS_CONTROL, true, LdapControl::berEncodeInt(7));
+$ldap-&gt;getConnection()-&gt;setControl($sdControl);
+
+$user = $ldap-&gt;buildLdapQuery()
+    -&gt;fromUsers()
+    -&gt;where(['username' =&gt; 'SomeUser'])
+    // The ntSecurityDescriptor is what describes permissions against that object...
+    -&gt;select('ntSecurityDescriptor')
+    // Paging must be set to false, otherwise it interfers with the SD Flags control we set...
+    -&gt;setUsePaging(false)
+    -&gt;getLdapQuery()
+    -&gt;getSingleResult();
+
+// Instantiate a new Security Descriptor class that decodes and represents all of the AD permissions...
+$sd = new SecurityDescriptor($user-&gt;get('ntSecurityDescriptor'));
+
+// The DACL is what contains all of your ACEs, so loop through it.
+// We will check specifically if this user cannot change their own password.
+foreach ($sd-&gt;getDacl()-&gt;getAces() as $ace) {
+   // Ignore any ACEs that allow access
+   if ($ace-&gt;isAllowAce()) {
+       continue;
+   }
+   // This will check if the user is setup so they cannot change their own password...
+   if ((string) $ace-&gt;getSid() === SID::SHORT_NAME['PS'] &amp;&amp; (string) $ace-&gt;getObjectType() === AceRights::EXTENDED['CHANGE_PASSWORD']) {
+       echo &quot;User cannot change their password.&quot;.PHP_EOL;
+   }
+}
+</code></pre>
+
+<h2 id="modifying-existing-permissions">Modifying Existing Permissions</h2>
+<p>Working off the same example as above, after you determined that a user is set so they cannot change their password,
+you can switch it back so they can by removing one ACE and flipping the type of another. The following will assume you
+are already working with the Security Descriptor object queried above:</p>
+<pre><code class="php">// The DACL is what contains all of your ACEs, so loop through it
+// We will check specifically if this user cannot change their own password
+foreach ($sd-&gt;getDacl()-&gt;getAces() as $ace) {
+   // Ignore any ACEs that allow access
+   if ($ace-&gt;isAllowAce()) {
+       continue;
+   }
+   // This will get the ACE that applies to the user themselves ('PS' is the SID short name for 'Principal Self')
+   if ((string) $ace-&gt;getSid() === SID::SHORT_NAME['PS'] &amp;&amp; (string) $ace-&gt;getObjectType() === AceRights::EXTENDED['CHANGE_PASSWORD']) {
+       $sd-&gt;getDacl()-&gt;removeAce($ace);
+   }
+   // This flips the ACE type to allow for the 'WD' SID ('WD' is the SID short name for &quot;Everyone&quot;).
+   if ((string) $ace-&gt;getSid() === SID::SHORT_NAME['WD'] &amp;&amp; (string) $ace-&gt;getObjectType() === AceRights::EXTENDED['CHANGE_PASSWORD']) {
+       $ace-&gt;setType(new AceType('A'));
+   }
+}
+
+// Now set the new Security Descriptor value and send it back to LDAP...
+$user-&gt;set('ntSecurityDescriptor', $sd-&gt;toBinary());
+$ldap-&gt;persist($user);
+
+</code></pre>
+
+<h2 id="security-descriptor-methods">Security Descriptor Methods</h2>
+<p>The Security Descriptor object is what represents the complete permissions for an LDAP object. It contains the SACL,
+DACL, owner, and group. It can be instantiated with its binary representation, or with nothing then explicitly use the
+methods below to describe it.</p>
+<hr />
+<h4 id="getdacl">getDacl()</h4>
+<p>Get the Discretionary Access Control List for the Security Descriptor. This is what contains all of the permission ACEs
+assigned to the LDAP object.</p>
+<pre><code class="php">$aces = $sd-&gt;getDacl()-&gt;getAces();
+</code></pre>
+
+<hr />
+<h4 id="setdacldacl-dacl-null">setDacl(Dacl $dacl = null)</h4>
+<p>Set the Discretionary Access Control List for the security Descriptor. This must be the DACL object.</p>
+<pre><code class="php">use LdapTools\Security\Acl\Dacl;
+
+$sd-&gt;setDacl(new Dacl());
+</code></pre>
+
+<hr />
+<h4 id="getsacl">getSacl()</h4>
+<p>Get the System Access Control List for the Security Descriptor. This contains System Audit entries, not permissions. The
+objects are still ACEs, but they relate to what specific access rights get audited.</p>
+<pre><code class="php">$aces = $sd-&gt;getSacl()-&gt;getAces();
+</code></pre>
+
+<hr />
+<h4 id="setsaclsacl-sacl-null">setSacl(Sacl $sacl = null)</h4>
+<p>Set the System Access Control List for the Security Descriptor. This must be the SACL object.</p>
+<pre><code class="php">use LdapTools\Security\Acl\Sacl;
+
+$sd-&gt;setSacl(new Sacl());
+</code></pre>
+
+<hr />
+<h4 id="getowner">getOwner()</h4>
+<p>This returns the owner of the Security Descriptor as a SID object.</p>
+<pre><code class="php">echo $sd-&gt;getOwner()-&gt;toString();
+</code></pre>
+
+<hr />
+<h4 id="setownerowner">setOwner($owner)</h4>
+<p>Set the owner of the Security Descriptor. This can be a SID object or a string SID/SID short name.</p>
+<pre><code class="php">use LdapTools\Security\SID;
+
+// The SID can be constructed with a SID string, or a SID short name...
+$sd-&gt;setOwner(SID::SHORT_NAME['BA']);
+</code></pre>
+
+<hr />
+<h4 id="getgroup">getGroup()</h4>
+<p>Get the primary group of the owner of the Security Descriptor. This will be a SID object.</p>
+<pre><code class="php">echo $sd-&gt;getGroup()-&gt;toString();
+</code></pre>
+
+<hr />
+<h4 id="setgroupgroup">setGroup($group)</h4>
+<p>Set the primary group of the Security Descriptor. This can be a SID object or a string SID/SID short name.</p>
+<pre><code class="php">// The SID can be constructed with a SID string, or a SID short name...
+$sd-&gt;setGroup('S-1-5-21-1263317781-1938881490-3107577794-512');
+</code></pre>
+
+<hr />
+<h4 id="tobinarycanonical-true">toBinary($canonical = true)</h4>
+<p>Get the binary representation of the Security Descriptor. This is the format it must be in when being sent back via LDAP.
+You can optionally pass <code>false</code> as a parameter if you're sending a non-canonical set of ACEs to LDAP. Typically you do
+not want to do that.</p>
+<pre><code class="php">$binary = $sd-&gt;toBinary();
+</code></pre>
+
+<hr />
+<h4 id="tosddlcanonical-true">toSddl($canonical = true)</h4>
+<p>Get the Security Descriptor Definition Language (SDDL) string representation of the object. You can optionally pass 
+<code>false</code> as a parameter if you want the ACEs represent in a non-canonical form. Typically you do not want to do that.</p>
+<pre><code class="php">echo $sd-&gt;toSddl();
+</code></pre>
+
+<hr />
+<h4 id="getcontrolflags">getControlFlags()</h4>
+<p>Get the Control Flags for the Security Descriptor. This returns a flags object.</p>
+<pre><code class="php">use LdapTools\Security\ControlFlags;
+
+$flags = $sd-&gt;getControlFlags();
+
+if ($flags-&gt;has(ControlFlags::FLAG['SACL_PRESENT']) {
+   // ...
+}
+</code></pre>
+
+<hr />
+<h4 id="setcontrolflagscontrolflags-flags">setControlFlags(ControlFlags $flags)</h4>
+<p>Set the control flags for the Security Descriptor. This must be a ControlFlags object.</p>
+<pre><code class="php">use LdapTools\Security\ControlFlags;
+
+$sd-&gt;setControlFlags(new ControlFlags(ControlFlags::FLAGS['SELF_RELATIVE']);
+</code></pre>
+
+<h2 id="dacl-and-sacl-methods">DACL and SACL Methods</h2>
+<p>The DACL and SACL both contain a set of ACEs. The DACL is what contains all of the permission ACEs. The SACL contains
+all of the System ACEs used for auditing purposes. However, they both contain the same basic methods, with only a few
+exceptions.</p>
+<hr />
+<h4 id="getaces">getAces()</h4>
+<p>Get all of the ACEs assigned to the ACL as an array of ACE objects.</p>
+<pre><code class="php">// Loop through each ACE and print out the SDDL representation of it...
+foreach ($sd-&gt;getDacl()-&gt;getAces() as $ace) {
+    echo $ace-&gt;toSddl();
+}
+</code></pre>
+
+<hr />
+<h4 id="setacesace-aces">setAces(Ace ...$aces)</h4>
+<p>Set the ACEs for the ACL. This overwrites any ACEs that might be set on the ACL already.</p>
+<pre><code class="php">// Set some valid access obviously (not these...)
+$aces = [
+    (new Ace('D')-&gt;setTrustee('BA'),
+    (new Ace('A')-&gt;setTrustee('PS'),
+]
+
+$sd-&gt;getDacl()-&gt;setAces(...$aces);
+</code></pre>
+
+<hr />
+<h4 id="hasaceace-aces">hasAce(Ace ...$aces)</h4>
+<p>Check if an ACE (or several ACEs) exists on the ACL. The check is strict, so the ACE needs to be the same object to return true.</p>
+<hr />
+<h4 id="removeaceace-aces">removeAce(Ace ...$aces)</h4>
+<p>Remove an ACE (or several ACEs) from the ACL. The ACE must be the same object already assigned to the ACL.</p>
+<pre><code class="php">foreach ($sd-&gt;getDacl()-&gt;getAces() as $ace) {
+    // Perform some logic to check if the ACE should be removed...
+    // ...
+    $sd-&gt;getDacl()-&gt;removeAce($ace);
+}
+</code></pre>
+
+<hr />
+<h4 id="addaceace-aces">addAce(Ace ...$aces)</h4>
+<p>Add an ACE (or several ACEs) to the ACL. You do not have to worry about the the ACE order in the ACL when adding it.
+When the ACL is converted to binary/SDDL form it is canonicalized to be in the correct order.</p>
+<pre><code class="php">use LdapTools\Security\Ace\Ace;
+use LdapTools\Security\Ace\AceRights;
+
+// OA is short for an object allow ace type...
+$ace = (new Ace('OA'))
+    // The SID of the user being granted the right...
+    -&gt;setTrustee('S-1-5-21-1263317781-1938881490-3107577794-1020')
+    // This is an extended access right allowing the trustee to reset a password...
+    -&gt;setObjectType(AceRights::EXTENDED['RESET_PASSWORD'])
+    // This sets the ACE with the Access Control right...
+    -&gt;setRights(new AceRights(AceRights::FLAGS['DS_CONTROL_ACCESS']));
+
+// Add the ACE to the DACL...
+$sd-&gt;getDacl()-&gt;addAce($ace);
+</code></pre>
+
+<hr />
+<h4 id="tosddlcanonicalize-true">toSddl($canonicalize = true)</h4>
+<p>This will return a SDDL string that represents all ACEs within the ACL. You can optionally pass a bool to indicate
+whether or not the ACEs should be canonicalized or not (by default they are).</p>
+<pre><code class="php">echo $sd-&gt;getDacl()-&gt;toSddl();
+</code></pre>
+
+<hr />
+<h4 id="tobinarycanonicalize-true">toBinary($canonicalize = true)</h4>
+<p>This will return the binary form of the ACL. This is not very useful by itself outside the context of the binary Security
+Descriptor overall. You can optionally pass a bool to indicate whether or not the ACEs should be canonicalized or not
+(by default they are).</p>
+<hr />
+<h4 id="iscanonical">isCanonical()</h4>
+<p>This method is only valid for the DACL. It returns a bool value for whether or not all of the ACEs in the ACL are in 
+canonical form. If you want to see if the ACEs are in canonical for coming from AD then you should call this immediately
+after instantiating the Security Descriptor.</p>
+<pre><code class="php">if (!$sd-&gt;getDacl()-&gt;isCanonical()) {
+    echo &quot;Warning! The DACL is not in canonical form. Be careful when editing...&quot;;
+}
+</code></pre>
+
+<hr />
+<h4 id="canonicalize">canonicalize()</h4>
+<p>Calling this method forces all ACEs in the ACL into canonical form. This is the order that AD expects the ACEs to be in
+when saving it back via LDAP. The ACLs are canonicalized automatically when being converted to binary/SDDL, so you do
+not have to call this each time you make a modification.</p>
+<h2 id="ace-methods">Ace Methods</h2>
+<p>The Access Control Entry (ACE) represents a specific permission assigned to an ACL. This can represent whether a specific
+user (The "Trustee" as it is referred to on an ACE) is allowed or denied read/write access to a specific Active Directory
+property object, or event if they are allowed or denied rights for specific actions, such as resetting a password or being
+able to have send-as rights on a user's mailbox in Exchange.</p>
+<p>There are several helper/convenience methods available to make it easier to decipher and parse the ACEs assigned to an
+object so you can take the action you need.</p>
+<hr />
+<h4 id="gettype">getType()</h4>
+<p>The ACE type represents if this is an access allowed or access denied type, and whether the ACE relates to an object type
+or not. </p>
+<pre><code>// Show the SDDL short name of the ACE type...
+echo $ace-&gt;getType()-&gt;getShortName();
+</code></pre>
+
+<hr />
+<h4 id="settypeacetype-type">setType(AceType $type)</h4>
+<p>When setting the ACE type explicitly you need to use the AceType object. The ACE type can be one of several types and 
+can be defined by its SDDL short name or one of the constants available on the <code>LdapTools\Security\Ace\AceType</code> class.
+Available types defined on the AceType class include:</p>
+<pre><code class="php">    const TYPE = [
+        'ACCESS_ALLOWED' =&gt; 0x00,
+        'ACCESS_DENIED' =&gt; 0x01,
+        'SYSTEM_AUDIT' =&gt; 0x02,
+        'SYSTEM_ALARM' =&gt; 0x03,
+        'ACCESS_ALLOWED_COMPOUND' =&gt; 0x04,
+        'ACCESS_ALLOWED_OBJECT' =&gt; 0x05,
+        'ACCESS_DENIED_OBJECT' =&gt; 0x06,
+        'SYSTEM_AUDIT_OBJECT' =&gt; 0x07,
+        'SYSTEM_ALARM_OBJECT' =&gt; 0x08,
+        'ACCESS_ALLOWED_CALLBACK' =&gt; 0x09,
+        'ACCESS_DENIED_CALLBACK' =&gt; 0x0A,
+        'ACCESS_ALLOWED_CALLBACK_OBJECT' =&gt; 0x0B,
+        'ACCESS_DENIED_CALLBACK_OBJECT' =&gt; 0x0C,
+        'SYSTEM_AUDIT_CALLBACK' =&gt; 0x0D,
+        'SYSTEM_ALARM_CALLBACK' =&gt; 0x0E,
+        'SYSTEM_AUDIT_CALLBACK_OBJECT' =&gt; 0x0F,
+        'SYSTEM_ALARM_CALLBACK_OBJECT' =&gt; 0x10,
+        'SYSTEM_MANDATORY_LABEL' =&gt; 0x11,
+        'SYSTEM_RESOURCE_ATTRIBUTE' =&gt; 0x12,
+        'SYSTEM_SCOPED_POLICY_ID' =&gt; 0x13,
+    ];
+</code></pre>
+
+<p>Only <code>ACCESS_*</code> ACEs can be added to a DACL. And only <code>SYSTEM_*</code> ACEs can be added to a SACL.</p>
+<pre><code class="php">use LdapTools\Ace\Ace;
+use LdapTools\Ace\AceType;
+
+// You can instantiate an ACE using its AceType SDDL short name...
+$ace = new Ace('A');
+
+// Set the AceType by object, flipping it to a deny...
+$ace-&gt;setType(new AceType('D'));
+</code></pre>
+
+<hr />
+<h4 id="gettrustee">getTrustee()</h4>
+<p>Get SID object of the trustee for the ACE.</p>
+<pre><code class="php">// Print the trustee SID as a string...
+echo $ace-&gt;getTrustee()-&gt;toString();
+</code></pre>
+
+<hr />
+<h4 id="settrusteesid">setTrustee($sid)</h4>
+<p>Set the SID of the trustee for this ACE. This can be either a SID object, a string SID, or a SID short name.</p>
+<pre><code class="php">// Set the trustee SID by short name...
+$ace-&gt;setTrustee('PS');
+
+// Set the trustee SID by using a string SID...
+$ace-&gt;setTrustee('S-1-5-21-1263317781-1938881490-3107577794-512');
+</code></pre>
+
+<hr />
+<h4 id="getobjecttype">getObjectType()</h4>
+<p>Get the GUID object type this ACE controls access for if this is an object type ACE (otherwise this will be null). This GUID
+can represent a specific AD property, or some type of extended access right for the ACE.</p>
+<pre><code class="php">if ($ace-&gt;getObjectType()) {
+    echo $ace-&gt;getObjectType()-&gt;toString();
+}
+</code></pre>
+
+<hr />
+<h4 id="setobjecttypeguid">setObjectType($guid)</h4>
+<p>Set the GUID object type this ACE controls access for. When you set this it will automatically toggle the AceObjectFlags
+as needed. You can pass either a GUID object or a GUID string as a parameter.</p>
+<pre><code class="php">use LdapTools\Security\GUID;
+use LdapTools\Security\Ace\AceRights;
+
+// Set by the GUID object...
+$ace-&gt;setObjectType(new GUID('bf967950-0de6-11d0-a285-00aa003049e2'));
+
+// Set by a string GUID from a constant...
+$ace-&gt;setObjectType(AceRights::EXTENDED['RESET_PASSWORD']);
+</code></pre>
+
+<hr />
+<h4 id="getinheritedobjecttype">getInheritedObjectType()</h4>
+<p>Get the GUID object type that represents the type of child objects that can inherit the ACE. This returns the same type
+of value as the <code>getObjectType()</code> method. See above.</p>
+<hr />
+<h4 id="setinheritedobjecttypeguid">setInheritedObjectType($guid)</h4>
+<p>Set the GUID object type that represents the type of child objects that can inherit the ACE. This allows the same type
+of values as the <code>setInheritedObjectType()</code> method. See above.</p>
+<hr />
+<h4 id="getrights">getRights()</h4>
+<p>Returns an AceRights object that has several helper methods for checking/settting what rights are assigned to this ACE:</p>
+<pre><code class="php">// Get the AceRights object...
+$rights = $ace-&gt;getRights();
+
+// The below functions can either check for access, or set access (pass a bool true or false to toggle)...
+
+/**
+ * Check or set the ability to read a specific property.
+ */
+$rights-&gt;readProperty($action = null);
+
+/**
+ * Check or set the ability to write a specific property.
+ */
+$rights-&gt;writeProperty($action = null);
+
+/**
+ * Check or set the ability to create child objects.
+ */
+$rights-&gt;createChildObject($action = null);
+
+/**
+ * Check or set the ability to delete child objects.
+ */
+$rights-&gt;deleteChildObject($action = null);
+
+/**
+ * Check or set the ability to list child objects.
+ */
+$rights-&gt;listChildObject($action = null);
+
+/**
+ * Check or set the ability to delete objects of a certain type (all if objectType on the ACE is empty).
+ */
+$rights-&gt;deleteObject($action = null);
+
+/**
+ * Check or set the ability to list objects of a specific type.
+ */
+$rights-&gt;listObject($action = null);
+
+/**
+ * Check or set the ability to perform a validated write for a property.
+ */
+$rights-&gt;validatedWrite($action = null);
+
+/**
+ * Check or set control access rights. These control specific actions/operations on an object or attribute.
+ */
+$rights-&gt;controlAccess($action = null);
+
+/**
+ * Check or set the ability to read data from the security descriptor (minus the SACL).
+ */
+$rights-&gt;readSecurity($action = null);
+
+/**
+ * Check or set the ability to access the SACL of an object.
+ */
+$rights-&gt;accessSacl($action = null);
+
+/**
+ * Check or set the ability to write the DACL of an object.
+ */
+$rights-&gt;writeDacl($action = null);
+
+/**
+ * Check or set the ability to assume ownership of the object. The user must be an object trustee. The user cannot
+ * transfer the ownership to other users.
+ */
+$rights-&gt;writeOwner($action = null);
+
+/**
+ * Check or set the ability to read permissions on this object, read all the properties on this object, list this
+ * object name when the parent container is listed, and list the contents of this object if it is a container.
+ */
+$rights-&gt;readAll($action = null);
+
+/**
+ * Check or set the ability to read permissions on this object, write all the properties on this object, and perform
+ * all validated writes to this object.
+ */
+$rights-&gt;writeAll($action = null);
+
+/**
+ * Check or set the ability to read permissions on, and list the contents of, a container object.
+ */
+$rights-&gt;execute($action = null);
+
+/**
+ * Check or set the ability to create or delete child objects, delete a subtree, read and write properties, examine
+ * child objects and the object itself, add and remove the object from the directory, and read or write with an
+ * extended right.
+ */
+$rights-&gt;fullControl($action = null);
+
+/**
+ * Check or set the ability to use the object for synchronization. This enables a thread to wait until the
+ * object is in the signaled state.
+ */
+$rights-&gt;synchronize($action = null);
+</code></pre>
+
+<hr />
+<h4 id="setrightsacerights-rights">setRights(AceRights $rights)</h4>
+<p>Set a specific AceRights to the ACE.</p>
+<pre><code class="php">use LdapTools\Security\Ace\AceRights;
+
+$rights = new AceRights(AceRights::SHORT_NAME['CR']);
+$ace-&gt;setRights($rights);
+</code></pre>
+
+<hr />
+<h4 id="getflags">getFlags()</h4>
+<p>Gets an AceFlags object that represents all of the flags set for the ACE. This has several helper methods for extracting
+useful information about the ACE:</p>
+<pre><code class="php">// Get the AceFlags object...
+$flags = $ace-&gt;getFlags();
+
+// The below functions can either check for a specific flag, or toggle it on/off with a bool true or false...
+
+/**
+ * Check or set whether the ACE does not control access to the object to which it is attached. When this is true,
+ * the ACE only controls access on those objects which inherit it.
+ */
+$flags-&gt;inheritOnly($action = null);
+
+/**
+ * Check or set whether inheritance of this ACE should be propagated.
+ */
+$flags-&gt;propagateInheritance($action = null);
+
+/**
+ * Check or set whether containers should inherit this ACE.
+ */
+$flags-&gt;containerInherit($action = null);
+
+/**
+ * Check or set whether objects should inherit this ACE.
+ */
+$flags-&gt;objectInherit($action = null);
+
+/**
+ * Whether or not the ACE should generate audit messages for failed access attempts (only valid in the SACL).
+ */
+$flags-&gt;auditFailedAccess($action = null);
+
+/**
+ * Whether or not the ACE should generate audit messages for successful access attempts (only valid in the SACL).
+ */
+$flags-&gt;auditSuccessfulAccess($action = null);
+
+/**
+ * Check whether or not the ACE is inherited. This method can only be checked, not set.
+ */
+$flags-&gt;isInherited();
+</code></pre>
+
+<hr />
+<h4 id="setflagsaceflags-flags">setFlags(AceFlags $flags)</h4>
+<p>Set the AceFlags object assigned to the ACE.</p>
+<pre><code class="php">use LdapTools\Security\Ace\AceFlags;
+
+$flags = new AceFlags(AceFlags::FLAGS['INHERIT_ONLY']);
+$ace-&gt;setFlags($flags);
+</code></pre>
+
+<hr />
+<h4 id="isallowace">isAllowAce()</h4>
+<p>A convenience method that will return true for any ACE type that allows access.</p>
+<hr />
+<h4 id="isdenyace">isDenyAce()</h4>
+<p>A convenience method that will return true for any ACE type that denies access.</p>
+<hr />
+<h4 id="isobjectace">isObjectAce()</h4>
+<p>A convenience method that will return true for any object type ACE.</p>
+<hr />
+<h4 id="tobinary">toBinary()</h4>
+<p>Returns the binary representation of the ACE.</p>
+<hr />
+<h4 id="tosddl">toSddl()</h4>
+<p>Returns the SDDL string representation of the ACE.</p>
+<pre><code class="php">echo $ace-&gt;toSddl();
+</code></pre>
+
+<h2 id="parsing-sddl">Parsing SDDL</h2>
+<p>Security Descriptor Definition Language (SDDL) is a string representation of a Security Descriptor. It may be necessary
+, or easier, to represent a set of ACLs/ACEs in string form as you pass it around your application. To that end, this
+library contains a SDDL parser capable of taking a SDDL string and producing a SecurityDescriptor object that contains
+everything represented in the SDDL:</p>
+<pre><code class="php">use LdapTools\Security\SddlParser;
+use LdapTools\Exception\SddlParserException;
+
+// The following SDDL string represents the default Exchange Security Descriptor...
+$sddl = 'O:PSG:PSD:(A;CI;RCCC;;;PS)';
+
+// Parse will return a &quot;\LdapTools\Security\SecurityDescriptor&quot; object, as described in earlier sections...
+try {
+    $sd = (new SddlParser())-&gt;parse($sddl);
+} catch (SddlParserException $e) {
+    echo &quot;Error Parsing SDDL: &quot;.$e-&gt;getMessage();
+    exit;
+}
+
+echo &quot;Owner: &quot;.$sd-&gt;getOwner();
+echo &quot;Group: &quot;.$sd-&gt;getGroup();
+foreach($sd-&gt;getDacl()-&gt;getAces() as $ace) {
+    echo sprintf('Ace type &quot;%s&quot; for &quot;%s&quot;', $ace-&gt;getType(), $ace-&gt;getTrustee());
+}
+</code></pre>
+
+<p>When you are parsing a more complex SDDL string, you may need to instantiate the parser with an LdapConnection instance
+from the LdapManager of this library. It is needed when it translates certain well-known SIDs that relate to domain
+objects;</p>
+<pre><code class="php">use LdapTools\Security\SddlParser;
+use LdapTools\Exception\SddlParserException;
+
+// The 'DA' short name needs a lookup to find the Domain Admin group SID... 
+$sddl = 'O:DAG:DAD:(A;CI;RCCC;;;DA)';
+
+try {
+    // Assumes $ldap is the LdapManager instance...
+    $sd = (new SddlParser($ldap-&gt;getConnection()))-&gt;parse($sddl);
+} catch (SddlParserException $e) {
+    echo &quot;Error Parsing SDDL: &quot;.$e-&gt;getMessage();
+    exit;
+}
+</code></pre></div>
+            
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+                <p>Copyright &copy; 2015, Chad Sikorra.</p>
+            
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+
+        <script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script>
+        <script>var base_url = '../..';</script>
+        <script data-main="../../mkdocs/js/search.js" src="../../mkdocs/js/require.js"></script>
+        <script src="../../js/base.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            From here you can search these documents. Enter
+                            your search terms below.
+                        </p>
+                        <form role="form">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                            </div>
+                        </form>
+                        <div id="mkdocs-search-results"></div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>

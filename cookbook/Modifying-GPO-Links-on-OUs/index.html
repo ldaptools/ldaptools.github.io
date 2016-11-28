@@ -82,6 +82,12 @@
 
                         
                             
+<li >
+    <a href="../Getting-Your-LDAP-SSL-Certificate/">Getting Your LDAP SSL Certificate</a>
+</li>
+
+                        
+                            
 <li class="active">
     <a href="./">Modifying GPO Links on OUs</a>
 </li>
@@ -95,6 +101,12 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../../tutorials/AD-Permissions/">AD Permissions</a>
+</li>
+
                         
                             
 <li >
@@ -198,12 +210,12 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="../Creating-a-Custom-Repository/">
+                        <a rel="next" href="../Getting-Your-LDAP-SSL-Certificate/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="../../tutorials/AD-User-Modification/">
+                        <a rel="prev" href="../../tutorials/AD-Permissions/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -306,7 +318,7 @@ try {
 <h2 id="searching-for-ous-with-specific-gpo-links">Searching for OUs with Specific GPO Links</h2>
 <p>You can also use GPOLink objects in queries to check if a link exists on an OU. You can even get as granular as setting
 whether the GPOLink is enforced/enabled or not.</p>
-<pre><code>use LdapTools\Utilities\GPOLink;
+<pre><code class="php">use LdapTools\Utilities\GPOLink;
 
 $query = $ldap-&gt;buildLdapQuery()-&gt;fromOU();
 
@@ -325,7 +337,7 @@ foreach ($result as $ou) {
 <p>The <code>\LdapTools\Utilities\GPOLink</code> class is used to represent a GPO linked to an OU. It has several helper methods for 
 getting all of the details regarding the link.</p>
 <p>A GPOLink can be constructed use a name, GUID, DN, or LdapObject:</p>
-<pre><code>use LdapTools\Utilities\GPOLink;
+<pre><code class="php">use LdapTools\Utilities\GPOLink;
 
 // Create a link for a GPO named &quot;Server Baseline&quot;...
 $link1 = new GPOLink('Server Baseline&quot;);
@@ -359,7 +371,7 @@ $ldap-&gt;persist($ou);
 </code></pre>
 
 <p>When searching for OUs you can inspect their GPO links to determine information about them:</p>
-<pre><code>// Query for the GPO links for an OU...
+<pre><code class="php">// Query for the GPO links for an OU...
 $ou = $ldap-&gt;buildLdapQuery()
     -&gt;fromOU()
     -&gt;select('gpoLinks')
@@ -389,7 +401,7 @@ foreach ($ou-&gt;get('gpoLinks') as $gpoLink) {
 
 <p>In the above example, if during the loop you want to modify any of the GPOLink objects you should set all of the GPO
 links back to the OU and then persist it back to LDAP:</p>
-<pre><code>// Query for the GPO links for an OU...
+<pre><code class="php">// Query for the GPO links for an OU...
 $ou = $ldap-&gt;buildLdapQuery()
     -&gt;fromOU()
     -&gt;select('gpoLinks')

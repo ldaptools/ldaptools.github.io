@@ -83,6 +83,12 @@
                         
                             
 <li >
+    <a href="../../cookbook/Getting-Your-LDAP-SSL-Certificate/">Getting Your LDAP SSL Certificate</a>
+</li>
+
+                        
+                            
+<li >
     <a href="../../cookbook/Modifying-GPO-Links-on-OUs/">Modifying GPO Links on OUs</a>
 </li>
 
@@ -95,6 +101,12 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../../tutorials/AD-Permissions/">AD Permissions</a>
+</li>
+
                         
                             
 <li >
@@ -259,6 +271,18 @@
 
 <h1 id="events">Events</h1>
 <hr />
+<ul>
+<li><a href="#adding-event-listeners">Adding Event Listeners</a></li>
+<li><a href="#adding-event-subscribers">Adding Event Subscribers</a></li>
+<li><a href="#the-event-names">Event Names</a></li>
+<li><a href="#the-ldap-object-creation-event">The LDAP Object Creation Event</a></li>
+<li><a href="#the-ldap-object-deletion-and-modification-events">The LDAP Object Deletion and Modification Events</a></li>
+<li><a href="#the-ldap-object-restore-event">The LDAP Object Restore Event</a></li>
+<li><a href="#the-ldap-object-schema-event">The LDAP Object Schema Event</a></li>
+<li><a href="#the-ldap-authentication-event">The LDAP Authentication Event</a></li>
+<li><a href="#the-ldap-operation-event">The LDAP Operation Event</a></li>
+<li><a href="#using-a-customspecific-event-dispatcher">Using a Custom Event Dispatcher</a></li>
+</ul>
 <p>There are many events you can hook into to extend, and take action on, many common tasks (LDAP deletion, creation, modification, etc).
 This is done by using a event dispatcher system (the <code>symfony/event-dispatcher</code> by default).</p>
 <h2 id="adding-event-listeners">Adding Event Listeners</h2>

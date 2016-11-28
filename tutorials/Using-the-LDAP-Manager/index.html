@@ -83,6 +83,12 @@
                         
                             
 <li >
+    <a href="../../cookbook/Getting-Your-LDAP-SSL-Certificate/">Getting Your LDAP SSL Certificate</a>
+</li>
+
+                        
+                            
+<li >
     <a href="../../cookbook/Modifying-GPO-Links-on-OUs/">Modifying GPO Links on OUs</a>
 </li>
 
@@ -95,6 +101,12 @@
                     <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../AD-Permissions/">AD Permissions</a>
+</li>
+
                         
                             
 <li >
@@ -253,6 +265,16 @@
 
 <h1 id="using-the-ldapmanager-class">Using the LdapManager Class</h1>
 <hr />
+<ul>
+<li><a href="#getting-a-ldapquerybuilder-instance">The LDAP Query Builder</a></li>
+<li><a href="#getting-a-repository-object-for-a-ldap-type">LDAP Object Repositories</a></li>
+<li><a href="#switching-domains">Switching Domains</a></li>
+<li><a href="#getting-the-ldapconnection">The LDAP Connection</a></li>
+<li><a href="#modifying-ldap-objects">Modifying LDAP Objects</a></li>
+<li><a href="#deleting-ldap-objects">Deleting LDAP Objects</a></li>
+<li><a href="#moving-ldap-objects">Moving LDAP Objects</a></li>
+<li><a href="#restoring-ldap-objects">Restoring LDAP Objects</a></li>
+</ul>
 <p>The <code>LdapManager</code> provides an easy point of access into the different parts of this library after you have setup the
 <a href="../../reference/Main-Configuration/">configuration</a>. You can use the <code>LdapManager</code> to generate LDAP queries for a
 certain domain, get a "Repository" for a specific LDAP type in your schema, switch between domains when you have 
@@ -260,21 +282,22 @@ multiple defined in your configuration, and retrieve a <code>LdapConnection</cod
 <h3 id="getting-a-ldapquerybuilder-instance">Getting a LdapQueryBuilder Instance</h3>
 <hr />
 <p>You can retrieve a <code>LdapQueryBuilder</code> for a specific domain. For example, the below query will select all users with 
-the first name 'John', last name starts with a 'S', and whose accounts are not disabled.</p>
+the first name 'John', last name starts with a 'S', and whose accounts are enabled.</p>
 <pre><code class="php">$query = $ldapManager-&gt;buildLdapQuery();
 
-$users = $query-&gt;select(['username', 'city', 'state', 'guid'])
+$users = $query
+    -&gt;select(['username', 'city', 'state', 'guid'])
     -&gt;fromUsers()
     -&gt;where(
+        $query-&gt;filter()-&gt;eq('enabled', true)
         $query-&gt;filter()-&gt;eq('firstName', 'John'),
         $query-&gt;filter()-&gt;startsWith('lastName', 'S'),
-        // 'accountIsDisabled' is an Active Directory specific filter method. Negate a statement using 'not'.
-        $query-&gt;filter()-&gt;not($query-&gt;filter()-&gt;accountIsDisabled())
     )
     -&gt;getLdapQuery()
-    -&gt;execute();
+    -&gt;getResult();
 </code></pre>
 
+<p>For more information on building LDAP queries, see <a href="../Building-LDAP-Queries/">the docs for it</a>.</p>
 <h3 id="getting-a-repository-object-for-a-ldap-type">Getting a Repository Object for a LDAP Type</h3>
 <hr />
 <p>A repository object lets you easily query specific attributes for a LDAP object type to retrieve either a single result
@@ -359,6 +382,7 @@ try {
 }
 </code></pre>
 
+<p>For more information on modifying LDAP objects <a href="../Modifying-LDAP-Objects/">see the docs for it</a>.</p>
 <h3 id="deleting-ldap-objects">Deleting LDAP Objects</h3>
 <hr />
 <p>Using the <code>LdapManager</code> class you can also remove an object from LDAP using the <code>delete($ldapObject)</code> method. To 

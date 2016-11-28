@@ -83,6 +83,12 @@
                         
                             
 <li >
+    <a href="../../cookbook/Getting-Your-LDAP-SSL-Certificate/">Getting Your LDAP SSL Certificate</a>
+</li>
+
+                        
+                            
+<li >
     <a href="../../cookbook/Modifying-GPO-Links-on-OUs/">Modifying GPO Links on OUs</a>
 </li>
 
@@ -95,6 +101,12 @@
                     <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../AD-Permissions/">AD Permissions</a>
+</li>
+
                         
                             
 <li >
@@ -241,6 +253,14 @@
 
 <h1 id="ldif-files">LDIF Files</h1>
 <hr />
+<ul>
+<li><a href="#ldif-parsing">LDIF Parsing</a></li>
+<li><a href="#ldif-url-loaders">LDIF URL Loaders</a></li>
+<li><a href="#ldif-creation">LDIF Creation</a></li>
+<li><a href="#the-ldif-object">The LDIF Object</a></li>
+<li><a href="#ldif-line-endings">LDIF Line Endings</a></li>
+<li><a href="#line-folding-and-max-line-length">Line Folding and Max Line Length</a></li>
+</ul>
 <p>LdapTools provides an easy method to both parse and create LDIF files. The parser is able to take a LDIF string and
 return an object that allows you to get all the entries it contains. From the object you can get all the LDAP operations
 represented by those entries and enter them into LDAP. You also have the ability to build a LDIF file in an 
@@ -320,9 +340,15 @@ file_put_contents('/path/to/ldif.txt', $ldif-&gt;toString());
 $ldif = new Ldif();
 
 $ldif-&gt;addEntry(
-    $ldif-&gt;entry()-&gt;add('cn=Some Group,dc=foo,dc=bar', [ 'sAMAccountName' =&gt; 'Some Group', 'objectClass' =&gt; 'group']),
+    $ldif-&gt;entry()-&gt;add('cn=Some Group,dc=foo,dc=bar', [
+        'sAMAccountName' =&gt; 'Some Group',
+        'objectClass' =&gt; 'group'
+    ]),
     $ldif-&gt;entry()-&gt;delete('cn=Some User,dc=foo,dc=bar'),
-    $ldif-&gt;entry()-&gt;move('cn=Frank,dc=foo,dc=bar', 'ou=Employees,dc=foo,dc=bar')
+    $ldif-&gt;entry()-&gt;move(
+        'cn=Frank,dc=foo,dc=bar',
+        'ou=Employees,dc=foo,dc=bar'
+    )
 );
 
 // Output the LDIF object as a string to a file.
@@ -340,7 +366,8 @@ this object. Likewise, you can construct a LDIF object to get the LDIF string re
 // Construct the LDIF object...
 $ldif = new Ldif();
 
-// By default the LDIF version is set to '1' to follow the RFC. You can remove it by setting it to null.
+// By default the LDIF version is set to '1' to follow the RFC. 
+// You can remove it by setting it to null.
 $ldif-&gt;setVersion(null);
 
 // Add a few comments to appear at the top of the LDIF...
@@ -359,7 +386,7 @@ echo $ldifData;
 </code></pre>
 
 <h3 id="the-ldif-delete-entry-type">The LDIF Delete Entry Type</h3>
-<p>The delete entry type is a 'delete' changetype in LDIF. It is used to delete an object from LDAP. All you need to
+<p>The delete entry type is a <code>delete</code> changetype in LDIF. It is used to delete an object from LDAP. All you need to
 do is pass it the full DN of the object you'd like to delete.</p>
 <pre><code class="php">use LdapTools\Ldif\Entry\LdifDeleteEntry;
 

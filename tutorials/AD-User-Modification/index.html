@@ -83,6 +83,12 @@
                         
                             
 <li >
+    <a href="../../cookbook/Getting-Your-LDAP-SSL-Certificate/">Getting Your LDAP SSL Certificate</a>
+</li>
+
+                        
+                            
+<li >
     <a href="../../cookbook/Modifying-GPO-Links-on-OUs/">Modifying GPO Links on OUs</a>
 </li>
 
@@ -95,6 +101,12 @@
                     <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../AD-Permissions/">AD Permissions</a>
+</li>
+
                         
                             
 <li class="active">
@@ -198,7 +210,7 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="../../cookbook/Modifying-GPO-Links-on-OUs/">
+                        <a rel="next" href="../AD-Permissions/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
@@ -230,7 +242,7 @@
     
         <li class="main active"><a href="#ad-user-modification">AD User Modification</a></li>
         
-            <li><a href="#ad-user-account-properties">AD User Account Properties</a></li>
+            <li><a href="#user-account-properties">User Account Properties</a></li>
         
             <li><a href="#group-membership">Group Membership</a></li>
         
@@ -247,6 +259,13 @@
 
 <h1 id="ad-user-modification">AD User Modification</h1>
 <hr />
+<ul>
+<li><a href="#user-account-properties">User Account Properties</a></li>
+<li><a href="#group-membership">Group Membership</a></li>
+<li><a href="#user-log-on-to-workstations-list">Log-On-To Workstations List</a></li>
+<li><a href="#account-expiration-date">Account Expiration Date</a></li>
+<li><a href="#manager-modification">Manager Modification</a></li>
+</ul>
 <p>Modifying an Active Directory user is really no different than modifying any other LDAP object, but there are a few
 things to note. For example, using a few simple statements you can modify many of the user's properties typically seen
 in the "Account" tab in the "AD Users and Computers" tool:</p>
@@ -259,7 +278,7 @@ $repository = $ldapManager-&gt;getRepository(LdapObjectType::USER);
 $user = $repository-&gt;findOneByUsername('chad');
 
 // Make sure the user account is set to enabled.
-$user-&gt;setDisabled(false);
+$user-&gt;setEnabled(true);
 // Set their password to never expire.
 $user-&gt;setPasswordNeverExpires(true);
 
@@ -271,7 +290,7 @@ try {
 </code></pre>
 
 <p>With the above statement you have just the user account to be enabled and set the password to never expire.</p>
-<h2 id="ad-user-account-properties">AD User Account Properties</h2>
+<h2 id="user-account-properties">User Account Properties</h2>
 <p>This table contains many useful AD attributes you can toggle with a simple <code>true</code> or <code>false</code> value like above.</p>
 <table>
 <thead>
@@ -283,7 +302,11 @@ try {
 <tbody>
 <tr>
 <td>disabled</td>
-<td>Disable (true) or enable (false) the account.</td>
+<td>Whether or not the account is disabled.</td>
+</tr>
+<tr>
+<td>enabled</td>
+<td>Whether or not the account is enabled.</td>
 </tr>
 <tr>
 <td>passwordIsReversible</td>

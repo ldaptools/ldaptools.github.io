@@ -83,6 +83,12 @@
                         
                             
 <li >
+    <a href="../../cookbook/Getting-Your-LDAP-SSL-Certificate/">Getting Your LDAP SSL Certificate</a>
+</li>
+
+                        
+                            
+<li >
     <a href="../../cookbook/Modifying-GPO-Links-on-OUs/">Modifying GPO Links on OUs</a>
 </li>
 
@@ -95,6 +101,12 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../../tutorials/AD-Permissions/">AD Permissions</a>
+</li>
+
                         
                             
 <li >
@@ -241,6 +253,12 @@
 
 <h1 id="main-configuration">Main Configuration</h1>
 <hr />
+<ul>
+<li><a href="#manual-configuration">Manual Configuration</a></li>
+<li><a href="#yaml-configuration">YAML Configuration</a></li>
+<li><a href="#general-section">Main Configuration Options</a></li>
+<li><a href="#domain-section">Domain Configuration Options</a></li>
+</ul>
 <p>You can either choose to configure your settings via a file (YAML) or directly using the methods on the <code>Configuration</code> 
 and <code>DomainConfiguration</code> classes. Once you have an instance of the configuration, you can pass it to the <code>LdapManager</code>
 class.</p>
@@ -420,6 +438,7 @@ the <code>TLS_REQCERT never</code> line. The <code>ldap.conf</code> file is in t
 <p>However, be warned that using <code>TLS_REQCERT never</code> can be a bit of a security risk as it ignores invalid certificates.
 Consider copying your domain CA cert to <code>/etc/ssl/certs</code> then reference it in your <code>ldap.conf</code> with the <code>TLS_CACERT /etc/ssl/certs/ca.pem</code>
 option combined with <code>TLS_REQCERT hard</code>.</p>
+<p>For more information on obtaining/using your LDAP SSL certificates, see <a href="../../cookbook/Getting-Your-LDAP-SSL-Certificate/">this cookbook doc</a>.</p>
 <p><strong>Default</strong>: <code>false</code></p>
 <hr />
 <h4 id="ldap_type">ldap_type</h4>

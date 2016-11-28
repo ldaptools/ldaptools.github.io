@@ -83,6 +83,12 @@
                         
                             
 <li >
+    <a href="cookbook/Getting-Your-LDAP-SSL-Certificate/">Getting Your LDAP SSL Certificate</a>
+</li>
+
+                        
+                            
+<li >
     <a href="cookbook/Modifying-GPO-Links-on-OUs/">Modifying GPO Links on OUs</a>
 </li>
 
@@ -95,6 +101,12 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="tutorials/AD-Permissions/">AD Permissions</a>
+</li>
+
                         
                             
 <li >
@@ -260,14 +272,13 @@
 <p>LdapTools is designed to be customizable for use with pretty much any directory service, but contains default attribute converters and schemas 
 for Active Directory and OpenLDAP. </p>
 <ul>
-<li>A fluent and easy to understand syntax for generating LDAP queries.</li>
-<li>Easily create common LDAP objects (Users, Groups, Contacts, Computers, OUs).</li>
-<li>Easily modify LDAP objects with automatic setters/getters/properties/etc.</li>
+<li>A fluent and easy to understand syntax for <a href="#searching-ldap">generating LDAP queries</a>.</li>
+<li>Easily <a href="#creating-ldap-objects">create</a>/<a href="#modifying-ldap-objects">modify</a>/<a href="#deleting-ldap-objects">delete</a>/<a href="tutorials/Using-the-LDAP-Manager/#restoring-ldap-objects">restore</a> common LDAP objects (Users, Groups, Contacts, Computers, OUs).</li>
 <li>Retrieve LDAP objects as either a simple array or an object with automagic setters/getters.</li>
-<li>A dynamic and customizable attribute converter system to translate data between LDAP and PHP.</li>
-<li>An event system for further customization, extensibility, and integration.</li>
-<li>Active Directory specific features to help ease development of applications.</li>
-<li>Includes a comprehensive set of specs for the code.</li>
+<li>A <a href="reference/Logging/">logging mechanism</a> for all LDAP operations</li>
+<li>An <a href="reference/Events/">event system</a> for further customization, extensibility, and integration.</li>
+<li>Parse and create <a href="tutorials/LDIF-Files/">LDIF files</a>.</li>
+<li>View and modify <a href="tutorials/AD-Permissions/">Active Directory permissions</a>.</li>
 </ul>
 <h2 id="installation">Installation</h2>
 <p>The recommended way to install LdapTools is using <a href="http://getcomposer.org/download/">Composer</a>:</p>
@@ -343,7 +354,7 @@ $user = $userRepository-&gt;findOneByUsername('jsmith');
 echo &quot;First name &quot;.$user-&gt;getFirstName().&quot; and last name &quot;.$user-&gt;getLastName();
 </code></pre>
 
-<p>The query syntax is very similar to <a href="http://www.doctrine-project.org">Doctrine ORM</a>.</p>
+<p>See <a href="tutorials/Building-LDAP-Queries/">the docs</a> for more information on building LDAP queries.</p>
 <h2 id="modifying-ldap-objects">Modifying LDAP Objects</h2>
 <p>Modifying LDAP is as easy as searching for the LDAP object as described above, then making changes directly to the object
 and saving it back to LDAP using the <code>LdapManager</code>.</p>
@@ -368,9 +379,9 @@ if ($user-&gt;disabled) {
 }
 
 // Add a value to an attribute...
-$user-&gt;addIpPhone('#001-5555');
+$user-&gt;addOtherIpPhones('#001-5555');
 // Add a few values at one time...
-$user-&gt;addIpPhone('#001-4444', '#001-3333', '#001-2222');
+$user-&gt;addOtherIpPhones('#001-4444', '#001-3333', '#001-2222');
 
 // Now actually save the changes back to LDAP...
 try {
@@ -380,6 +391,7 @@ try {
 }
 </code></pre>
 
+<p>See <a href="tutorials/Modifying-LDAP-Objects/">the docs</a> for more information on modifying LDAP objects.</p>
 <h2 id="deleting-ldap-objects">Deleting LDAP Objects</h2>
 <p>Deleting LDAP objects is a simple matter of searching for the object you want to remove, then passing it to the delete
 method on the <code>LdapManager</code>:</p>
@@ -429,6 +441,7 @@ $ldapObject-&gt;createOU()
     -&gt;execute();
 </code></pre>
 
+<p>See <a href="tutorials/Creating-LDAP-Objects/">the docs</a> for more information on creating LDAP objects.</p>
 <h2 id="documentation">Documentation</h2>
 <ul>
 <li><a href="reference/Main-Configuration/">Main Configuration Reference</a></li>
@@ -438,6 +451,7 @@ $ldapObject-&gt;createOU()
 <li><a href="tutorials/Creating-LDAP-Objects/">Creating LDAP Objects</a></li>
 <li><a href="tutorials/Modifying-LDAP-Objects/">Modifying LDAP Objects</a></li>
 <li><a href="tutorials/LDIF-Files/">LDIF files</a></li>
+<li><a href="tutorials/AD-Permissions/">Active Directory permissions</a></li>
 <li><a href="reference/Default-Schema-Attributes/">Default Schema Attributes</a></li>
 <li><a href="reference/Events/">The Event System</a></li>
 </ul>
@@ -495,5 +509,5 @@ $ldapObject-&gt;createOU()
 
 <!--
 MkDocs version : 0.14.0
-Build Date UTC : 2016-08-22 13:04:07.965766
+Build Date UTC : 2016-11-28 00:03:25.479606
 -->
