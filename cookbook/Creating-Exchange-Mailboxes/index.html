@@ -6,9 +6,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         <meta name="author" content="Chad Sikorra">
-        <link rel="canonical" href="http://www.phpldaptools.com/reference/Logging/">
+        <link rel="canonical" href="http://www.phpldaptools.com/cookbook/Creating-Exchange-Mailboxes/">
         <link rel="shortcut icon" href="../../img/favicon.ico">
-        <title>Logging - LdapTools</title>
+        <title>Creating Exchange Mailboxes - LdapTools</title>
         <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../../css/font-awesome-4.5.0.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
@@ -48,61 +48,61 @@
                     <li >
                         <a href="../..">Home</a>
                     </li>
-                    <li class="dropdown">
+                    <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cookbook <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             
 <li >
-    <a href="../../cookbook/Authenticating-a-User/">Authenticating a User</a>
+    <a href="../Authenticating-a-User/">Authenticating a User</a>
 </li>
                             
 <li >
-    <a href="../../cookbook/Common-LDAP-Queries/">Common LDAP Queries</a>
+    <a href="../Common-LDAP-Queries/">Common LDAP Queries</a>
+</li>
+                            
+<li class="active">
+    <a href="./">Creating Exchange Mailboxes</a>
 </li>
                             
 <li >
-    <a href="../../cookbook/Creating-Exchange-Mailboxes/">Creating Exchange Mailboxes</a>
+    <a href="../Creating-a-Custom-Repository/">Creating a Custom Repository</a>
 </li>
                             
 <li >
-    <a href="../../cookbook/Creating-a-Custom-Repository/">Creating a Custom Repository</a>
+    <a href="../Getting-Your-LDAP-SSL-Certificate/">Getting Your LDAP SSL Certificate</a>
 </li>
                             
 <li >
-    <a href="../../cookbook/Getting-Your-LDAP-SSL-Certificate/">Getting Your LDAP SSL Certificate</a>
-</li>
-                            
-<li >
-    <a href="../../cookbook/Modifying-GPO-Links-on-OUs/">Modifying GPO Links on OUs</a>
+    <a href="../Modifying-GPO-Links-on-OUs/">Modifying GPO Links on OUs</a>
 </li>
                         </ul>
                     </li>
-                    <li class="dropdown active">
+                    <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reference <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             
 <li >
-    <a href="../Attribute-Converters/">Attribute Converters</a>
+    <a href="../../reference/Attribute-Converters/">Attribute Converters</a>
 </li>
                             
 <li >
-    <a href="../Default-Schema-Attributes/">Default Schema Attributes</a>
+    <a href="../../reference/Default-Schema-Attributes/">Default Schema Attributes</a>
 </li>
                             
 <li >
-    <a href="../Events/">Events</a>
-</li>
-                            
-<li class="active">
-    <a href="./">Logging</a>
+    <a href="../../reference/Events/">Events</a>
 </li>
                             
 <li >
-    <a href="../Main-Configuration/">Main Configuration</a>
+    <a href="../../reference/Logging/">Logging</a>
 </li>
                             
 <li >
-    <a href="../Schema-Configuration/">Schema Configuration</a>
+    <a href="../../reference/Main-Configuration/">Main Configuration</a>
+</li>
+                            
+<li >
+    <a href="../../reference/Schema-Configuration/">Schema Configuration</a>
 </li>
                         </ul>
                     </li>
@@ -152,12 +152,12 @@
                     </a>
                 </li>
                     <li >
-                        <a rel="next" href="../Events/">
+                        <a rel="next" href="../Common-LDAP-Queries/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="../Main-Configuration/">
+                        <a rel="prev" href="../Creating-a-Custom-Repository/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -174,58 +174,87 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#logging">Logging</a></li>
-            <li><a href="#enabling-logging-for-the-ldapmanager">Enabling Logging for the LdapManager</a></li>
-            <li><a href="#the-ldaploggerinterface-and-the-logoperation">The LdapLoggerInterface and the LogOperation</a></li>
+        <li class="main active"><a href="#creating-exchange-mailboxes">Creating Exchange Mailboxes</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="logging">Logging</h1>
+<h1 id="creating-exchange-mailboxes">Creating Exchange Mailboxes</h1>
 <hr />
-<p>Logging is available for the following LDAP operations performed by the connection class: add, modify, delete, move, and
-rename. To enable logging you must pass a logger to the <code>setLogger($logger)</code> method of the main <code>\LdapTools\Configuration</code>
-class. The only requirement for the class is that it implements <code>\LdapTools\Log\LdapLoggerInterface</code>.</p>
-<h2 id="enabling-logging-for-the-ldapmanager">Enabling Logging for the LdapManager</h2>
-<hr />
-<p>To enable logging for all connections in the LdapManager you can pass a class implementing <code>\LdapTools\Log\LdapLoggerInterface</code>
-as the third argument to the constructor. There are two classes that implement this interface that come with LdapTools.
-The simplest implementation is a logger that outputs log information to standard output using echo statements. The other
-is a class that lets you chain several loggers into one.</p>
-<pre><code class="php">use LdapTools\Log\EchoLdapLogger;
-use LdapTools\Log\LoggerChain;
-use LdapTools\LdapManager;
-use LdapTools\Configuration;
+<p>Creating an Exchange Mailbox User is a pretty simple process with the built-in Exchange schema types. All you need to create
+the mailbox is the: username, password, an Exchange Database name, and an Exchange Server name. All of the rest is optional.
+This should work for creating mailboxes on Exchange 2007, 2010, 2013, and 2016.</p>
+<ol>
+<li>Find an Exchange Database for the mailbox</li>
+</ol>
+<pre><code class="php">use LdapTools\Object\LdapObjectType;
 
-# Load your overall config
-$config = new Configuration();
+// ...
 
-# ... add/set domain configuration, load from YML, etc...
+// Find an Exchange Database by its common name...
+$database = $ldap-&gt;buildLdapQuery()
+    -&gt;from(LdapObjectType::EXCHANGE_DATABASE)
+    -&gt;where(['name' =&gt; 'Default Database'])
+    -&gt;getLdapQuery()
+    -&gt;getSingleResult();
 
-# Adds a simple echo logger to the config
-$logger = new EchoLdapLogger();
-$config-&gt;setLogger($logger);
+// Not sure of the names? List them all...
+$databases = $ldap-&gt;buildLdapQuery()
+     -&gt;select('name')
+     -&gt;from(LdapObjectType::EXCHANGE_DATABASE)
+     -&gt;getLdapQuery()
+     -&gt;getArrayResult();
 
-$ldap = new LdapManager($config);
-
-# Add a logger chain so several loggers can be used at once
-$logger = new LoggerChain();
-
-# Add some loggers to the chain...
-$logger-&gt;addLogger(new EchoLdapLogger());
-$logger-&gt;addLogger(new EchoLdapLogger());
-$config-&gt;setLogger($logger);
-
-# You will now see duplicated echo statements as the result of both loggers.
-# Not a very useful example, but demonstrates the capability for several logging mechanisms.
-$ldap = new LdapManager($config);
+var_dump($databases);
 </code></pre>
 
-<h2 id="the-ldaploggerinterface-and-the-logoperation">The LdapLoggerInterface and the LogOperation</h2>
-<p>To do your own logging you can extend the LdapLoggerInterface. This class has two method requirements: <code>start()</code> and <code>end()</code>.
-The start method is called before the operation is executed by LDAP and the end method is called immediately afterwards.
-Both methods are passed an instance of the <code>\LdapTools\Log\LogOperation</code> class. This contains all of the useful information
-about what operation just executed.</p></div>
+<ol>
+<li>Find an Exchange Server for the mailbox</li>
+</ol>
+<pre><code class="php">use LdapTools\Object\LdapObjectType;
+
+// ...
+
+// Find an Exchange Server by its common name...
+$server = $ldap-&gt;buildLdapQuery()
+    -&gt;from(LdapObjectType::EXCHANGE_SERVER)
+    -&gt;where(['name' =&gt; 'EXCHANGE01'])
+    -&gt;getLdapQuery()
+    -&gt;getSingleResult();
+
+// Not sure of the server names? List them all...
+$servers = $ldap-&gt;buildLdapQuery()
+     -&gt;select('name')
+     -&gt;from(LdapObjectType::EXCHANGE_SERVER)
+     -&gt;getLdapQuery()
+     -&gt;getArrayResult();
+
+var_dump($servers);
+</code></pre>
+
+<ol>
+<li>Create the Mailbox</li>
+</ol>
+<pre><code class="php">use LdapTools\Object\LdapObjectType;
+
+// ...
+
+$ldap-&gt;createLdapObject(LdapObjectType::EXCHANGE_MAILBOX_USER)
+    -&gt;with([
+        'username' =&gt; 'SomeGuy',
+        'password' =&gt; 'P@ssword123',
+        // Pass the objects from the above queries. Could also use the: name, guid, or dn
+        'mailboxDatabase' =&gt; $database,
+        'mailboxServer' =&gt; $server
+    ])
+    -&gt;in('dc=example,dc=local')
+    -&gt;execute();
+</code></pre>
+
+<p>For a complete listing of what attributes you can specify in the creation command above <a href="../../reference/Default-Schema-Attributes/#exchange-mailbox-user-types">see schema reference doc</a>.
+ Since the Exchange Mailbox User type extends the default AD type, you can also use any attribute from that type on
+ creation as well.</p>
+<p>However, the account creating the mailboxes will still need the appropriate permissions in order for the above to work.</p></div>
         </div>
 
         <footer class="col-md-12">

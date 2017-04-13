@@ -4,25 +4,24 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="A feature-rich LDAP library for PHP 5.6+.">
+        
         <meta name="author" content="Chad Sikorra">
         
-        <link rel="shortcut icon" href="./img/favicon.ico">
-
-	<title>LdapTools</title>
-
-        <link href="./css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="./css/font-awesome-4.0.3.css" rel="stylesheet">
-        <link href="./css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="./css/highlight.css">
-
+        <link rel="shortcut icon" href="/img/favicon.ico">
+        <title>LdapTools</title>
+        <link href="/css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="/css/font-awesome-4.5.0.css" rel="stylesheet">
+        <link href="/css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="/css/highlight.css">
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
-
-        
+	
+	<script src="/js/jquery-1.10.2.min.js"></script>
+        <script src="/js/bootstrap-3.0.3.min.js"></script>
+        <script src="/js/highlight.pack.js"></script> 
     </head>
 
     <body>
@@ -32,7 +31,6 @@
 
         <!-- Collapsed navigation -->
         <div class="navbar-header">
-            
             <!-- Expander button -->
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -40,167 +38,112 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            
-
-            <!-- Main title -->
-            <a class="navbar-brand" href=".">LdapTools</a>
+            <a class="navbar-brand" href="/">LdapTools</a>
         </div>
 
         <!-- Expanded navigation -->
         <div class="navbar-collapse collapse">
-            
                 <!-- Main navigation -->
                 <ul class="nav navbar-nav">
-                
-                
                     <li >
-                        <a href=".">Home</a>
+                        <a href="/">Home</a>
                     </li>
-                
-                
-                
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cookbook <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                        
                             
 <li >
-    <a href="cookbook/Authenticating-a-User/">Authenticating a User</a>
+    <a href="/cookbook/Authenticating-a-User/">Authenticating a User</a>
 </li>
-
-                        
                             
 <li >
-    <a href="cookbook/Common-LDAP-Queries/">Common LDAP Queries</a>
+    <a href="/cookbook/Common-LDAP-Queries/">Common LDAP Queries</a>
 </li>
-
-                        
                             
 <li >
-    <a href="cookbook/Creating-a-Custom-Repository/">Creating a Custom Repository</a>
+    <a href="/cookbook/Creating-Exchange-Mailboxes/">Creating Exchange Mailboxes</a>
 </li>
-
-                        
                             
 <li >
-    <a href="cookbook/Getting-Your-LDAP-SSL-Certificate/">Getting Your LDAP SSL Certificate</a>
+    <a href="/cookbook/Creating-a-Custom-Repository/">Creating a Custom Repository</a>
 </li>
-
-                        
                             
 <li >
-    <a href="cookbook/Modifying-GPO-Links-on-OUs/">Modifying GPO Links on OUs</a>
+    <a href="/cookbook/Getting-Your-LDAP-SSL-Certificate/">Getting Your LDAP SSL Certificate</a>
 </li>
-
-                        
+                            
+<li >
+    <a href="/cookbook/Modifying-GPO-Links-on-OUs/">Modifying GPO Links on OUs</a>
+</li>
                         </ul>
                     </li>
-                
-                
-                
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                        
-                            
-<li >
-    <a href="tutorials/AD-Permissions/">AD Permissions</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="tutorials/AD-User-Modification/">AD User Modification</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="tutorials/Building-LDAP-Queries/">Building LDAP Queries</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="tutorials/Creating-AD-Password-Settings-Objects/">Creating AD Password Settings Objects</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="tutorials/Creating-LDAP-Objects/">Creating LDAP Objects</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="tutorials/LDIF-Files/">LDIF Files</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="tutorials/Modifying-LDAP-Objects/">Modifying LDAP Objects</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="tutorials/Using-the-LDAP-Manager/">Using the LDAP Manager</a>
-</li>
-
-                        
-                        </ul>
-                    </li>
-                
-                
-                
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reference <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                        
                             
 <li >
-    <a href="reference/Attribute-Converters/">Attribute Converters</a>
+    <a href="/reference/Attribute-Converters/">Attribute Converters</a>
 </li>
-
-                        
                             
 <li >
-    <a href="reference/Default-Schema-Attributes/">Default Schema Attributes</a>
+    <a href="/reference/Default-Schema-Attributes/">Default Schema Attributes</a>
 </li>
-
-                        
                             
 <li >
-    <a href="reference/Events/">Events</a>
+    <a href="/reference/Events/">Events</a>
 </li>
-
-                        
                             
 <li >
-    <a href="reference/Logging/">Logging</a>
+    <a href="/reference/Logging/">Logging</a>
 </li>
-
-                        
                             
 <li >
-    <a href="reference/Main-Configuration/">Main Configuration</a>
+    <a href="/reference/Main-Configuration/">Main Configuration</a>
 </li>
-
-                        
                             
 <li >
-    <a href="reference/Schema-Configuration/">Schema Configuration</a>
+    <a href="/reference/Schema-Configuration/">Schema Configuration</a>
 </li>
-
-                        
                         </ul>
                     </li>
-                
-                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            
+<li >
+    <a href="/tutorials/AD-Permissions/">AD Permissions</a>
+</li>
+                            
+<li >
+    <a href="/tutorials/AD-User-Modification/">AD User Modification</a>
+</li>
+                            
+<li >
+    <a href="/tutorials/Building-LDAP-Queries/">Building LDAP Queries</a>
+</li>
+                            
+<li >
+    <a href="/tutorials/Creating-AD-Password-Settings-Objects/">Creating AD Password Settings Objects</a>
+</li>
+                            
+<li >
+    <a href="/tutorials/Creating-LDAP-Objects/">Creating LDAP Objects</a>
+</li>
+                            
+<li >
+    <a href="/tutorials/LDIF-Files/">LDIF Files</a>
+</li>
+                            
+<li >
+    <a href="/tutorials/Modifying-LDAP-Objects/">Modifying LDAP Objects</a>
+</li>
+                            
+<li >
+    <a href="/tutorials/Using-the-LDAP-Manager/">Using the LDAP Manager</a>
+</li>
+                        </ul>
+                    </li>
                 </ul>
-            
 
             <ul class="nav navbar-nav navbar-right">
                 <li>
@@ -208,35 +151,17 @@
                         <i class="fa fa-search"></i> Search
                     </a>
                 </li>
-                
-                    <li class="disabled">
-                        <a rel="next" >
-                            <i class="fa fa-arrow-left"></i> Previous
-                        </a>
-                    </li>
-                    <li class="disabled">
-                        <a rel="prev" >
-                            Next <i class="fa fa-arrow-right"></i>
-                        </a>
-                    </li>
-                
-                
                     <li>
                         <a href="https://github.com/ldaptools/ldaptools/">
-                            
-                                <i class="fa fa-github"></i>
-                            
-                            GitHub
+                                <i class="fa fa-github"></i>GitHub
                         </a>
                     </li>
-                
             </ul>
         </div>
     </div>
 </div>
 
         <div class="container">
-            
 
     <div class="row-fluid">
       <div id="main-content" class="span12">
@@ -250,43 +175,35 @@
 
         <footer class="col-md-12">
             <hr>
-            
                 <p>Copyright &copy; 2015, Chad Sikorra.</p>
-            
             <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-
-        <script src="./js/jquery-1.10.2.min.js"></script>
-        <script src="./js/bootstrap-3.0.3.min.js"></script>
-        <script src="./js/highlight.pack.js"></script>
-        <script>var base_url = '.';</script>
-        <script data-main="./mkdocs/js/search.js" src="./mkdocs/js/require.js"></script>
-        <script src="./js/base.js"></script>
-
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+        <script>var base_url = '';</script>
+        <script data-main="/mkdocs/js/search.js" src="/mkdocs/js/require.js"></script>
+        <script src="/js/base.js"></script><div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
                     </div>
-                    <div class="modal-body">
-                        <p>
-                            From here you can search these documents. Enter
-                            your search terms below.
-                        </p>
-                        <form role="form">
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
-                            </div>
-                        </form>
-                        <div id="mkdocs-search-results"></div>
-                    </div>
-                    <div class="modal-footer">
-                    </div>
-                </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
             </div>
         </div>
+    </div>
+</div>
 
     </body>
 </html>

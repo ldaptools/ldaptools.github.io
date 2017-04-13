@@ -8,21 +8,20 @@
         <meta name="author" content="Chad Sikorra">
         <link rel="canonical" href="http://www.phpldaptools.com/reference/Default-Schema-Attributes/">
         <link rel="shortcut icon" href="../../img/favicon.ico">
-
-	<title>Default Schema Attributes - LdapTools</title>
-
+        <title>Default Schema Attributes - LdapTools</title>
         <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.5.0.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="../../css/highlight.css">
-
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
-
-        
+	
+	<script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script> 
     </head>
 
     <body>
@@ -32,7 +31,6 @@
 
         <!-- Collapsed navigation -->
         <div class="navbar-header">
-            
             <!-- Expander button -->
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -40,167 +38,112 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            
-
-            <!-- Main title -->
             <a class="navbar-brand" href="../..">LdapTools</a>
         </div>
 
         <!-- Expanded navigation -->
         <div class="navbar-collapse collapse">
-            
                 <!-- Main navigation -->
                 <ul class="nav navbar-nav">
-                
-                
                     <li >
                         <a href="../..">Home</a>
                     </li>
-                
-                
-                
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cookbook <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                        
                             
 <li >
     <a href="../../cookbook/Authenticating-a-User/">Authenticating a User</a>
 </li>
-
-                        
                             
 <li >
     <a href="../../cookbook/Common-LDAP-Queries/">Common LDAP Queries</a>
 </li>
-
-                        
+                            
+<li >
+    <a href="../../cookbook/Creating-Exchange-Mailboxes/">Creating Exchange Mailboxes</a>
+</li>
                             
 <li >
     <a href="../../cookbook/Creating-a-Custom-Repository/">Creating a Custom Repository</a>
 </li>
-
-                        
                             
 <li >
     <a href="../../cookbook/Getting-Your-LDAP-SSL-Certificate/">Getting Your LDAP SSL Certificate</a>
 </li>
-
-                        
                             
 <li >
     <a href="../../cookbook/Modifying-GPO-Links-on-OUs/">Modifying GPO Links on OUs</a>
 </li>
-
-                        
                         </ul>
                     </li>
-                
-                
-                
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                        
-                            
-<li >
-    <a href="../../tutorials/AD-Permissions/">AD Permissions</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../../tutorials/AD-User-Modification/">AD User Modification</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../../tutorials/Building-LDAP-Queries/">Building LDAP Queries</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../../tutorials/Creating-AD-Password-Settings-Objects/">Creating AD Password Settings Objects</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../../tutorials/Creating-LDAP-Objects/">Creating LDAP Objects</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../../tutorials/LDIF-Files/">LDIF Files</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../../tutorials/Modifying-LDAP-Objects/">Modifying LDAP Objects</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../../tutorials/Using-the-LDAP-Manager/">Using the LDAP Manager</a>
-</li>
-
-                        
-                        </ul>
-                    </li>
-                
-                
-                
                     <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reference <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                        
                             
 <li >
     <a href="../Attribute-Converters/">Attribute Converters</a>
 </li>
-
-                        
                             
 <li class="active">
     <a href="./">Default Schema Attributes</a>
 </li>
-
-                        
                             
 <li >
     <a href="../Events/">Events</a>
 </li>
-
-                        
                             
 <li >
     <a href="../Logging/">Logging</a>
 </li>
-
-                        
                             
 <li >
     <a href="../Main-Configuration/">Main Configuration</a>
 </li>
-
-                        
                             
 <li >
     <a href="../Schema-Configuration/">Schema Configuration</a>
 </li>
-
-                        
                         </ul>
                     </li>
-                
-                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            
+<li >
+    <a href="../../tutorials/AD-Permissions/">AD Permissions</a>
+</li>
+                            
+<li >
+    <a href="../../tutorials/AD-User-Modification/">AD User Modification</a>
+</li>
+                            
+<li >
+    <a href="../../tutorials/Building-LDAP-Queries/">Building LDAP Queries</a>
+</li>
+                            
+<li >
+    <a href="../../tutorials/Creating-AD-Password-Settings-Objects/">Creating AD Password Settings Objects</a>
+</li>
+                            
+<li >
+    <a href="../../tutorials/Creating-LDAP-Objects/">Creating LDAP Objects</a>
+</li>
+                            
+<li >
+    <a href="../../tutorials/LDIF-Files/">LDIF Files</a>
+</li>
+                            
+<li >
+    <a href="../../tutorials/Modifying-LDAP-Objects/">Modifying LDAP Objects</a>
+</li>
+                            
+<li >
+    <a href="../../tutorials/Using-the-LDAP-Manager/">Using the LDAP Manager</a>
+</li>
+                        </ul>
+                    </li>
                 </ul>
-            
 
             <ul class="nav navbar-nav navbar-right">
                 <li>
@@ -208,7 +151,6 @@
                         <i class="fa fa-search"></i> Search
                     </a>
                 </li>
-                
                     <li >
                         <a rel="next" href="../Attribute-Converters/">
                             <i class="fa fa-arrow-left"></i> Previous
@@ -219,42 +161,26 @@
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
-                
-                
                     <li>
                         <a href="https://github.com/ldaptools/ldaptools/">
-                            
-                                <i class="fa fa-github"></i>
-                            
-                            GitHub
+                                <i class="fa fa-github"></i>GitHub
                         </a>
                     </li>
-                
             </ul>
         </div>
     </div>
 </div>
 
         <div class="container">
-            
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-    
         <li class="main active"><a href="#default-schema-attributes">Default Schema Attributes</a></li>
-        
             <li><a href="#active-directory-schema">Active Directory Schema</a></li>
-        
             <li><a href="#exchange-schema">Exchange Schema</a></li>
-        
             <li><a href="#openldap-schema">OpenLDAP Schema</a></li>
-        
             <li><a href="#the-active-directory-schema">The Active Directory Schema</a></li>
-        
             <li><a href="#the-exchange-schema">The Exchange Schema</a></li>
-        
             <li><a href="#the-openldap-schema">The OpenLDAP Schema</a></li>
-        
-    
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
@@ -272,11 +198,13 @@ used when generating queries and returning data from LDAP.</p>
 <li><a href="#ad-container-types">Containers</a></li>
 <li><a href="#ad-ou-types">OUs</a></li>
 <li><a href="#ad-password-settings-objects-types">Password Settings Objects</a></li>
+<li><a href="#ad-deleted-objects-types">Deleted Objects</a></li>
 </ul>
 <h4 id="exchange-schema">Exchange Schema</h4>
 <ul>
 <li><a href="#exchange-server-types">Servers</a></li>
 <li><a href="#exchange-database-types">Databases</a></li>
+<li><a href="#exchange-mailbox-user-types">Mailbox User</a></li>
 <li><a href="#exchange-recipient-policy-types">Recipient Policies</a></li>
 <li><a href="#exchange-activesync-policy-types">ActiveSync Policies</a></li>
 <li><a href="#exchange-rbac-policy-types">RBAC Policies</a></li>
@@ -1698,6 +1626,247 @@ the type name <code>PSO</code>.</p>
 </tr>
 </tbody>
 </table>
+<h4 id="exchange-mailbox-user-types">Exchange Mailbox User Types</h4>
+<p>These are mailbox user accounts. They extend the AD User type, so all attributes available there are available here
+along with the attributes below.</p>
+<ul>
+<li><strong>Type</strong>: <code>LdapObjectType::EXCHANGE_MAILBOX_USER</code></li>
+<li><strong>Filter</strong>: <code>(&amp;(objectClass=user)(objectCategory=person)(msExchMailboxGUID=*))</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>LdapTools Name</th>
+<th>LDAP Attribute</th>
+<th>Value Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>activeSyncPolicy</td>
+<td>msExchMobileMailboxPolicyLink</td>
+<td>string</td>
+<td>The Active Sync policy name</td>
+</tr>
+<tr>
+<td>alias</td>
+<td>mailNickname</td>
+<td>string</td>
+<td>The Exchange Mailbox alias</td>
+</tr>
+<tr>
+<td>archiveDatabase</td>
+<td>msExchArchiveDatabaseLink</td>
+<td>string</td>
+<td>The Archive Database name</td>
+</tr>
+<tr>
+<td>archiveGuid</td>
+<td>msExchArchiveGUID</td>
+<td>string</td>
+<td>The GUID for the Mailbox archive</td>
+</tr>
+<tr>
+<td>archiveHardQuota</td>
+<td>msExchArchiveQuota</td>
+<td>int</td>
+<td>The hard quota for the archive</td>
+</tr>
+<tr>
+<td>archiveName</td>
+<td>msExchArchiveName</td>
+<td>string</td>
+<td>The archive name</td>
+</tr>
+<tr>
+<td>archiveWarnQuota</td>
+<td>msExchArchiveWarnQuota</td>
+<td>int</td>
+<td>The warning quota for the archive</td>
+</tr>
+<tr>
+<td>calendarLoggingDisabled</td>
+<td>msExchELCMailboxFlags</td>
+<td>bool</td>
+<td>Whether calendar logging is disabled</td>
+</tr>
+<tr>
+<td>calendarLoggingEnabled</td>
+<td>msExchELCMailboxFlags</td>
+<td>bool</td>
+<td>Whether calendar logging is enabled</td>
+</tr>
+<tr>
+<td>defaultSmtpAddress</td>
+<td>proxyAddresses</td>
+<td>string</td>
+<td>The default SMTP address for the mailbox</td>
+</tr>
+<tr>
+<td>hideFromAddressBooks</td>
+<td>msExchHideFromAddressLists</td>
+<td>bool</td>
+<td>Whether or not to hide the mailbox from the address books</td>
+</tr>
+<tr>
+<td>isArchiveDatabaseValid</td>
+<td>msExchELCMailboxFlags</td>
+<td>bool</td>
+<td>Whether or not the archive DB is considered valid</td>
+</tr>
+<tr>
+<td>language</td>
+<td>msExchUserCulture</td>
+<td>string</td>
+<td>The language (ie en-us) for the mailbox</td>
+</tr>
+<tr>
+<td>litigationDate</td>
+<td>msexchLitigationHoldDate</td>
+<td><code>\DateTime</code></td>
+<td>The datetime for litigation hold</td>
+</tr>
+<tr>
+<td>litigationEnabled</td>
+<td>msExchELCMailboxFlags</td>
+<td>bool</td>
+<td>Whether or not litigation is enabled</td>
+</tr>
+<tr>
+<td>litigationOwner</td>
+<td>msexchLitigationHoldOwner</td>
+<td>string</td>
+<td>The litigation owner name</td>
+</tr>
+<tr>
+<td>mailboxDatabase</td>
+<td>homeMDB</td>
+<td>string</td>
+<td>The name of the database where the mailbox resides</td>
+</tr>
+<tr>
+<td>mailboxDisabled</td>
+<td>msExchUserAccountControl</td>
+<td>bool</td>
+<td>Whether or not the mailbox is disabled</td>
+</tr>
+<tr>
+<td>mailboxGuid</td>
+<td>msExchMailboxGUID</td>
+<td>string</td>
+<td>The GUID of the mailbox</td>
+</tr>
+<tr>
+<td>mailboxSecurity</td>
+<td>msExchMailboxSecurityDescriptor</td>
+<td><code>SecurityDescriptor</code></td>
+<td>The mailbox security permissions</td>
+</tr>
+<tr>
+<td>mailboxServer</td>
+<td>msExchHomeServerName</td>
+<td>string</td>
+<td>The name of the exchange server where the mailbox resides</td>
+</tr>
+<tr>
+<td>mailTips</td>
+<td>msExchSenderHintTranslations</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>mrmEnabled</td>
+<td>msExchELCMailboxFlags</td>
+<td>bool</td>
+<td>Whether or not message records management is enabled</td>
+</tr>
+<tr>
+<td>quotaSizeWarning</td>
+<td>mDBStorageQuota</td>
+<td>int</td>
+<td>The quota size warning for the mailbox</td>
+</tr>
+<tr>
+<td>quotaSizeProhibitSend</td>
+<td>mDBOverQuotaLimit</td>
+<td>int</td>
+<td>The quota size to limit sends at</td>
+</tr>
+<tr>
+<td>quotaSizeProhibitAll</td>
+<td>mDBOverHardQuotaLimit</td>
+<td>int</td>
+<td>The quota size to limit all actions at</td>
+</tr>
+<tr>
+<td>rbacPolicy</td>
+<td>msExchRBACPolicyLink</td>
+<td>string</td>
+<td>The RBAC policy name</td>
+</tr>
+<tr>
+<td>retentionEnabled</td>
+<td>msExchELCMailboxFlags</td>
+<td>bool</td>
+<td>Whether or not retention is enabled</td>
+</tr>
+<tr>
+<td>retentionPolicy</td>
+<td>msExchMailboxTemplateLink</td>
+<td>string</td>
+<td>The retention policy name</td>
+</tr>
+<tr>
+<td>recipientDisplayType</td>
+<td>msExchRecipientDisplayType</td>
+<td>string</td>
+<td>The recipient display type</td>
+</tr>
+<tr>
+<td>recipientPolicies</td>
+<td>msExchPoliciesIncluded</td>
+<td>array</td>
+<td>The recipient policy names for the mailbox</td>
+</tr>
+<tr>
+<td>recipientTypeDetails</td>
+<td>msExchRecipientTypeDetails</td>
+<td>string</td>
+<td>The recipient type details</td>
+</tr>
+<tr>
+<td>sendOnBehalfOf</td>
+<td>publicDelegates</td>
+<td>array</td>
+<td>The users allowed to send-on-behalf of this mailbox</td>
+</tr>
+<tr>
+<td>showInAddressBooks</td>
+<td>showInAddressBook</td>
+<td>array</td>
+<td>The address book names where this mailbox should appear</td>
+</tr>
+<tr>
+<td>singleItemRecoveryEnabled</td>
+<td>msExchELCMailboxFlags</td>
+<td>bool</td>
+<td>Whether or not single item recovery is enabled</td>
+</tr>
+<tr>
+<td>smtpAddresses</td>
+<td>proxyAddresses</td>
+<td>array</td>
+<td>All of the SMTP addresses for the mailbox</td>
+</tr>
+<tr>
+<td>useDefaultQuota</td>
+<td>mDBUseDefaults</td>
+<td>bool</td>
+<td>Whether or not the mailbox should use the default quota limits</td>
+</tr>
+</tbody>
+</table>
 <h4 id="exchange-recipient-policy-types">Exchange Recipient Policy Types</h4>
 <p>These are Exchange Recipient policies.</p>
 <ul>
@@ -2246,48 +2415,39 @@ the type name <code>PSO</code>.</p>
 </tr>
 </tbody>
 </table></div>
-            
         </div>
 
         <footer class="col-md-12">
             <hr>
-            
                 <p>Copyright &copy; 2015, Chad Sikorra.</p>
-            
             <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-
-        <script src="../../js/jquery-1.10.2.min.js"></script>
-        <script src="../../js/bootstrap-3.0.3.min.js"></script>
-        <script src="../../js/highlight.pack.js"></script>
         <script>var base_url = '../..';</script>
         <script data-main="../../mkdocs/js/search.js" src="../../mkdocs/js/require.js"></script>
-        <script src="../../js/base.js"></script>
-
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+        <script src="../../js/base.js"></script><div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
                     </div>
-                    <div class="modal-body">
-                        <p>
-                            From here you can search these documents. Enter
-                            your search terms below.
-                        </p>
-                        <form role="form">
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
-                            </div>
-                        </form>
-                        <div id="mkdocs-search-results"></div>
-                    </div>
-                    <div class="modal-footer">
-                    </div>
-                </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
             </div>
         </div>
+    </div>
+</div>
 
     </body>
 </html>

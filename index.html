@@ -8,21 +8,20 @@
         <meta name="author" content="Chad Sikorra">
         <link rel="canonical" href="http://www.phpldaptools.com/">
         <link rel="shortcut icon" href="./img/favicon.ico">
-
-	<title>LdapTools</title>
-
+        <title>LdapTools</title>
         <link href="./css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="./css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="./css/font-awesome-4.5.0.css" rel="stylesheet">
         <link href="./css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="./css/highlight.css">
-
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
-
-        
+	
+	<script src="./js/jquery-1.10.2.min.js"></script>
+        <script src="./js/bootstrap-3.0.3.min.js"></script>
+        <script src="./js/highlight.pack.js"></script> 
     </head>
 
     <body class="homepage">
@@ -32,7 +31,6 @@
 
         <!-- Collapsed navigation -->
         <div class="navbar-header">
-            
             <!-- Expander button -->
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -40,167 +38,112 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            
-
-            <!-- Main title -->
             <a class="navbar-brand" href=".">LdapTools</a>
         </div>
 
         <!-- Expanded navigation -->
         <div class="navbar-collapse collapse">
-            
                 <!-- Main navigation -->
                 <ul class="nav navbar-nav">
-                
-                
                     <li class="active">
                         <a href=".">Home</a>
                     </li>
-                
-                
-                
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cookbook <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                        
                             
 <li >
     <a href="cookbook/Authenticating-a-User/">Authenticating a User</a>
 </li>
-
-                        
                             
 <li >
     <a href="cookbook/Common-LDAP-Queries/">Common LDAP Queries</a>
 </li>
-
-                        
+                            
+<li >
+    <a href="cookbook/Creating-Exchange-Mailboxes/">Creating Exchange Mailboxes</a>
+</li>
                             
 <li >
     <a href="cookbook/Creating-a-Custom-Repository/">Creating a Custom Repository</a>
 </li>
-
-                        
                             
 <li >
     <a href="cookbook/Getting-Your-LDAP-SSL-Certificate/">Getting Your LDAP SSL Certificate</a>
 </li>
-
-                        
                             
 <li >
     <a href="cookbook/Modifying-GPO-Links-on-OUs/">Modifying GPO Links on OUs</a>
 </li>
-
-                        
                         </ul>
                     </li>
-                
-                
-                
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                        
-                            
-<li >
-    <a href="tutorials/AD-Permissions/">AD Permissions</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="tutorials/AD-User-Modification/">AD User Modification</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="tutorials/Building-LDAP-Queries/">Building LDAP Queries</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="tutorials/Creating-AD-Password-Settings-Objects/">Creating AD Password Settings Objects</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="tutorials/Creating-LDAP-Objects/">Creating LDAP Objects</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="tutorials/LDIF-Files/">LDIF Files</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="tutorials/Modifying-LDAP-Objects/">Modifying LDAP Objects</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="tutorials/Using-the-LDAP-Manager/">Using the LDAP Manager</a>
-</li>
-
-                        
-                        </ul>
-                    </li>
-                
-                
-                
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reference <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                        
                             
 <li >
     <a href="reference/Attribute-Converters/">Attribute Converters</a>
 </li>
-
-                        
                             
 <li >
     <a href="reference/Default-Schema-Attributes/">Default Schema Attributes</a>
 </li>
-
-                        
                             
 <li >
     <a href="reference/Events/">Events</a>
 </li>
-
-                        
                             
 <li >
     <a href="reference/Logging/">Logging</a>
 </li>
-
-                        
                             
 <li >
     <a href="reference/Main-Configuration/">Main Configuration</a>
 </li>
-
-                        
                             
 <li >
     <a href="reference/Schema-Configuration/">Schema Configuration</a>
 </li>
-
-                        
                         </ul>
                     </li>
-                
-                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            
+<li >
+    <a href="tutorials/AD-Permissions/">AD Permissions</a>
+</li>
+                            
+<li >
+    <a href="tutorials/AD-User-Modification/">AD User Modification</a>
+</li>
+                            
+<li >
+    <a href="tutorials/Building-LDAP-Queries/">Building LDAP Queries</a>
+</li>
+                            
+<li >
+    <a href="tutorials/Creating-AD-Password-Settings-Objects/">Creating AD Password Settings Objects</a>
+</li>
+                            
+<li >
+    <a href="tutorials/Creating-LDAP-Objects/">Creating LDAP Objects</a>
+</li>
+                            
+<li >
+    <a href="tutorials/LDIF-Files/">LDIF Files</a>
+</li>
+                            
+<li >
+    <a href="tutorials/Modifying-LDAP-Objects/">Modifying LDAP Objects</a>
+</li>
+                            
+<li >
+    <a href="tutorials/Using-the-LDAP-Manager/">Using the LDAP Manager</a>
+</li>
+                        </ul>
+                    </li>
                 </ul>
-            
 
             <ul class="nav navbar-nav navbar-right">
                 <li>
@@ -208,7 +151,6 @@
                         <i class="fa fa-search"></i> Search
                     </a>
                 </li>
-                
                     <li class="disabled">
                         <a rel="next" >
                             <i class="fa fa-arrow-left"></i> Previous
@@ -219,48 +161,29 @@
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
-                
-                
                     <li>
                         <a href="https://github.com/ldaptools/ldaptools/">
-                            
-                                <i class="fa fa-github"></i>
-                            
-                            GitHub
+                                <i class="fa fa-github"></i>GitHub
                         </a>
                     </li>
-                
             </ul>
         </div>
     </div>
 </div>
 
         <div class="container">
-            
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-    
         <li class="main active"><a href="#ldaptools">LdapTools</a></li>
-        
             <li><a href="#overview">Overview</a></li>
-        
             <li><a href="#installation">Installation</a></li>
-        
             <li><a href="#getting-started">Getting Started</a></li>
-        
             <li><a href="#searching-ldap">Searching LDAP</a></li>
-        
             <li><a href="#modifying-ldap-objects">Modifying LDAP Objects</a></li>
-        
             <li><a href="#deleting-ldap-objects">Deleting LDAP Objects</a></li>
-        
             <li><a href="#creating-ldap-objects">Creating LDAP Objects</a></li>
-        
             <li><a href="#documentation">Documentation</a></li>
-        
             <li><a href="#todo">TODO</a></li>
-        
-    
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
@@ -286,7 +209,8 @@ for Active Directory and OpenLDAP. </p>
 </code></pre>
 
 <h2 id="getting-started">Getting Started</h2>
-<p>The easiest way to get started is by creating a YAML config file. See the <a href="./resources/config/example.yml">example config</a> file for basic usage.</p>
+<p>The easiest way to get started is by creating a YAML config file. See the <a href="./resources/config/example.yml">example config</a> file for basic usage. See the 
+<a href="reference/Main-Configuration/">configuration file reference doc</a> for a list of all available options.</p>
 <p>Once you have a configuration file defined, you can get up and running by doing the following:</p>
 <pre><code class="php">use LdapTools\Configuration;
 use LdapTools\LdapManager;
@@ -451,6 +375,7 @@ $ldapObject-&gt;createOU()
 <li><a href="tutorials/Creating-LDAP-Objects/">Creating LDAP Objects</a></li>
 <li><a href="tutorials/Modifying-LDAP-Objects/">Modifying LDAP Objects</a></li>
 <li><a href="tutorials/LDIF-Files/">LDIF files</a></li>
+<li><a href="cookbook/Creating-Exchange-Mailboxes/">Creating Exchange Mailboxes</a></li>
 <li><a href="tutorials/AD-Permissions/">Active Directory permissions</a></li>
 <li><a href="reference/Default-Schema-Attributes/">Default Schema Attributes</a></li>
 <li><a href="reference/Events/">The Event System</a></li>
@@ -461,53 +386,44 @@ $ldapObject-&gt;createOU()
 <li>Automatic generation of the schema based off of information in LDAP.</li>
 <li>More work needed on the OpenLDAP schema.</li>
 </ul></div>
-            
         </div>
 
         <footer class="col-md-12">
             <hr>
-            
                 <p>Copyright &copy; 2015, Chad Sikorra.</p>
-            
             <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-
-        <script src="./js/jquery-1.10.2.min.js"></script>
-        <script src="./js/bootstrap-3.0.3.min.js"></script>
-        <script src="./js/highlight.pack.js"></script>
         <script>var base_url = '.';</script>
         <script data-main="./mkdocs/js/search.js" src="./mkdocs/js/require.js"></script>
-        <script src="./js/base.js"></script>
-
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+        <script src="./js/base.js"></script><div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
                     </div>
-                    <div class="modal-body">
-                        <p>
-                            From here you can search these documents. Enter
-                            your search terms below.
-                        </p>
-                        <form role="form">
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
-                            </div>
-                        </form>
-                        <div id="mkdocs-search-results"></div>
-                    </div>
-                    <div class="modal-footer">
-                    </div>
-                </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
             </div>
         </div>
+    </div>
+</div>
 
     </body>
 </html>
 
 <!--
-MkDocs version : 0.14.0
-Build Date UTC : 2016-11-28 00:03:25.479606
+MkDocs version : 0.16.3
+Build Date UTC : 2017-04-13 13:18:23
 -->
