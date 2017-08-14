@@ -215,6 +215,15 @@ process and the converter may use the connection to make LDAP calls to resolve d
 <p><code>fromLdap</code>: Converts a LDAP numeric string to a PHP int.</p>
 </li>
 </ul>
+<h4 id="enum"><em>enum</em></h4>
+<ul>
+<li>
+<p><code>toLdap</code>: Takes a friendly enum name and converts it to the value it represents.</p>
+</li>
+<li>
+<p><code>fromLdap</code>: Takes an enum value and converts it to the friendly name it represents.</p>
+</li>
+</ul>
 <h4 id="flags"><em>flags</em></h4>
 <ul>
 <li>
@@ -240,6 +249,15 @@ process and the converter may use the connection to make LDAP calls to resolve d
 </li>
 <li>
 <p><code>fromLdap</code>: Converts a LDAP '0' (true - password must change) or '&gt;0' (false - password doesn't have to change).</p>
+</li>
+</ul>
+<h4 id="windows_account_name"><em>windows_account_name</em></h4>
+<ul>
+<li>
+<p><code>toLdap</code>: Removes invalid characters from the account name on creation/modification.</p>
+</li>
+<li>
+<p><code>fromLdap</code>: Returns the unmodified account name string.</p>
 </li>
 </ul>
 <h4 id="windows_generalized_time"><em>windows_generalized_time</em></h4>
@@ -303,15 +321,6 @@ process and the converter may use the connection to make LDAP calls to resolve d
 </li>
 <li>
 <p><code>fromLdap</code>: Parses through the proxyAddresses attribute to return only the address portion for a specific address type.</p>
-</li>
-</ul>
-<h4 id="exchange_recipient_type"><em>exchange_recipient_type</em></h4>
-<ul>
-<li>
-<p><code>toLdap</code>: Takes an integer and maps it to the friendly display name of the recipient type info.</p>
-</li>
-<li>
-<p><code>fromLdap</code>: Takes a friendly recipient type name and converts it to the integer value.</p>
 </li>
 </ul>
 <h4 id="exchange_object_version"><em>exchange_object_version</em></h4>

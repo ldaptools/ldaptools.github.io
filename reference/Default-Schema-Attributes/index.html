@@ -204,6 +204,7 @@ used when generating queries and returning data from LDAP.</p>
 <ul>
 <li><a href="#exchange-server-types">Servers</a></li>
 <li><a href="#exchange-database-types">Databases</a></li>
+<li><a href="#exchange-contact-types">Contacts</a></li>
 <li><a href="#exchange-mailbox-user-types">Mailbox User</a></li>
 <li><a href="#exchange-recipient-policy-types">Recipient Policies</a></li>
 <li><a href="#exchange-activesync-policy-types">ActiveSync Policies</a></li>
@@ -1644,6 +1645,18 @@ along with the attributes below.</p>
 </thead>
 <tbody>
 <tr>
+<td>activeSyncEnabled</td>
+<td>msExchOmaAdminWirelessEnable</td>
+<td>bool</td>
+<td>Whether or not ActiveSync is enabled</td>
+</tr>
+<tr>
+<td>activeSyncPushEnabled</td>
+<td>msExchOmaAdminWirelessEnable</td>
+<td>bool</td>
+<td>Whether or not ActiveSync Push is enabled</td>
+</tr>
+<tr>
 <td>activeSyncPolicy</td>
 <td>msExchMobileMailboxPolicyLink</td>
 <td>string</td>
@@ -1782,6 +1795,18 @@ along with the attributes below.</p>
 <td>Whether or not message records management is enabled</td>
 </tr>
 <tr>
+<td>omaEnabled</td>
+<td>msExchOmaAdminWirelessEnable</td>
+<td>bool</td>
+<td>Whether or not OMA is enabled</td>
+</tr>
+<tr>
+<td>owaForDevicesEnabled</td>
+<td>msExchOmaAdminWirelessEnable</td>
+<td>bool</td>
+<td>Whether or not OWA for devices is enabled</td>
+</tr>
+<tr>
 <td>quotaSizeWarning</td>
 <td>mDBStorageQuota</td>
 <td>int</td>
@@ -1864,6 +1889,60 @@ along with the attributes below.</p>
 <td>mDBUseDefaults</td>
 <td>bool</td>
 <td>Whether or not the mailbox should use the default quota limits</td>
+</tr>
+</tbody>
+</table>
+<h4 id="exchange-contact-types">Exchange Contact Types</h4>
+<p>These are Exchange mail-enabled contact objects.</p>
+<ul>
+<li><strong>Type</strong>: <code>LdapObjectType::EXCHANGE_CONTACT</code></li>
+<li><strong>Filter</strong>: <code>(&amp;(objectCategory=contact)(msExchRecipientDisplayType=6))</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>LdapTools Name</th>
+<th>LDAP Attribute</th>
+<th>Value Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>alias</td>
+<td>mailNickname</td>
+<td>string</td>
+<td>The contact's exchange alias</td>
+</tr>
+<tr>
+<td>hideFromAddressBook</td>
+<td>msExchHideFromAddressLists</td>
+<td>bool</td>
+<td>Whether the contact should be hidden from the address list</td>
+</tr>
+<tr>
+<td>smtpAddresses</td>
+<td>proxyAddresses</td>
+<td>array</td>
+<td>All of the contact's assigned SMTP addresses</td>
+</tr>
+<tr>
+<td>defaultSmtpAddress</td>
+<td>proxyAddresses</td>
+<td>string</td>
+<td>The contact's default SMTP address</td>
+</tr>
+<tr>
+<td>recipientPolicies</td>
+<td>msExchPoliciesIncluded</td>
+<td>array</td>
+<td>The recipient policy names for the contact</td>
+</tr>
+<tr>
+<td>showInAddressBooks</td>
+<td>showInAddressBook</td>
+<td>array</td>
+<td>The address book names where this contact should appear</td>
 </tr>
 </tbody>
 </table>
@@ -1956,7 +2035,7 @@ along with the attributes below.</p>
 <td>The date the ActiveSync policy was last modified</td>
 </tr>
 <tr>
-<td>numberOfPreviousPasswordsDisallowed</td>
+<td>passwordHistoryLimit</td>
 <td>msExchMobileDeviceNumberOfPreviousPasswordsDisallowed</td>
 <td>int</td>
 <td>Password history limit</td>

@@ -235,62 +235,62 @@ common error codes you may see in AD:</p>
 <tbody>
 <tr>
 <td>1317</td>
-<td><code>ACCOUNT_INVALID</code></td>
+<td><code>AccountInvalid</code></td>
 <td>Account does not exist.</td>
 </tr>
 <tr>
 <td>1326</td>
-<td><code>ACCOUNT_CREDENTIALS_INVALID</code></td>
+<td><code>AccountCredentialsInvalid</code></td>
 <td>Account password is invalid.</td>
 </tr>
 <tr>
 <td>1327</td>
-<td><code>ACCOUNT_RESTRICTIONS</code></td>
+<td><code>AccountRestrictions</code></td>
 <td>Account Restrictions prevent this user from signing in.</td>
 </tr>
 <tr>
 <td>1328</td>
-<td><code>ACCOUNT_RESTRICTIONS_TIME</code></td>
+<td><code>AccountRestrictionsTime</code></td>
 <td>Time Restriction - The account cannot login at this time.</td>
 </tr>
 <tr>
 <td>1329</td>
-<td><code>ACCOUNT_RESTRICTIONS_DEVICE</code></td>
+<td><code>AccountRestrictionsDevice</code></td>
 <td>Device Restriction - The account is not allowed to log on to this computer.</td>
 </tr>
 <tr>
 <td>1330</td>
-<td><code>ACCOUNT_PASSWORD_EXPIRED</code></td>
+<td><code>AccountPasswordExpired</code></td>
 <td>The password for the account has expired.</td>
 </tr>
 <tr>
 <td>1331</td>
-<td><code>ACCOUNT_DISABLED</code></td>
+<td><code>AccountDisabled</code></td>
 <td>The account is currently disabled.</td>
 </tr>
 <tr>
 <td>1384</td>
-<td><code>ACCOUNT_CONTEXT_IDS</code></td>
+<td><code>AccountContextIDS</code></td>
 <td>The account is a member of too many groups and cannot be logged on.</td>
 </tr>
 <tr>
 <td>1793</td>
-<td><code>ACCOUNT_EXPIRED</code></td>
+<td><code>AccountExpired</code></td>
 <td>The account has expired.</td>
 </tr>
 <tr>
 <td>1907</td>
-<td><code>ACCOUNT_PASSWORD_MUST_CHANGE</code></td>
+<td><code>AccountPasswordMustChange</code></td>
 <td>The accounts password must change before it can login.</td>
 </tr>
 <tr>
 <td>1909</td>
-<td><code>ACCOUNT_LOCKED</code></td>
+<td><code>AccountLocked</code></td>
 <td>The account is currently locked out.</td>
 </tr>
 </tbody>
 </table>
-<p>All constants are located in <code>\LdapTools\Connection\ADResponseCodes</code>. You should use those constants to compare against 
+<p>All constants are located in <code>\LdapTools\Enums\AD\ResponseCode</code>. You should use those constants to compare against 
 the received error number to take a specific action for an event.</p></div>
         </div>
 

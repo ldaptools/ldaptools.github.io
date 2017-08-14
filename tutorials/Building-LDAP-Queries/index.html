@@ -767,17 +767,17 @@ OR condition: <code>(|(id=1)(id=2)(id=3)(id=4)(id=5))</code></p>
 <hr />
 <h4 id="bitwiseandattribute-value">bitwiseAnd($attribute, $value)</h4>
 <p>Creates a bitwise 'AND' comparison between the attribute and the value: <code>(attribute:1.2.840.113556.1.4.803:=value)</code></p>
-<pre><code class="php">use LdapTools\Query\UserAccountControlFlags;
+<pre><code class="php">use LdapTools\Enums\AD\UserAccountControl;
 
-$lqb-&gt;filter()-&gt;bitwiseAnd('userAccountControl', UserAccountControlFlags::DISABLED);
+$lqb-&gt;filter()-&gt;bitwiseAnd('userAccountControl', UserAccountControl::Disabled);
 </code></pre>
 
 <hr />
 <h4 id="bitwiseorattribute-value">bitwiseOr($attribute, $value)</h4>
 <p>Creates a bitwise 'OR' comparison between the attribute and the value: <code>(attribute:1.2.840.113556.1.4.804:=value)</code></p>
-<pre><code class="php">use LdapTools\Query\GroupTypeFlags;
+<pre><code class="php">use LdapTools\Enums\AD\GroupType;
 
-$lqb-&gt;filter()-&gt;bitwiseOr('groupType', GroupTypeFlags::UNIVERSAL_GROUP);
+$lqb-&gt;filter()-&gt;bitwiseOr('groupType', GroupType::UniversalGroup);
 </code></pre>
 
 <hr />
